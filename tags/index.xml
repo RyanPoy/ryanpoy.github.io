@@ -6,8 +6,36 @@
     <description>Recent content in Tags on 一哥黑板报</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Jul 2025 17:44:43 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 16 Jul 2025 19:20:31 +0800</lastBuildDate>
     <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Thinking</title>
+      <link>/tags/Thinking/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/tags/Thinking/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>配置</title>
+      <link>/tags/%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/tags/%E9%85%8D%E7%BD%AE/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kanban</title>
+      <link>/tags/Kanban/</link>
+      <pubDate>Mon, 11 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/tags/Kanban/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Translation</title>
+      <link>/tags/Translation/</link>
+      <pubDate>Mon, 11 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/tags/Translation/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Development</title>
       <link>/tags/development/</link>
@@ -51,6 +79,20 @@
       <description></description>
     </item>
     <item>
+      <title>Essay</title>
+      <link>/tags/Essay/</link>
+      <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
+      <guid>/tags/Essay/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>QCon</title>
+      <link>/tags/QCon/</link>
+      <pubDate>Fri, 25 Jan 2013 00:00:00 +0000</pubDate>
+      <guid>/tags/QCon/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Fudge</title>
       <link>/tags/Fudge/</link>
       <pubDate>Sat, 20 Oct 2012 00:00:00 +0000</pubDate>
@@ -76,6 +118,13 @@
       <link>/tags/Webpy/</link>
       <pubDate>Thu, 18 Aug 2011 00:00:00 +0000</pubDate>
       <guid>/tags/Webpy/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tricks</title>
+      <link>/tags/Tricks/</link>
+      <pubDate>Fri, 11 Sep 2009 00:00:00 +0000</pubDate>
+      <guid>/tags/Tricks/</guid>
       <description></description>
     </item>
     <item>

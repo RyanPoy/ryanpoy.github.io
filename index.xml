@@ -36,6 +36,27 @@
       <description>&lt;h2 id=&#34;move-static-content-to-static&#34;&gt;&#xA;  Move static content to &lt;code&gt;static&lt;/code&gt;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#move-static-content-to-static&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Jekyll has a rule that any directory not starting with &lt;code&gt;_&lt;/code&gt; will be copied as-is to the &lt;code&gt;_site&lt;/code&gt; output. Hugo keeps all static content under &lt;code&gt;static&lt;/code&gt;. You should therefore move it all there.&#xA;With Jekyll, something that looked like&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;▾ &amp;lt;root&amp;gt;/&#xA;    ▾ images/&#xA;        logo.png&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;should become&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;▾ &amp;lt;root&amp;gt;/&#xA;    ▾ static/&#xA;        ▾ images/&#xA;            logo.png&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;Additionally, you&amp;rsquo;ll want any files that should reside at the root (such as &lt;code&gt;CNAME&lt;/code&gt;) to be moved to &lt;code&gt;static&lt;/code&gt;.&lt;/p&gt;</description>
     </item>
     <item>
+      <title>黑客增长简悟</title>
+      <link>/posts/growth-hacking/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/posts/growth-hacking/</guid>
+      <description>&lt;h1 id=&#34;引子&#34;&gt;&#xA;  引子&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%bc%95%e5%ad%90&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;&lt;code&gt;黑客增长&lt;/code&gt;这个词已经出现很久了，之前只是听说过，也仅仅只是听说。这段时间，通过一些资料阅读，算是有一些了解了。简单说一下自己的领悟吧。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>HomeBrew修改国内源</title>
+      <link>/posts/HomeBrew%E4%BF%AE%E6%94%B9%E5%9B%BD%E5%86%85%E6%BA%90/</link>
+      <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/posts/HomeBrew%E4%BF%AE%E6%94%B9%E5%9B%BD%E5%86%85%E6%BA%90/</guid>
+      <description>&lt;p&gt;因为众所周知的原因，正常访问homebrew是很难的。所以，我们需要修改它的源，让其指向国内。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>重新设计我的看板</title>
+      <link>/posts/translation-rethinking-kanban/</link>
+      <pubDate>Mon, 11 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/posts/translation-rethinking-kanban/</guid>
+      <description>&lt;p&gt;发现&#xA;  &lt;a href=&#34;https://matschaffer.com/2014/06/16/rethinking-kanban&#34;&gt;一篇文章&lt;/a&gt;，觉得有意思，就翻译了一下。&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>(Hu)go Template Primer</title>
       <link>/posts/goisforlovers/</link>
       <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
@@ -50,11 +71,32 @@
       <description>&lt;h2 id=&#34;step-1-install-hugo&#34;&gt;&#xA;  Step 1. Install Hugo&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#step-1-install-hugo&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Go to &#xA;  &lt;a href=&#34;https://github.com/spf13/hugo/releases&#34;&gt;Hugo releases&lt;/a&gt; and download the&#xA;appropriate version for your OS and architecture.&lt;/p&gt;&#xA;&lt;p&gt;Save it somewhere specific as we will be using it in the next step.&lt;/p&gt;&#xA;&lt;p&gt;More complete instructions are available at &#xA;  &lt;a href=&#34;https://gohugo.io/getting-started/installing/&#34;&gt;Install Hugo&lt;/a&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;step-2-build-the-docs&#34;&gt;&#xA;  Step 2. Build the Docs&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#step-2-build-the-docs&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Hugo has its own example site which happens to also be the documentation site&#xA;you are reading right now.&lt;/p&gt;&#xA;&lt;p&gt;Follow the following steps:&lt;/p&gt;</description>
     </item>
     <item>
+      <title>12年，1780公里，6小时</title>
+      <link>/posts/12-Years-1780-Kilometers-6-Hours/</link>
+      <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
+      <guid>/posts/12-Years-1780-Kilometers-6-Hours/</guid>
+      <description>&lt;p&gt;12年前，青涩的他怀揣着懵懂的梦想踏上了这个被人津津乐道的城市的土地。&lt;/p&gt;&#xA;&lt;p&gt;古色古香的南锣鼓巷和钢筋铁骨的国贸中心、气势磅礴的万里长城和宁静如璧的互城小河体现出它与生俱来的混乱。密密麻麻的人群，拥堵不堪的车流，忙忙碌碌的人们，匆匆忙忙的脚步却又反映出那与混乱抗衡的秩序。人们在这儿实现梦想、体味繁华、分享喜悦，也在这儿增长欲望、产生颓废、无尽挣扎。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>/posts/QCon-Beijing-2013/</link>
+      <pubDate>Fri, 25 Jan 2013 00:00:00 +0000</pubDate>
+      <guid>/posts/QCon-Beijing-2013/</guid>
+      <description>&lt;h2 id=&#34;引子&#34;&gt;&#xA;  引子&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%bc%95%e5%ad%90&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;接到了QCon BeiJing的邀请&lt;/strong&gt;，很荣幸，也很有压力，不知道能不能讲好。尽力吧。&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>fudge使用文档</title>
       <link>/posts/fudge-using-document/</link>
       <pubDate>Sat, 20 Oct 2012 00:00:00 +0000</pubDate>
       <guid>/posts/fudge-using-document/</guid>
       <description>&lt;p&gt;fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>善·缘</title>
+      <link>/posts/fate/</link>
+      <pubDate>Sat, 13 Oct 2012 00:00:00 +0000</pubDate>
+      <guid>/posts/fate/</guid>
+      <description>&lt;p&gt;不信一见钟情，只因为我不是一个极端的人。&lt;/p&gt;&#xA;&lt;p&gt;既然不是一个极端的人，就不会有极端的想法，也不会有极端的感受。&lt;/p&gt;&#xA;&lt;p&gt;我相信缘分。&lt;/p&gt;&#xA;&lt;p&gt;缘分是一种奇妙的东西，你不想的时候，却偏偏来到你的身旁。&lt;/p&gt;&#xA;&lt;p&gt;我相信命运。&lt;/p&gt;&#xA;&lt;p&gt;命运是一种缥缈的东西，你永远琢磨不透，上天的如此安排究竟为何。&lt;/p&gt;</description>
     </item>
     <item>
       <title>tornado教程</title>
@@ -69,6 +111,13 @@
       <pubDate>Thu, 18 Aug 2011 00:00:00 +0000</pubDate>
       <guid>/posts/a-user-guild-to-using-webpy/</guid>
       <description>&lt;p&gt;来&#xA;  &lt;a href=&#34;https://sohu.com&#34;&gt;搜狐&lt;/a&gt;后，这里做的系统几乎都是 webpy + twsited 写的。所以，有必要好好学习一下这两个东西了。从今天开始介绍webpy。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>python奇技淫巧</title>
+      <link>/posts/python-tricks-and-hacks/</link>
+      <pubDate>Fri, 11 Sep 2009 00:00:00 +0000</pubDate>
+      <guid>/posts/python-tricks-and-hacks/</guid>
+      <description>&lt;p&gt;在Python中，有一些常见不常用又很有用的&lt;strong&gt;奇技淫巧&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
     <item>
       <title>Hibernate入门使用</title>

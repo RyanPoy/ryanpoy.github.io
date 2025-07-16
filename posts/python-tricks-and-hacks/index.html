@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="在Python中，有一些常见不常用又很有用的奇技淫巧">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="/posts/python-tricks-and-hacks/">
+  <meta property="og:site_name" content="一哥黑板报">
+  <meta property="og:title" content="python奇技淫巧">
+  <meta property="og:description" content="在Python中，有一些常见不常用又很有用的奇技淫巧">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2009-09-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-16T19:09:47+08:00">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="Tricks">
+<title>python奇技淫巧 | 一哥黑板报</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="/posts/python-tricks-and-hacks/">
+<link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.c6cebd6934d13a244568c21552531456b602e249d3bc0fa99f89af9110d81288.js" ></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>一哥黑板报</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="/docs/example/" class="">Example Site</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/" class="">Table of Contents</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/with-toc/" class="">With ToC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/without-toc/" class="">Without ToC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-3cac40e98ef6004516ceb5fd9190d720" class="toggle"  />
+    <label for="section-3cac40e98ef6004516ceb5fd9190d720" class="flex">
+      <a role="button" class="flex-auto ">Collapsed</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/collapsed/3rd-level/" class="">3rd Level</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/collapsed/3rd-level/4th-level/" class="">4th Level</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Shortcodes</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/buttons/" class="">Buttons</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/columns/" class="">Columns</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/details/" class="">Details</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/mermaid/" class="">Mermaid</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/tabs/" class="">Tabs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/katex/" class="">KaTeX</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/RyanPoy/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>python奇技淫巧</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#getattribute"><strong>getattribute</strong></a></li>
+        <li><a href="#getattr"><strong>getattr</strong></a></li>
+        <li><a href="#setattr"><strong>setattr</strong></a></li>
+        <li><a href="#with--as-">with &hellip; as &hellip;</a></li>
+        <li><a href="#巧用异常得到代码片段的信息">巧用异常得到代码片段的信息</a></li>
+        <li><a href="#基本数学">基本数学</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h1>
+    python奇技淫巧
+  </h1>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>September 11, 2009</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tech/">Tech</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/Python/">Python</a>, 
+      <a href="/tags/Tricks/">Tricks</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><p>在Python中，有一些常见不常用又很有用的<strong>奇技淫巧</strong></p>
+<h2 id="getattribute">
+  <strong>getattribute</strong>
+  <a class="anchor" href="#getattribute">#</a>
+</h2>
+<p>先上代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span>(object):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;1&#39;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__getattribute__</span>(self, name):
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;in get attribute&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> super(Foo, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__getattribute__</span>(name)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">hello</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;hello&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>f <span style="color:#f92672">=</span> Foo()
+</span></span><span style="display:flex;"><span>print f<span style="color:#f92672">.</span>value
+</span></span></code></pre></div><p>打印出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; in get attribute
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; <span style="color:#ae81ff">1111111111</span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; in get attribute
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; hello
+</span></span></code></pre></div><p>可见 当调用一个Instance.attr 或者 Instance.method的时候，实际上是调用了<code>__getattribute__</code>
+注意不要在__getattribute__的方法里面写Intance.xx，否则会进入死递归，直到溢出</p>
+<h2 id="getattr">
+  <strong>getattr</strong>
+  <a class="anchor" href="#getattr">#</a>
+</h2>
+<p>上代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span>(object):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;1&#39;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__getattribute__</span>(self, name):
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;in get attribute&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> super(Foo, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__getattribute__</span>(name)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__getattr__</span>(self, name):
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;in get attr&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">hello</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;hello&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>f <span style="color:#f92672">=</span> Foo()
+</span></span><span style="display:flex;"><span>print f<span style="color:#f92672">.</span>value
+</span></span><span style="display:flex;"><span>print f<span style="color:#f92672">.</span>hello()
+</span></span><span style="display:flex;"><span>print f<span style="color:#f92672">.</span>value1
+</span></span></code></pre></div><p>打印出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; in get attribute
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; <span style="color:#ae81ff">1111111111</span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; in get attribute
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; hello
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; in get attribute
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; in get attr
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; None
+</span></span></code></pre></div><p>可见 当调用一个Instance.attr 或者 Instance.method的时候，实际上先调用了<code>__getattribute__</code>，当没有找到的时候，</p>
+<p>再调用<code>__getattr__</code>方法。</p>
+<p>利用上面的方法，其实类似于rails里面的missing_method在Python中也可以实现</p>
+<h2 id="setattr">
+  <strong>setattr</strong>
+  <a class="anchor" href="#setattr">#</a>
+</h2>
+<p>上代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span>(object):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__setattribute__</span>(self, name, value):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>__dict__[name] <span style="color:#f92672">=</span> value
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;in set attribute&#39;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__setattr__</span>(self, name, value):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>__dict__[name] <span style="color:#f92672">=</span> value
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;in set attr&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>f <span style="color:#f92672">=</span> Foo()
+</span></span><span style="display:flex;"><span>f<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;1&#39;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>f<span style="color:#f92672">.</span>hello <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span>: <span style="color:#e6db74">&#39;hello&#39;</span>
+</span></span><span style="display:flex;"><span>print f<span style="color:#f92672">.</span>value
+</span></span><span style="display:flex;"><span>print f<span style="color:#f92672">.</span>hello()
+</span></span></code></pre></div><p>打印出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; in set attr
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; in set attr
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; <span style="color:#ae81ff">1111111111</span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; hello
+</span></span></code></pre></div><p>可见</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Instance<span style="color:#f92672">.</span>attr <span style="color:#f92672">=</span> value
+</span></span><span style="display:flex;"><span>Instance<span style="color:#f92672">.</span>method <span style="color:#f92672">=</span> xxx
+</span></span></code></pre></div><p>都是调用的<code>__setattr__</code>方法，注意不要在<code>__setattr__</code>里面再调用Instance.xx = yy或者 setattr的方法，否则会进行死递归，直到溢出</p>
+<h2 id="with--as-">
+  with &hellip; as &hellip;
+  <a class="anchor" href="#with--as-">#</a>
+</h2>
+<p>python2.6中有一个特殊的用法：<code>with...as...</code>  ；  在2.5中需要<code>import __feature__</code>;</p>
+<p>先来说说他的用法，先看看一般我们如何打开并且读取一个文件的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>f <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>    f <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#39;/etc/hosts&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>)
+</span></span><span style="display:flex;"><span>    print f<span style="color:#f92672">.</span>readlines()
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">raise</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> f:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            f<span style="color:#f92672">.</span>close()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>            f <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span></code></pre></div><p>一个简单的文件操作，但是对于文件的打开和关闭我们做了太多的处理。那么如果减少这些资源的打开和释放的代码呢？请看下面：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;/etc/hosts&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>        print f<span style="color:#f92672">.</span>readlines()
+</span></span></code></pre></div><p>实现了同样的功能，但是文件的关闭在哪里呢？这个就是with &hellip; as &hellip; 的作用了。它最大的好处就是自动释放一些资源。那么原理是怎么样的呢？看看下面的代码吧：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span>(object):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__enter__</span>(self):
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;in enter&#39;</span> 
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__exit__</span>(self, exc_type, exc_value, traceback):
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;exit&#39;</span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> Foo() <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><p>打印出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; in enter
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; exit
+</span></span></code></pre></div><p>可见 <code>with ... as ...</code> 的时候，嗲用了 <code>__enter__</code> 的方法，当跳出with 代码段的时候，自动调用了 <code>__exit__</code>的方法。对于高版本的python来说，可以直接用contextmanager来进行相同的工作。而我们可以利用这个写出很多有意思的代码，例如在操作数据库的时候，假设有一个User的ORM。</p>
+<p>那么对于事务的处理，我们完全可以写成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Transaction</span>(object):
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, db):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>_conn <span style="color:#f92672">=</span> db
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db<span style="color:#f92672">.</span>autocommit(<span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">commit</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db<span style="color:#f92672">.</span>commit()
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db<span style="color:#f92672">.</span>autocommit(<span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rollback</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db<span style="color:#f92672">.</span>rollback()
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>_conn<span style="color:#f92672">.</span>_db<span style="color:#f92672">.</span>autocommit(<span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span>(object):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@classmethod</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@contextmanager</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">transaction</span>(cls):
+</span></span><span style="display:flex;"><span>        t <span style="color:#f92672">=</span> Transaction(db)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">yield</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span>, ex:
+</span></span><span style="display:flex;"><span>            t<span style="color:#f92672">.</span>rollback()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            t<span style="color:#f92672">.</span>commit()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> User<span style="color:#f92672">.</span>transaction():
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># do sth.</span>
+</span></span></code></pre></div><h2 id="巧用异常得到代码片段的信息">
+  巧用异常得到代码片段的信息
+  <a class="anchor" href="#%e5%b7%a7%e7%94%a8%e5%bc%82%e5%b8%b8%e5%be%97%e5%88%b0%e4%bb%a3%e7%a0%81%e7%89%87%e6%ae%b5%e7%9a%84%e4%bf%a1%e6%81%af">#</a>
+</h2>
+<p>python 有<code>__file__</code>, 但没有<code>__funcname__</code>, <code>__line__</code> 这样的东西，来描述目前执行到什么方法，哪一行。怎么办？巧用异常，可以得到相应的信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#utf-8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func_name_and_line</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Return the frame object for the caller&#39;s stack frame.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">Exception</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>        f <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>exc_info()[<span style="color:#ae81ff">2</span>]<span style="color:#f92672">.</span>tb_frame<span style="color:#f92672">.</span>f_back
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> f<span style="color:#f92672">.</span>f_code<span style="color:#f92672">.</span>co_name, f<span style="color:#f92672">.</span>f_lineno
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test</span>():
+</span></span><span style="display:flex;"><span>    print func_name_and_line()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    test()
+</span></span></code></pre></div><h2 id="基本数学">
+  基本数学
+  <a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e6%95%b0%e5%ad%a6">#</a>
+</h2>
+<p><strong>一个方法得到整数和余数</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print divmod(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">3</span>)
+</span></span></code></pre></div><p><strong>利用两个*号，求幂</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>print <span style="color:#ae81ff">2</span><span style="color:#f92672">**</span><span style="color:#ae81ff">3</span>
+</span></span></code></pre></div><p><strong>利用namedtuple代替常量的dict</strong></p>
+<p>dict的优势在于简单，缺点在于key可以是随意的，所以，有时候key填错了，也不容易找出来。而且，由于dict的完全对外开发性。所以，通过某些步骤后，可能内容就完全变化了。所以，当你的dict作为一个常量的时候，可以考虑用namedtuple，这样增加了代码的可读性。而且，减少了出错的概率</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> namedtuple
+</span></span><span style="display:flex;"><span>user <span style="color:#f92672">=</span> namedtuple(<span style="color:#e6db74">&#39;User&#39;</span>, [<span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#e6db74">&#39;password&#39;</span>])<span style="color:#f92672">.</span>_make([<span style="color:#e6db74">&#39;pengyi&#39;</span>, <span style="color:#e6db74">&#39;888888&#39;</span>])
+</span></span><span style="display:flex;"><span>print user<span style="color:#f92672">.</span>name, user<span style="color:#f92672">.</span>password
+</span></span></code></pre></div><p><strong>快速拉平一个list</strong></p>
+<p>对于一个list，里面的元素可能又是一个list或者tuple。那么有没有方式快速拉平？</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">flatten</span>(sequnce):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> sequnce:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> isinstance(x, (list, tuple)):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> flatten(x):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">yield</span> y
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">yield</span> x
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> flatten([<span style="color:#e6db74">&#39;a&#39;</span>, [<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>], range(<span style="color:#ae81ff">10</span>), <span style="color:#e6db74">&#39;f&#39;</span>]):
+</span></span><span style="display:flex;"><span>    print x
+</span></span></code></pre></div><p><strong>元素组合</strong></p>
+<p>组合一个集合里面的所有元素</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> itertools <span style="color:#f92672">import</span> combinations
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> combinations(range(<span style="color:#ae81ff">10</span>), <span style="color:#ae81ff">2</span>):
+</span></span><span style="display:flex;"><span>    print x
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> combinations(range(<span style="color:#ae81ff">10</span>), <span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>    print x
+</span></span></code></pre></div><p><strong>对list进行排序</strong></p>
+<ul>
+<li>不忽略大小写</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>l <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;B&#39;</span>, <span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;A&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span> ]
+</span></span><span style="display:flex;"><span>l<span style="color:#f92672">.</span>sort()
+</span></span></code></pre></div><ul>
+<li>忽略大小写</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>l <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;B&#39;</span>, <span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;A&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span> ]
+</span></span><span style="display:flex;"><span>l<span style="color:#f92672">.</span>sort(key <span style="color:#f92672">=</span> str<span style="color:#f92672">.</span>lower)
+</span></span></code></pre></div><p><strong>对字典进行排序</strong></p>
+<ul>
+<li>元素很多的字典：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sort_dict</span>(d):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> sorted(d<span style="color:#f92672">.</span>iterkeys()):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">yield</span> k, d[k]
+</span></span></code></pre></div><ul>
+<li>元素不多的字典：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>[ k, d[k] <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> sorted(d<span style="color:#f92672">.</span>iterkeys()) ]
+</span></span></code></pre></div><p><strong><em>SortedDict</em> 保证字典的插入顺序</strong>
+对于字典来说，key是hash算法。那么，无法保证插入顺序。但是python的标准库里面提供了一个SortedDict，用法和dict一样。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> SortedDict(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, aa<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, bb<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)<span style="color:#f92672">.</span>iteritems():
+</span></span><span style="display:flex;"><span>    print k, v
+</span></span></code></pre></div></div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+  <div><a class="flex align-center" href="https://github.com/RyanPoy/blog/commit/0cc2a1b46f196e5981fa6f552e0e0ab7c07843d3" title='Last modified by pengyi | July 16, 2025' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="" />
+      <span>July 16, 2025</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/RyanPoy/blog/edit/main/exampleSite/content/posts/python%20tricks%20and%20hacks.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#getattribute"><strong>getattribute</strong></a></li>
+        <li><a href="#getattr"><strong>getattr</strong></a></li>
+        <li><a href="#setattr"><strong>setattr</strong></a></li>
+        <li><a href="#with--as-">with &hellip; as &hellip;</a></li>
+        <li><a href="#巧用异常得到代码片段的信息">巧用异常得到代码片段的信息</a></li>
+        <li><a href="#基本数学">基本数学</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

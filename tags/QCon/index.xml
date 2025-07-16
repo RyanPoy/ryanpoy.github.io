@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>QCon on 一哥黑板报</title>
+    <link>/tags/QCon/</link>
+    <description>Recent content in QCon on 一哥黑板报</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 16 Jul 2025 18:56:41 +0800</lastBuildDate>
+    <atom:link href="/tags/QCon/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>/posts/QCon-Beijing-2013/</link>
+      <pubDate>Fri, 25 Jan 2013 00:00:00 +0000</pubDate>
+      <guid>/posts/QCon-Beijing-2013/</guid>
+      <description>&lt;h2 id=&#34;引子&#34;&gt;&#xA;  引子&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%bc%95%e5%ad%90&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;接到了QCon BeiJing的邀请&lt;/strong&gt;，很荣幸，也很有压力，不知道能不能讲好。尽力吧。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
