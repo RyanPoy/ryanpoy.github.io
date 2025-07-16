@@ -17,7 +17,7 @@
 <link rel="canonical" href="/categories/Tutorials/">
 <link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/en.search.min.8aa26c99f9a9f000c89bb9897039d0f5e9d79fba0a51314d80464697fc7c3a7d.js" ></script>
+  <script defer src="/en.search.min.ddaf773e60b30105a49b6224bc20f89fff6b2ea6aef5d882522c04567545908d.js" ></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
 <link rel="alternate" type="application/rss+xml" href="/categories/Tutorials/index.xml" title="一哥黑板报" />
@@ -374,7 +374,12 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/categories/Tutorials/">Tutorials</a>
-          <span>2</span>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Tech/">Tech</a>
+          <span>1</span>
         </li>
       
       </ul>
@@ -423,6 +428,16 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/tags/Python/">Python</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Tornado/">Tornado</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Webpy/">Webpy</a>
           <span>1</span>
         </li>
       
@@ -480,54 +495,40 @@ https://github.com/alex-shpak/hugo-book
   
 
 
-    <p><p>fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。</p>
-<h2 id="fudging-a-web-service">
-  Fudging a Web Service
-  <a class="anchor" href="#fudging-a-web-service">#</a>
-</h2>
-<p>当测试一个使用web服务的代码时，你可能想快速的设置一个不依赖于真实的在互联网上的web服务。这是一个使用mock对象的好的方式。假设你又一个Twitter的机器人，看起来像这样：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Python" data-lang="Python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> oauthtwitter
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post_msg_to_twitter</span>(msg):
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>     api <span style="color:#f92672">=</span> oauthtwitter<span style="color:#f92672">.</span>OAuthApi(
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>         <span style="color:#e6db74">&#39;&lt;consumer_key&gt;&#39;</span>, <span style="color:#e6db74">&#39;&lt;consumer_secret&gt;&#39;</span>,
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>         <span style="color:#e6db74">&#39;&lt;oauth_token&gt;&#39;</span>, <span style="color:#e6db74">&#39;&lt;oauth_token_secret&gt;&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>     )
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>     api<span style="color:#f92672">.</span>UpdateStatus(msg)
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>     print <span style="color:#e6db74">&#34;Sent: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> msg
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span>
-</span></span></code></pre></div><p>因为
-  <a href="http://code.google.com/p/oauth-python-twitter/">oauthtwitter</a>是独立维护的，你的代码只要调用了正确的方法，就能正常工作。</p>
-<h2 id="a-simple-testcase">
-  A Simple TestCase
-  <a class="anchor" href="#a-simple-testcase">#</a>
-</h2>
-<p>你可以使用一个假的声明的期望的class来代替OAuthApi的class，它这样用：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> fudge
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#a6e22e">@fudge.patch</span>(<span style="color:#e6db74">&#39;oauthtwitter.OAuthApi&#39;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test</span>(FakeOAuthApi):
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>     (FakeOAuthApi<span style="color:#f92672">.</span>expects_call()
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>                  <span style="color:#f92672">.</span>with_args(<span style="color:#e6db74">&#39;&lt;consumer_key&gt;&#39;</span>, <span style="color:#e6db74">&#39;&lt;consumer_secret&gt;&#39;</span>,
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>                             <span style="color:#e6db74">&#39;&lt;oauth_token&gt;&#39;</span>, <span style="color:#e6db74">&#39;&lt;oauth_token_secret&gt;&#39;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>                  <span style="color:#f92672">.</span>returns_fake()
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>                  <span style="color:#f92672">.</span>expects(<span style="color:#e6db74">&#39;UpdateStatus&#39;</span>)<span style="color:#f92672">.</span>with_arg_count(<span style="color:#ae81ff">1</span>))
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>     post_msg_to_twitter(<span style="color:#e6db74">&#34;hey there fellow testing freaks!&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span>
-</span></span></code></pre></div><p>让我们来分解一下：</p>
-<ol>
-<li>测试阶段，patch装饰器将用一个假的对象临时的打一个补丁。并且使它作为一个参数，传入到测试方法中。这允许你添加你所想要的东西。</li>
-<li>这里你看到的这个fake对象，期望有一个方法被调用，这个方法使用4个指定的字符串作为参数。它返回了一个对象实例(一个新的fake对象)，它希望你使用一个参数调用fake_oauth.UpdateStatus()</li>
-<li>最后, post_msg_to_twitter() 被调用。让我们运行测试！</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> test()
-</span></span><span style="display:flex;"><span>Sent: hey there fellow testing freaks<span style="color:#960050;background-color:#1e0010">!</span>
-</span></span></code></pre></div><p>很高兴，它通过了。</p>
-<p>Fudge让你声明了你想要的或松散或紧密的期望(expectations)。如果你不关心确切的参数，你可以不调用fudge.Fake.with_args()。如果你不关心方法是不是真的被调用，你可以用fudge.Fake.provides()来代替fudge.Fake.expects()。同样的，当你不想为真实的参数值而操心，可以使用fudge.Fake.with_arg_count()。在其它方面有检测者，检测参数的值。</p>
-<h2 id="fake-objects-without-patches-dependency-injection">
-  Fake objects without patches (dependency injection)
-  <a class="anchor" href="#fake-objects-without-patches-dependency-injection">#</a>
-</h2>
-<p>如果你不需要任何补丁，你可以使用fudge.test()装饰器。这将捕获任何一个被抛出的非预期的异常。这是一个例子：</p></p>
+    <p><p>fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。</p></p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/a-quick-guide-to-using-tornado/">tornado教程</a>
+    </h2>
+    
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>November 5, 2011</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tutorials/">Tutorials</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/Python/">Python</a>, 
+      <a href="/tags/Tornado/">Tornado</a>
+  </div>
+  
+
+
+    <p><p>最近要做一个新的系统：一个披着邮件系统外衣的消息系统。性能肯定是一方面，所以Webpy就不打算用了。Django本来是我的第一选择，但是觉得Django可能也会出现性能问题。我还是考虑其它的吧。选来选去，最后选择了Torando。因为它：<strong>简单</strong>；<strong>传说性能好</strong>；<strong>成熟案例</strong> （ 
+  <a href="https://www.zhihu.com">知乎</a>, 
+  <a href="http://friendfeed.com/">FriendFeed</a> )</p></p>
   </article>
   
   <article class="markdown book-post">
@@ -558,46 +559,7 @@ https://github.com/alex-shpak/hugo-book
   
 
 
-    <p><p>Hibernate入门使用文章, 主要讲快速使用，不会介绍太多的深层次的东西。方便自己，方便大家。因本人懒惰，记不住hibernate的配置选项，所以，此文实例都是使用myeclipse进行快速开发，数据库都是mysql。</p>
-<!-- more --> 
-<h2 id="初次使用">
-  初次使用
-  <a class="anchor" href="#%e5%88%9d%e6%ac%a1%e4%bd%bf%e7%94%a8">#</a>
-</h2>
-<p>直接上需求：实现对用户的增、删、改、查。</p>
-<p>为了方便，用户就2个属性 用户ID和用户名。实体模型如下：</p>
-<p>
-  <img src="/images/hibernate-1.gif" alt="Imgurl" /></p>
-<p>建立工程:HibernateQuickUse，并且建立包。如下：</p>
-<p>
-  <img src="/images/hibernate-2.gif" alt="Imgurl" /></p>
-<h3 id="pojo">
-  Pojo
-  <a class="anchor" href="#pojo">#</a>
-</h3>
-<p>根据实体，创建类User，代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@SuppressWarnings</span>(<span style="color:#e6db74">&#34;serial&#34;</span>)
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">User</span> <span style="color:#66d9ef">implements</span> java.<span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Serializable</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> String id;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">private</span> String name;
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">User</span>() { }
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getId</span>() { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span>; }   
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setId</span>(String id) { <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> id; }  
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getName</span>() { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">name</span>; }
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setName</span>(String name) {<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> name;}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="db">
-  DB
-  <a class="anchor" href="#db">#</a>
-</h3>
-<p>根据实体，创建数据表。sql如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>use HibernateQuickUse;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">drop</span> <span style="color:#66d9ef">table</span> <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">exists</span> <span style="color:#66d9ef">User</span>;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#66d9ef">user</span> (
-</span></span><span style="display:flex;"><span>	id varchar(<span style="color:#ae81ff">32</span>) <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span>,
-</span></span><span style="display:flex;"><span>	name varchar(<span style="color:#ae81ff">32</span>)
-</span></span><span style="display:flex;"><span>);
-</span></span></code></pre></div><p>这里的id，我没有采用Integer auto_increment, 原因是为了数据库的数据能方便的导入到另外一种数据库里面，比方说：oracle。当然，这个是以牺牲部分效率为前提的。因为id是integer的，能更加快速查询。不过，从数据库会自动为 primary key 建立 index来看，效率也不会相差太多。</p></p>
+    <p><p>Hibernate入门使用文章, 主要讲快速使用，不会介绍太多的深层次的东西。方便自己，方便大家。因本人懒惰，记不住hibernate的配置选项，所以，此文实例都是使用myeclipse进行快速开发，数据库都是mysql。</p></p>
   </article>
   
 
@@ -655,7 +617,12 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/categories/Tutorials/">Tutorials</a>
-          <span>2</span>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Tech/">Tech</a>
+          <span>1</span>
         </li>
       
       </ul>
@@ -704,6 +671,16 @@ https://github.com/alex-shpak/hugo-book
       
         <li class="flex justify-between">
           <a href="/tags/Python/">Python</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Tornado/">Tornado</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Webpy/">Webpy</a>
           <span>1</span>
         </li>
       

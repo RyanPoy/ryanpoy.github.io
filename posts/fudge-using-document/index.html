@@ -3,67 +3,13 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。
-
-  Fudging a Web Service
-  #
-
-当测试一个使用web服务的代码时，你可能想快速的设置一个不依赖于真实的在互联网上的web服务。这是一个使用mock对象的好的方式。假设你又一个Twitter的机器人，看起来像这样：
-&gt;&gt;&gt; import oauthtwitter
-&gt;&gt;&gt; def post_msg_to_twitter(msg):
-...     api = oauthtwitter.OAuthApi(
-...         &#39;&lt;consumer_key&gt;&#39;, &#39;&lt;consumer_secret&gt;&#39;,
-...         &#39;&lt;oauth_token&gt;&#39;, &#39;&lt;oauth_token_secret&gt;&#39;
-...     )
-...     api.UpdateStatus(msg)
-...     print &#34;Sent: %s&#34; % msg
-&gt;&gt;&gt;
-因为
-  oauthtwitter是独立维护的，你的代码只要调用了正确的方法，就能正常工作。
-
-  A Simple TestCase
-  #
-
-你可以使用一个假的声明的期望的class来代替OAuthApi的class，它这样用：
-&gt;&gt;&gt; import fudge
-&gt;&gt;&gt; @fudge.patch(&#39;oauthtwitter.OAuthApi&#39;)
-... def test(FakeOAuthApi):
-...     (FakeOAuthApi.expects_call()
-...                  .with_args(&#39;&lt;consumer_key&gt;&#39;, &#39;&lt;consumer_secret&gt;&#39;,
-...                             &#39;&lt;oauth_token&gt;&#39;, &#39;&lt;oauth_token_secret&gt;&#39;)
-...                  .returns_fake()
-...                  .expects(&#39;UpdateStatus&#39;).with_arg_count(1))
-...
-...     post_msg_to_twitter(&#34;hey there fellow testing freaks!&#34;)
-&gt;&gt;&gt;
-让我们来分解一下：
-
-测试阶段，patch装饰器将用一个假的对象临时的打一个补丁。并且使它作为一个参数，传入到测试方法中。这允许你添加你所想要的东西。
-这里你看到的这个fake对象，期望有一个方法被调用，这个方法使用4个指定的字符串作为参数。它返回了一个对象实例(一个新的fake对象)，它希望你使用一个参数调用fake_oauth.UpdateStatus()
-最后, post_msg_to_twitter() 被调用。让我们运行测试！
-
-&gt;&gt;&gt; test()
-Sent: hey there fellow testing freaks!
-很高兴，它通过了。
-Fudge让你声明了你想要的或松散或紧密的期望(expectations)。如果你不关心确切的参数，你可以不调用fudge.Fake.with_args()。如果你不关心方法是不是真的被调用，你可以用fudge.Fake.provides()来代替fudge.Fake.expects()。同样的，当你不想为真实的参数值而操心，可以使用fudge.Fake.with_arg_count()。在其它方面有检测者，检测参数的值。
-
-  Fake objects without patches (dependency injection)
-  #
-
-如果你不需要任何补丁，你可以使用fudge.test()装饰器。这将捕获任何一个被抛出的非预期的异常。这是一个例子：">
+<meta name="description" content="fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
 <meta name="color-scheme" content="light dark"><meta property="og:url" content="/posts/fudge-using-document/">
   <meta property="og:site_name" content="一哥黑板报">
   <meta property="og:title" content="fudge使用文档">
-  <meta property="og:description" content="fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。
-Fudging a Web Service # 当测试一个使用web服务的代码时，你可能想快速的设置一个不依赖于真实的在互联网上的web服务。这是一个使用mock对象的好的方式。假设你又一个Twitter的机器人，看起来像这样：
-&gt;&gt;&gt; import oauthtwitter &gt;&gt;&gt; def post_msg_to_twitter(msg): ... api = oauthtwitter.OAuthApi( ... &#39;&lt;consumer_key&gt;&#39;, &#39;&lt;consumer_secret&gt;&#39;, ... &#39;&lt;oauth_token&gt;&#39;, &#39;&lt;oauth_token_secret&gt;&#39; ... ) ... api.UpdateStatus(msg) ... print &#34;Sent: %s&#34; % msg &gt;&gt;&gt; 因为 oauthtwitter是独立维护的，你的代码只要调用了正确的方法，就能正常工作。
-A Simple TestCase # 你可以使用一个假的声明的期望的class来代替OAuthApi的class，它这样用：
-&gt;&gt;&gt; import fudge &gt;&gt;&gt; @fudge.patch(&#39;oauthtwitter.OAuthApi&#39;) ... def test(FakeOAuthApi): ... (FakeOAuthApi.expects_call() ... .with_args(&#39;&lt;consumer_key&gt;&#39;, &#39;&lt;consumer_secret&gt;&#39;, ... &#39;&lt;oauth_token&gt;&#39;, &#39;&lt;oauth_token_secret&gt;&#39;) ... .returns_fake() ... .expects(&#39;UpdateStatus&#39;).with_arg_count(1)) ... ... post_msg_to_twitter(&#34;hey there fellow testing freaks!&#34;) &gt;&gt;&gt; 让我们来分解一下：
-测试阶段，patch装饰器将用一个假的对象临时的打一个补丁。并且使它作为一个参数，传入到测试方法中。这允许你添加你所想要的东西。 这里你看到的这个fake对象，期望有一个方法被调用，这个方法使用4个指定的字符串作为参数。它返回了一个对象实例(一个新的fake对象)，它希望你使用一个参数调用fake_oauth.UpdateStatus() 最后, post_msg_to_twitter() 被调用。让我们运行测试！ &gt;&gt;&gt; test() Sent: hey there fellow testing freaks! 很高兴，它通过了。
-Fudge让你声明了你想要的或松散或紧密的期望(expectations)。如果你不关心确切的参数，你可以不调用fudge.Fake.with_args()。如果你不关心方法是不是真的被调用，你可以用fudge.Fake.provides()来代替fudge.Fake.expects()。同样的，当你不想为真实的参数值而操心，可以使用fudge.Fake.with_arg_count()。在其它方面有检测者，检测参数的值。
-Fake objects without patches (dependency injection) # 如果你不需要任何补丁，你可以使用fudge.test()装饰器。这将捕获任何一个被抛出的非预期的异常。这是一个例子：">
+  <meta property="og:description" content="fudge是一个python的mock框架，我非常喜欢它。决定把使用文档翻译出来。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -77,7 +23,7 @@ Fake objects without patches (dependency injection) # 如果你不需要任何�
 <link rel="canonical" href="/posts/fudge-using-document/">
 <link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
   <script defer src="/fuse.min.js"></script>
-  <script defer src="/en.search.min.8aa26c99f9a9f000c89bb9897039d0f5e9d79fba0a51314d80464697fc7c3a7d.js" ></script>
+  <script defer src="/en.search.min.ddaf773e60b30105a49b6224bc20f89fff6b2ea6aef5d882522c04567545908d.js" ></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
 <!--
@@ -682,8 +628,7 @@ https://github.com/alex-shpak/hugo-book
 <p>
   <a href="http://farmdev.com/projects/fudge/api/fudge.patcher.html">fudge.patcher</a></p>
 </li>
-</ul>
-</div>
+</ul></div>
 </article>
  
       

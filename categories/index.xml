@@ -29,5 +29,12 @@
       <guid>/categories/Tutorials/</guid>
       <description></description>
     </item>
+    <item>
+      <title>Tech</title>
+      <link>/categories/Tech/</link>
+      <pubDate>Thu, 18 Aug 2011 00:00:00 +0000</pubDate>
+      <guid>/categories/Tech/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

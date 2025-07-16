@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="最近要做一个新的系统：一个披着邮件系统外衣的消息系统。性能肯定是一方面，所以Webpy就不打算用了。Django本来是我的第一选择，但是觉得Django可能也会出现性能问题。我还是考虑其它的吧。选来选去，最后选择了Torando。因为它：简单；传说性能好；成熟案例 （ 
+  知乎, 
+  FriendFeed )">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="/posts/a-quick-guide-to-using-tornado/">
+  <meta property="og:site_name" content="一哥黑板报">
+  <meta property="og:title" content="tornado教程">
+  <meta property="og:description" content="最近要做一个新的系统：一个披着邮件系统外衣的消息系统。性能肯定是一方面，所以Webpy就不打算用了。Django本来是我的第一选择，但是觉得Django可能也会出现性能问题。我还是考虑其它的吧。选来选去，最后选择了Torando。因为它：简单；传说性能好；成熟案例 （ 知乎, FriendFeed )">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2011-11-05T00:00:00+00:00">
+    <meta property="article:modified_time" content="2011-11-05T00:00:00+00:00">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="Tornado">
+<title>tornado教程 | 一哥黑板报</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="/posts/a-quick-guide-to-using-tornado/">
+<link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.ddaf773e60b30105a49b6224bc20f89fff6b2ea6aef5d882522c04567545908d.js" ></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>一哥黑板报</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="/docs/example/" class="">Example Site</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/" class="">Table of Contents</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/with-toc/" class="">With ToC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/without-toc/" class="">Without ToC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-3cac40e98ef6004516ceb5fd9190d720" class="toggle"  />
+    <label for="section-3cac40e98ef6004516ceb5fd9190d720" class="flex">
+      <a role="button" class="flex-auto ">Collapsed</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/collapsed/3rd-level/" class="">3rd Level</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/collapsed/3rd-level/4th-level/" class="">4th Level</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Shortcodes</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/buttons/" class="">Buttons</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/columns/" class="">Columns</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/details/" class="">Details</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/mermaid/" class="">Mermaid</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/tabs/" class="">Tabs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/katex/" class="">KaTeX</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/RyanPoy/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>tornado教程</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#简单尝试">简单尝试</a></li>
+        <li><a href="#主要核心">主要核心</a>
+          <ul>
+            <li><a href="#handler">Handler</a></li>
+            <li><a href="#db操作">DB操作</a></li>
+            <li><a href="#templates">Templates</a></li>
+            <li><a href="#route">Route</a></li>
+          </ul>
+        </li>
+        <li><a href="#合体django">合体Django</a>
+          <ul>
+            <li><a href="#修改-urlpy">修改 url.py</a></li>
+            <li><a href="#修改settingspy">修改settings.py</a></li>
+            <li><a href="#修改appcontrollerpy">修改app.controller.py</a></li>
+            <li><a href="#修改applicationpy">修改application.py</a></li>
+            <li><a href="#创建db">创建db</a></li>
+            <li><a href="#启动">启动</a></li>
+            <li><a href="#浏览器访问">浏览器访问</a></li>
+            <li><a href="#加载django环境">加载Django环境</a></li>
+            <li><a href="#启动django服务">启动django服务</a></li>
+            <li><a href="#要修改工程的urlspy">要修改工程的urls.py</a></li>
+            <li><a href="#要修改settingspy里面的admin_media_prefix">要修改settings.py里面的ADMIN_MEDIA_PREFIX</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用django的orm">使用Django的orm</a>
+          <ul>
+            <li><a href="#orm本身">orm本身</a></li>
+            <li><a href="#事务">事务</a></li>
+            <li><a href="#对于commit_on_success的方式">对于commit_on_success的方式</a></li>
+          </ul>
+        </li>
+        <li><a href="#异步调用">异步调用</a></li>
+        <li><a href="#基础知识">基础知识</a>
+          <ul>
+            <li><a href="#yield和generator">yield和generator</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h1>
+    tornado教程
+  </h1>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>November 5, 2011</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tutorials/">Tutorials</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/Python/">Python</a>, 
+      <a href="/tags/Tornado/">Tornado</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><p>最近要做一个新的系统：一个披着邮件系统外衣的消息系统。性能肯定是一方面，所以Webpy就不打算用了。Django本来是我的第一选择，但是觉得Django可能也会出现性能问题。我还是考虑其它的吧。选来选去，最后选择了Torando。因为它：<strong>简单</strong>；<strong>传说性能好</strong>；<strong>成熟案例</strong> （ 
+  <a href="https://www.zhihu.com">知乎</a>, 
+  <a href="http://friendfeed.com/">FriendFeed</a> )</p>
+<h2 id="简单尝试">
+  简单尝试
+  <a class="anchor" href="#%e7%ae%80%e5%8d%95%e5%b0%9d%e8%af%95">#</a>
+</h2>
+<ul>
+<li>安装</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo pip install tornado
+</span></span></code></pre></div><ul>
+<li>第一个demo</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tornado.ioloop
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tornado.web
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Index</span>(tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;Hello, world ! </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>urls <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#39;/&#39;</span>, Index),
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>():
+</span></span><span style="display:flex;"><span>    app <span style="color:#f92672">=</span> tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>Application(urls)
+</span></span><span style="display:flex;"><span>    app<span style="color:#f92672">.</span>listen(<span style="color:#ae81ff">4322</span>)
+</span></span><span style="display:flex;"><span>    tornado<span style="color:#f92672">.</span>ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>start()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    start()
+</span></span></code></pre></div><ul>
+<li>启动：python webpy_test.py 0.0.0.0:4322</li>
+<li>GET 测试：curl http://localhost:4322</li>
+</ul>
+<blockquote>
+<p>结果如下：
+Hello, world</p></blockquote>
+<p>看到了么，和Webpy长得几乎一模一样。我先简单压测一下它。如果好的话，我觉得可以考虑新系统用它来写，旧系统或者也可以往这方面上转。</p>
+<ul>
+<li>压测：ab -c 10 -n 1000 http://192.168.95.222:4322/</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>This is ApacheBench, Version 2.3 &lt;$Revision: <span style="color:#ae81ff">655654</span> $&gt;
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#ae81ff">1996</span> Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+</span></span><span style="display:flex;"><span>Licensed to The Apache Software Foundation, http://www.apache.org/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Benchmarking 192.168.95.222 <span style="color:#f92672">(</span>be patient<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">100</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">200</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">300</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">400</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">500</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">600</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">700</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">800</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">900</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">1000</span> requests
+</span></span><span style="display:flex;"><span>Finished <span style="color:#ae81ff">1000</span> requests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Server Software:        TornadoServer/2.1.1
+</span></span><span style="display:flex;"><span>Server Hostname:        192.168.95.222
+</span></span><span style="display:flex;"><span>Server Port:            <span style="color:#ae81ff">4322</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Document Path:          /
+</span></span><span style="display:flex;"><span>Document Length:        <span style="color:#ae81ff">16</span> bytes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Concurrency Level:      <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>Time taken <span style="color:#66d9ef">for</span> tests:   0.693 seconds
+</span></span><span style="display:flex;"><span>Complete requests:      <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>Failed requests:        <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Write errors:           <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Total transferred:      <span style="color:#ae81ff">174000</span> bytes
+</span></span><span style="display:flex;"><span>HTML transferred:       <span style="color:#ae81ff">16000</span> bytes
+</span></span><span style="display:flex;"><span>Requests per second:    1443.30 <span style="color:#f92672">[</span><span style="color:#75715e">#/sec] (mean)</span>
+</span></span><span style="display:flex;"><span>Time per request:       6.929 <span style="color:#f92672">[</span>ms<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>mean<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time per request:       0.693 <span style="color:#f92672">[</span>ms<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>mean, across all concurrent requests<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Transfer rate:          245.25 <span style="color:#f92672">[</span>Kbytes/sec<span style="color:#f92672">]</span> received
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Connection Times <span style="color:#f92672">(</span>ms<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                min  mean<span style="color:#f92672">[</span>+/-sd<span style="color:#f92672">]</span> median   max
+</span></span><span style="display:flex;"><span>Connect:        <span style="color:#ae81ff">1</span>    <span style="color:#ae81ff">1</span>   1.0      <span style="color:#ae81ff">1</span>      <span style="color:#ae81ff">13</span>
+</span></span><span style="display:flex;"><span>Processing:     <span style="color:#ae81ff">1</span>    <span style="color:#ae81ff">6</span>   1.9      <span style="color:#ae81ff">5</span>      <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span>Waiting:        <span style="color:#ae81ff">1</span>    <span style="color:#ae81ff">5</span>   1.8      <span style="color:#ae81ff">5</span>      <span style="color:#ae81ff">18</span>
+</span></span><span style="display:flex;"><span>Total:          <span style="color:#ae81ff">3</span>    <span style="color:#ae81ff">7</span>   1.8      <span style="color:#ae81ff">6</span>      <span style="color:#ae81ff">19</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Percentage of the requests served within a certain time <span style="color:#f92672">(</span>ms<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    50%      <span style="color:#ae81ff">6</span>
+</span></span><span style="display:flex;"><span>    66%      <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>    75%      <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>    80%      <span style="color:#ae81ff">7</span>
+</span></span><span style="display:flex;"><span>    90%      <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>    95%     <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    98%     <span style="color:#ae81ff">13</span>
+</span></span><span style="display:flex;"><span>    99%     <span style="color:#ae81ff">17</span>
+</span></span><span style="display:flex;"><span>    100%     <span style="color:#ae81ff">19</span> <span style="color:#f92672">(</span>longest request<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>每秒将近是1443，接近webpy的10倍。</p>
+<ul>
+<li>压测-100并发，2000请求：ab -c 100 -n 2000 http://192.168.95.222:4322/</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>This is ApacheBench, Version 2.3 &lt;$Revision: <span style="color:#ae81ff">655654</span> $&gt;
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#ae81ff">1996</span> Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+</span></span><span style="display:flex;"><span>Licensed to The Apache Software Foundation, http://www.apache.org/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Benchmarking 192.168.95.222 <span style="color:#f92672">(</span>be patient<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">200</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">400</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">600</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">800</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">1000</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">1200</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">1400</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">1600</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">1800</span> requests
+</span></span><span style="display:flex;"><span>Completed <span style="color:#ae81ff">2000</span> requests
+</span></span><span style="display:flex;"><span>Finished <span style="color:#ae81ff">2000</span> requests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Server Software:        TornadoServer/2.1.1
+</span></span><span style="display:flex;"><span>Server Hostname:        192.168.95.222
+</span></span><span style="display:flex;"><span>Server Port:            <span style="color:#ae81ff">4322</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Document Path:          /
+</span></span><span style="display:flex;"><span>Document Length:        <span style="color:#ae81ff">16</span> bytes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Concurrency Level:      <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>Time taken <span style="color:#66d9ef">for</span> tests:   1.075 seconds
+</span></span><span style="display:flex;"><span>Complete requests:      <span style="color:#ae81ff">2000</span>
+</span></span><span style="display:flex;"><span>Failed requests:        <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Write errors:           <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>Total transferred:      <span style="color:#ae81ff">348000</span> bytes
+</span></span><span style="display:flex;"><span>HTML transferred:       <span style="color:#ae81ff">32000</span> bytes
+</span></span><span style="display:flex;"><span>Requests per second:    1860.06 <span style="color:#f92672">[</span><span style="color:#75715e">#/sec] (mean)</span>
+</span></span><span style="display:flex;"><span>Time per request:       53.762 <span style="color:#f92672">[</span>ms<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>mean<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Time per request:       0.538 <span style="color:#f92672">[</span>ms<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>mean, across all concurrent requests<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Transfer rate:          316.06 <span style="color:#f92672">[</span>Kbytes/sec<span style="color:#f92672">]</span> received
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Connection Times <span style="color:#f92672">(</span>ms<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>                min  mean<span style="color:#f92672">[</span>+/-sd<span style="color:#f92672">]</span> median   max
+</span></span><span style="display:flex;"><span>Connect:        <span style="color:#ae81ff">1</span>    <span style="color:#ae81ff">1</span>   1.0      <span style="color:#ae81ff">1</span>       <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>Processing:     <span style="color:#ae81ff">4</span>   <span style="color:#ae81ff">51</span>  13.0     <span style="color:#ae81ff">46</span>      <span style="color:#ae81ff">76</span>
+</span></span><span style="display:flex;"><span>Waiting:        <span style="color:#ae81ff">4</span>   <span style="color:#ae81ff">51</span>  13.0     <span style="color:#ae81ff">46</span>      <span style="color:#ae81ff">75</span>
+</span></span><span style="display:flex;"><span>Total:          <span style="color:#ae81ff">8</span>   <span style="color:#ae81ff">53</span>  12.8     <span style="color:#ae81ff">48</span>      <span style="color:#ae81ff">77</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Percentage of the requests served within a certain time <span style="color:#f92672">(</span>ms<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    50%     <span style="color:#ae81ff">48</span>
+</span></span><span style="display:flex;"><span>    66%     <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>    75%     <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>    80%     <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>    90%     <span style="color:#ae81ff">66</span>
+</span></span><span style="display:flex;"><span>    95%     <span style="color:#ae81ff">70</span>
+</span></span><span style="display:flex;"><span>    98%     <span style="color:#ae81ff">73</span>
+</span></span><span style="display:flex;"><span>    99%     <span style="color:#ae81ff">73</span>
+</span></span><span style="display:flex;"><span>    100%     <span style="color:#ae81ff">77</span> <span style="color:#f92672">(</span>longest request<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>每秒1800个请求，响应为53.8ms，很强大啊。</p>
+<p>那就选它了。</p>
+<h2 id="主要核心">
+  主要核心
+  <a class="anchor" href="#%e4%b8%bb%e8%a6%81%e6%a0%b8%e5%bf%83">#</a>
+</h2>
+<h3 id="handler">
+  Handler
+  <a class="anchor" href="#handler">#</a>
+</h3>
+<p>对于<code>Tornado</code>而言，MVC中的C就是它的<code>Handler</code>。<code>Torando</code>的Handler非常好写，只要继承自<code>tornado.web.RequestHandler</code>就好了。下面我统一的把<code>Handler</code>叫做<code>Controller</code>，因为习惯了这种叫法。对于<code>Controller</code>的主要调用顺序如下：</p>
+<ul>
+<li><code>__init__</code>：构造方法，如果需要在开始做一些事情的话，不推荐在这里。而推荐使用<code>initialize</code></li>
+<li><code>initialize</code>：这里做事情，比方说给这个Controller加入一些成员变量。例如：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestController</span>(tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(self): 
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>uuid <span style="color:#f92672">=</span> uuid<span style="color:#f92672">.</span>uuid4()<span style="color:#f92672">.</span>hex
+</span></span></code></pre></div><ul>
+<li><code>prepare</code>：调用具体的<code>get/post/...</code>方法之前，会调用它。在这里加入加入一些权限控制。比如说，除了登陆页面外，需要登陆成功了才能进行访问。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestController</span>(tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">prepare</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>uri<span style="color:#f92672">.</span>startswith(self<span style="color:#f92672">.</span>get_login_url()) \
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">and</span> self<span style="color:#f92672">.</span>current_user <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>redirect(self<span style="color:#f92672">.</span>get_login_url())
+</span></span></code></pre></div><ul>
+<li><code>get/post/put/delete/...</code>：具体业务的方法</li>
+<li><code>get_error_html</code>：当有异常抛出的时候会调用它, 比方说，我们要渲染自己的错误页面</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_error_html</span>(self, status_code, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>render_string(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;my_error.html&#39;</span>, code<span style="color:#f92672">=</span>code, message<span style="color:#f92672">=</span>message, exception<span style="color:#f92672">=</span>exception
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><ul>
+<li><code>finish</code>：这个是一个很<strong>重要</strong>的方法，因为tornado最后总会调用finish一次，且仅仅调用一次。这个是由于它是异步框架的原因。</li>
+</ul>
+<p>除了上面的调用顺序中的几个方法，常用的就是下面的了:</p>
+<ul>
+<li><code>get_current_user</code>：得到当前用户，这个需要自己重写。一般的做法，从cookie中找到相应的session信息，再通过查session或者查db找到具体的用户</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_current_user</span>(self):
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_secure_cookie(<span style="color:#e6db74">&#34;user&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>db<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;select * from user where username = </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span>, username) <span style="color:#66d9ef">if</span> username <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">None</span>
+</span></span></code></pre></div><ul>
+<li><code>redirect</code>：302跳转到某个地址。我一般喜欢封装一下，封装为：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">redirect_to</span>(self, path, notice <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    self<span style="color:#f92672">.</span>notice(notice)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>redirect(path)
+</span></span></code></pre></div><p>这里的notice其实类似于rails中的flash。利用cookie实现的。代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">notice</span>(self, value <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> value <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        _value <span style="color:#f92672">=</span> urllib2<span style="color:#f92672">.</span>quote(value<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>), <span style="color:#e6db74">&#39;true&#39;</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>set_cookie(self<span style="color:#f92672">.</span>FLASH_COOKIE_KEY, _value)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        v <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_cookie(self<span style="color:#f92672">.</span>FLASH_COOKIE_KEY, <span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>clear_cookie(self<span style="color:#f92672">.</span>FLASH_COOKIE_KEY)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> urllib<span style="color:#f92672">.</span>unquote_plus(v)<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#39;utf-8&#39;</span>) <span style="color:#66d9ef">if</span> v <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span> <span style="color:#66d9ef">else</span> v
+</span></span></code></pre></div><ul>
+<li><code>render</code>：渲染某个页面，同样我也细化封装一下：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">render_view</span>(self, view_name, notice <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>    kwargs<span style="color:#f92672">.</span>update(filters)
+</span></span><span style="display:flex;"><span>    _notice <span style="color:#f92672">=</span> notice <span style="color:#f92672">or</span> self<span style="color:#f92672">.</span>notice()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>render(view_name, notice <span style="color:#f92672">=</span> _notice, <span style="color:#f92672">**</span>kwargs)
+</span></span></code></pre></div><p>这样我就可以传入更多的默认渲染的东西</p>
+<h3 id="db操作">
+  DB操作
+  <a class="anchor" href="#db%e6%93%8d%e4%bd%9c">#</a>
+</h3>
+<p>tornado 的db操作非常简单。简单到没有。仅仅只是对 mysql提供了基本的封装。</p>
+<ul>
+<li>打开连接：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>db <span style="color:#f92672">=</span> database<span style="color:#f92672">.</span>Connection(host, database, user<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, password<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, max_idle_time<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">3600</span>)
+</span></span></code></pre></div><ul>
+<li>查询多条记录</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 可能sql注入</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> user <span style="color:#f92672">in</span> db<span style="color:#f92672">.</span>query(<span style="color:#e6db74">&#34;SELECT * FROM user WHERE gender=&#39;f&#39;&#34;</span>): 
+</span></span><span style="display:flex;"><span>    print user<span style="color:#f92672">.</span>username, user<span style="color:#f92672">.</span>password
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 没有sql注入</span>
+</span></span><span style="display:flex;"><span>db<span style="color:#f92672">.</span>query(<span style="color:#e6db74">&#34;SELECT * FROM user WHERE gender = </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span>, <span style="color:#e6db74">&#39;f&#39;</span>): 
+</span></span></code></pre></div><ul>
+<li>查询单条记录：永远只是返回第1条</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>db<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;SELECT * FROM user WHERE id = 1&#39;</span>) <span style="color:#75715e"># 可能有sql注入    </span>
+</span></span><span style="display:flex;"><span>db<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;SELECT * FROM user WHERE id = </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span>, <span style="color:#ae81ff">1</span>) <span style="color:#75715e"># 没有sql注入</span>
+</span></span></code></pre></div><ul>
+<li>删除/修改/插入</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>db<span style="color:#f92672">.</span>execute(sql, <span style="color:#f92672">*</span>parameters)
+</span></span></code></pre></div><ul>
+<li>批量 的删除/修改/插入</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>db<span style="color:#f92672">.</span>executemany(sql, <span style="color:#f92672">*</span>parameters)
+</span></span></code></pre></div><p><strong>注意：</strong> <em>没有transaction的处理。</em></p>
+<h3 id="templates">
+  Templates
+  <a class="anchor" href="#templates">#</a>
+</h3>
+<p>tornado的templates，就是MVC的V，即：view。对于页面上常用的tag，基本和django一样。最大的差距就是所有的都是end结尾。不像django的endif等等。</p>
+<p><strong>常用tag</strong></p>
+<ul>
+<li><code>if</code> 比django的好，django没有<code>elif</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#f92672">%</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">%</span>} {<span style="color:#f92672">%</span> <span style="color:#66d9ef">elif</span> <span style="color:#f92672">%</span>} {<span style="color:#f92672">%</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">%</span>} {<span style="color:#f92672">%</span> end <span style="color:#f92672">%</span>}
+</span></span></code></pre></div><ul>
+<li><code>block</code> 和 django不同点：不需要 endblock</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#f92672">%</span> block <span style="color:#f92672">%</span>} {<span style="color:#f92672">%</span> end <span style="color:#f92672">%</span>} 
+</span></span></code></pre></div><ul>
+<li><code>extend</code>和django的一样</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#f92672">%</span> extend <span style="color:#f92672">%</span>}
+</span></span></code></pre></div><ul>
+<li><code>for</code>循环和django一样</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#f92672">%</span> <span style="color:#66d9ef">for</span> <span style="color:#f92672">%</span>} {<span style="color:#f92672">%</span> end <span style="color:#f92672">%</span>}
+</span></span></code></pre></div><ul>
+<li>设置变量：</li>
+</ul>
+<p>一个变量 name = &lsquo;poy&rsquo;, 这个对于一些navgation的高亮很有帮助。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{<span style="color:#f92672">%</span> set name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;poy&#39;</span> <span style="color:#f92672">%</span>}
+</span></span></code></pre></div><ul>
+<li>嵌入python代码：django里面只能是filter，但是Tornado是允许在template里面直接写python的代码的：</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{ <span style="color:#e6db74">&#39;RyanPoy&#39;</span><span style="color:#f92672">.</span>lower() }}
+</span></span></code></pre></div><p>对于python代码，可以直接封装成方法，然后，tornado可以直接在handler render 一个template的的时候把相应的function以key-value的方式传过来，这样就可以直接使用了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelloHandler</span>(WebHandler):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>render(<span style="color:#e6db74">&#39;test.html&#39;</span>, hello <span style="color:#f92672">=</span> <span style="color:#66d9ef">lambda</span> name: <span style="color:#e6db74">&#39;hello, </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> name)
+</span></span></code></pre></div><p>然后在<code>test.html</code>里面写：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{ hello(<span style="color:#e6db74">&#39;pengyi&#39;</span>) }}
+</span></span></code></pre></div><h3 id="route">
+  Route
+  <a class="anchor" href="#route">#</a>
+</h3>
+<p>tornado的url就是下面的形式：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>urls <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;/user/show/&#39;</span>, UserShow),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;/user/login/&#39;</span>, UserLogin),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;/group/maillist/&#39;</span>, GroupMaillist),
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></div><p>这里给出一个封装，用来自动的进行route，首先要求，项目目录如下：</p>
+<p>
+  <img src="/images/tornado-1.png" alt="目录" /></p>
+<p>接下来，就是url的自动生成了。我写了一个route.py的文件。
+route.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> sys
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__url_of</span>(module_name):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;/&#39;</span><span style="color:#f92672">.</span>join([ v <span style="color:#66d9ef">for</span> v <span style="color:#f92672">in</span> module_name<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;_&#39;</span>) <span style="color:#66d9ef">if</span> v ])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">reasoning</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">from</span> app.controllers.base_controller <span style="color:#f92672">import</span> BaseController
+</span></span><span style="display:flex;"><span>    valible_suffix <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;/&#39;</span>]
+</span></span><span style="display:flex;"><span>    controllers_dir <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;app/controllers&#39;</span>
+</span></span><span style="display:flex;"><span>    controllers_package <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.&#39;</span><span style="color:#f92672">.</span>join(controllers_dir<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;/&#39;</span>))
+</span></span><span style="display:flex;"><span>    controllers_dir <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>normpath(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(__file__), <span style="color:#e6db74">&#39;..&#39;</span>, controllers_dir))
+</span></span><span style="display:flex;"><span>    urls <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _, _, files <span style="color:#f92672">in</span> os<span style="color:#f92672">.</span>walk(controllers_dir):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> f <span style="color:#f92672">in</span> files:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> f <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;base_controller.py&#39;</span> <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> f<span style="color:#f92672">.</span>endswith(<span style="color:#e6db74">&#39;controller.py&#39;</span>):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            prefix_name <span style="color:#f92672">=</span> f[<span style="color:#ae81ff">0</span>:<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>] <span style="color:#75715e"># 3 为 len(&#39;.py&#39;)</span>
+</span></span><span style="display:flex;"><span>            model_name <span style="color:#f92672">=</span> prefix_name[<span style="color:#ae81ff">0</span>:<span style="color:#f92672">-</span><span style="color:#ae81ff">11</span>]  <span style="color:#75715e"># 11 为 len(&#39;_controller&#39;)</span>
+</span></span><span style="display:flex;"><span>            module_name <span style="color:#f92672">=</span> controllers_package <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.&#39;</span> <span style="color:#f92672">+</span> prefix_name
+</span></span><span style="display:flex;"><span>            module <span style="color:#f92672">=</span> __import__(module_name, fromlist<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;*&#39;</span>]) <span style="color:#75715e"># 导入所有的内容到内存中</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> class_name <span style="color:#f92672">in</span> dir(module):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>                    obj <span style="color:#f92672">=</span> getattr(module, class_name)
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> obj <span style="color:#f92672">is</span> BaseController <span style="color:#f92672">or</span> <span style="color:#f92672">not</span> issubclass(obj, BaseController):
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">TypeError</span>, _:
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                clazz <span style="color:#f92672">=</span> getattr(module, class_name)
+</span></span><span style="display:flex;"><span>                controller_file_name <span style="color:#f92672">=</span> module_name<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#39;.&#39;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">for</span> suffix <span style="color:#f92672">in</span> valible_suffix:
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span> controller_file_name <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;index_controller&#39;</span>:
+</span></span><span style="display:flex;"><span>                        url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">/</span><span style="color:#e6db74">%s%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (__url_of(model_name), class_name<span style="color:#f92672">.</span>lower(), suffix)
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">else</span>: <span style="color:#75715e"># 如果是index_controller，那么映射只有class name，controller name 不要  </span>
+</span></span><span style="display:flex;"><span>                        url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/</span><span style="color:#e6db74">%s%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (class_name<span style="color:#f92672">.</span>lower(), suffix)    
+</span></span><span style="display:flex;"><span>                    urls<span style="color:#f92672">.</span>append((url, clazz))
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> class_name<span style="color:#f92672">.</span>lower() <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;index&#39;</span>:
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">for</span> suffix <span style="color:#f92672">in</span> valible_suffix:
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">if</span> controller_file_name <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;index_controller&#39;</span>:
+</span></span><span style="display:flex;"><span>                            url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/</span><span style="color:#e6db74">%s%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (__url_of(model_name), suffix)
+</span></span><span style="display:flex;"><span>                            urls<span style="color:#f92672">.</span>append((url, clazz))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> urls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">special</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">import</span> app.controllers <span style="color:#66d9ef">as</span> controllers
+</span></span><span style="display:flex;"><span>    mapping <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;/&#39;</span>: controllers<span style="color:#f92672">.</span>user_controller<span style="color:#f92672">.</span>Login
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    urls <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> url, clazz <span style="color:#f92672">in</span> mapping<span style="color:#f92672">.</span>iteritems():
+</span></span><span style="display:flex;"><span>        urls<span style="color:#f92672">.</span>append((url, clazz)) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> urls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">all</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge</span>(all_urls_dict, mappings):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> mapping <span style="color:#f92672">in</span> mappings:
+</span></span><span style="display:flex;"><span>            url, clazz <span style="color:#f92672">=</span> mapping[<span style="color:#ae81ff">0</span>], mapping[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>            all_urls_dict[url] <span style="color:#f92672">=</span> (url, clazz)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_of</span>(reasoning, special):
+</span></span><span style="display:flex;"><span>        all <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>        merge(all, reasoning)
+</span></span><span style="display:flex;"><span>        merge(all, special)
+</span></span><span style="display:flex;"><span>        urls <span style="color:#f92672">=</span> all<span style="color:#f92672">.</span>values()
+</span></span><span style="display:flex;"><span>        urls<span style="color:#f92672">.</span>sort()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> urls
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> merge_of(reasoning(), special())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show</span>(url_mappings):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> mapping <span style="color:#f92672">in</span> url_mappings:
+</span></span><span style="display:flex;"><span>        print mapping
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;all&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> len(sys<span style="color:#f92672">.</span>argv) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">and</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">in</span> (<span style="color:#e6db74">&#39;all&#39;</span>, <span style="color:#e6db74">&#39;reasoning&#39;</span>, <span style="color:#e6db74">&#39;special&#39;</span>):
+</span></span><span style="display:flex;"><span>        name <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>argv[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    urls <span style="color:#f92672">=</span> eval(name)()
+</span></span><span style="display:flex;"><span>    show(urls)
+</span></span></code></pre></div><p>对于controller的写法如下：</p>
+<p>company_controller.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> app.controllers.base_controller <span style="color:#f92672">import</span> BaseController
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Index</span>(BaseController):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">List</span>(BaseController):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Create</span>(BaseController):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Show</span>(BaseController):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Update</span>(BaseController):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">post</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><h2 id="合体django">
+  合体Django
+  <a class="anchor" href="#%e5%90%88%e4%bd%93django">#</a>
+</h2>
+<p>之前有提过，tornado的db非常的简单，只有一个基于mysql的基础封装，而这个封装甚至连事务都没有。所以，如果我们采用tornado的db能做的事情就是写sql语句。</p>
+<p>对于小型的系统还好，对于一些中/中大/大型业务系统，sql写起来是比较费事费时的，成本很高，尤其是以后的维护成本。</p>
+<p>所以，我们需要引入一个第3方的ORM。在Python，ORM最著名的莫过于 sqlalchemy 和 sqlobject了。</p>
+<p>那我们在tornado中就用它们？答案是否定的。原因是：我们期望能够有一个类似DJango的Admin管理界面。</p>
+<p>好吧，程序员总是很懒惰的，哪怕一个字母都不愿意多敲。程序员总是很贪心的，哪怕能多一片叶子，也要仅仅的攥着手中。</p>
+<p>现在的实际情况就来了，我们能不能利用DJango提供的ORM和Admin，为Tornado使用呢 ？</p>
+<p>经过一天的研究，答案是肯定的。下面，我们就来具体的讲讲。</p>
+<p><strong>生成Django项目</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>django-admin.py startproject Tornadjango
+</span></span></code></pre></div><p><strong>创建一个app</strong>
+我习惯只有一个app，且命名为app</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cd Tornadjango
+</span></span><span style="display:flex;"><span>python manage.py startapp app
+</span></span></code></pre></div><p><strong>修改app目录下的文件名</strong>
+这个也是我习惯了的命名规则, 创建controllers.py, 删除views.py，在工程目录下面创建application.py。此时，目录结构应该如下：</p>
+<p>
+  <img src="/images/tornado-2.png" alt="目录结构" /></p>
+<h3 id="修改-urlpy">
+  修改 url.py
+  <a class="anchor" href="#%e4%bf%ae%e6%94%b9-urlpy">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> django.conf.urls.defaults <span style="color:#f92672">import</span> patterns, include
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> django.contrib <span style="color:#f92672">import</span> admin
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> django
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>admin<span style="color:#f92672">.</span>autodiscover()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MEDIA_ROOT <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(django<span style="color:#f92672">.</span>__file__), <span style="color:#e6db74">&#39;contrib&#39;</span>, <span style="color:#e6db74">&#39;admin&#39;</span>, <span style="color:#e6db74">&#39;media&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>urlpatterns <span style="color:#f92672">=</span> patterns(<span style="color:#e6db74">&#39;&#39;</span>,
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^admin/media/(?P&lt;path&gt;.*)$&#39;</span>, <span style="color:#e6db74">&#39;django.views.static.serve&#39;</span>,{<span style="color:#e6db74">&#39;document_root&#39;</span>: MEDIA_ROOT, <span style="color:#e6db74">&#39;show_indexes&#39;</span>: <span style="color:#66d9ef">False</span>}),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^admin/&#39;</span>, include(admin<span style="color:#f92672">.</span>site<span style="color:#f92672">.</span>urls)),
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="修改settingspy">
+  修改settings.py
+  <a class="anchor" href="#%e4%bf%ae%e6%94%b9settingspy">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Django settings for Tornadjango project.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DEBUG <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>TEMPLATE_DEBUG <span style="color:#f92672">=</span> DEBUG
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>PROJECT_PATH <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(__file__))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ADMINS <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># (&#39;Your Name&#39;, &#39;your_email@example.com&#39;),</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MANAGERS <span style="color:#f92672">=</span> ADMINS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DATABASES <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;default&#39;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;ENGINE&#39;</span>: <span style="color:#e6db74">&#39;django.db.backends.sqlite3&#39;</span>, <span style="color:#75715e"># Add &#39;postgresql_psycopg2&#39;, &#39;postgresql&#39;, &#39;mysql&#39;, &#39;sqlite3&#39; or &#39;oracle&#39;.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;NAME&#39;</span>: <span style="color:#e6db74">&#39;tornadjango&#39;</span>,                      <span style="color:#75715e"># Or path to database file if using sqlite3.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;USER&#39;</span>: <span style="color:#e6db74">&#39;&#39;</span>,                      <span style="color:#75715e"># Not used with sqlite3.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;PASSWORD&#39;</span>: <span style="color:#e6db74">&#39;&#39;</span>,                  <span style="color:#75715e"># Not used with sqlite3.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;HOST&#39;</span>: <span style="color:#e6db74">&#39;&#39;</span>,                      <span style="color:#75715e"># Set to empty string for localhost. Not used with sqlite3.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;PORT&#39;</span>: <span style="color:#e6db74">&#39;&#39;</span>,                      <span style="color:#75715e"># Set to empty string for default. Not used with sqlite3.</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Local time zone for this installation. Choices can be found here:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># http://en.wikipedia.org/wiki/List_of_tz_zones_by_name</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># although not all choices may be available on all operating systems.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># On Unix systems, a value of None will cause Django to use the same</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># timezone as the operating system.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If running in a Windows environment this must be set to the same as your</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># system time zone.</span>
+</span></span><span style="display:flex;"><span>TIME_ZONE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Asia/Shanghai&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Language code for this installation. All choices can be found here:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># http://www.i18nguy.com/unicode/language-identifiers.html</span>
+</span></span><span style="display:flex;"><span>LANGUAGE_CODE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;zh-cn&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SITE_ID <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If you set this to False, Django will make some optimizations so as not</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># to load the internationalization machinery.</span>
+</span></span><span style="display:flex;"><span>USE_I18N <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># If you set this to False, Django will not format dates, numbers and</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># calendars according to the current locale</span>
+</span></span><span style="display:flex;"><span>USE_L10N <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Absolute filesystem path to the directory that will hold user-uploaded files.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example: &#34;/home/media/media.lawrence.com/media/&#34;</span>
+</span></span><span style="display:flex;"><span>MEDIA_ROOT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># URL that handles the media served from MEDIA_ROOT. Make sure to use a</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># trailing slash.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Examples: &#34;http://media.lawrence.com/media/&#34;, &#34;http://example.com/media/&#34;</span>
+</span></span><span style="display:flex;"><span>MEDIA_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Absolute path to the directory static files should be collected to.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Don&#39;t put anything in this directory yourself; store your static files</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># in apps&#39; &#34;static/&#34; subdirectories and in STATICFILES_DIRS.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example: &#34;/home/media/media.lawrence.com/static/&#34;</span>
+</span></span><span style="display:flex;"><span>STATIC_ROOT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># URL prefix for static files.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Example: &#34;http://media.lawrence.com/static/&#34;</span>
+</span></span><span style="display:flex;"><span>STATIC_URL <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/static/&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># URL prefix for admin static files -- CSS, JavaScript and images.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Make sure to use a trailing slash.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Examples: &#34;http://foo.com/static/admin/&#34;, &#34;/static/admin/&#34;.</span>
+</span></span><span style="display:flex;"><span>ADMIN_MEDIA_PREFIX <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/admin/media/&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Additional locations of static files</span>
+</span></span><span style="display:flex;"><span>STATICFILES_DIRS <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Put strings here, like &#34;/home/html/static&#34; or &#34;C:/www/django/static&#34;.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Always use forward slashes, even on Windows.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Don&#39;t forget to use absolute paths, not relative paths.</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List of finder classes that know how to find static files in</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># various locations.</span>
+</span></span><span style="display:flex;"><span>STATICFILES_FINDERS <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.staticfiles.finders.FileSystemFinder&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.staticfiles.finders.AppDirectoriesFinder&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#    &#39;django.contrib.staticfiles.finders.DefaultStorageFinder&#39;,</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Make this unique, and don&#39;t share it with anybody.</span>
+</span></span><span style="display:flex;"><span>SECRET_KEY <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;oa8xplu6_lhlegtxpc(f+!tc=2$%&amp;oumz4zx2_1d*vio75z3c7&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># List of callables that know how to import templates from various sources.</span>
+</span></span><span style="display:flex;"><span>TEMPLATE_LOADERS <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.template.loaders.filesystem.Loader&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.template.loaders.app_directories.Loader&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#     &#39;django.template.loaders.eggs.Loader&#39;,</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MIDDLEWARE_CLASSES <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.middleware.common.CommonMiddleware&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.sessions.middleware.SessionMiddleware&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.middleware.csrf.CsrfViewMiddleware&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.messages.middleware.MessageMiddleware&#39;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ROOT_URLCONF <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;urls&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TEMPLATE_DIRS <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Put strings here, like &#34;/home/html/django_templates&#34; or &#34;C:/www/django/templates&#34;.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Always use forward slashes, even on Windows.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Don&#39;t forget to use absolute paths, not relative paths.</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>INSTALLED_APPS <span style="color:#f92672">=</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.auth&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.contenttypes&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.sessions&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.sites&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.messages&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;django.contrib.staticfiles&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Uncomment the next line to enable the admin:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;django.contrib.admin&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Uncomment the next line to enable admin documentation:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;django.contrib.admindocs&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># customer app</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;app&#39;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># A sample logging configuration. The only tangible logging</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># performed by this configuration is to send an email to</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the site admins on every HTTP 500 error.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># See http://docs.djangoproject.com/en/dev/topics/logging for</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># more details on how to customize your logging configuration.</span>
+</span></span><span style="display:flex;"><span>LOGGING <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;version&#39;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;disable_existing_loggers&#39;</span>: <span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;handlers&#39;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;mail_admins&#39;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;level&#39;</span>: <span style="color:#e6db74">&#39;ERROR&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;class&#39;</span>: <span style="color:#e6db74">&#39;django.utils.log.AdminEmailHandler&#39;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;loggers&#39;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;django.request&#39;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;handlers&#39;</span>: [<span style="color:#e6db74">&#39;mail_admins&#39;</span>],
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;level&#39;</span>: <span style="color:#e6db74">&#39;ERROR&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;propagate&#39;</span>: <span style="color:#66d9ef">True</span>,
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="修改appcontrollerpy">
+  修改app.controller.py
+  <a class="anchor" href="#%e4%bf%ae%e6%94%b9appcontrollerpy">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tornado.web
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelloController</span>(tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;Hello, world ! </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><h3 id="修改applicationpy">
+  修改application.py
+  <a class="anchor" href="#%e4%bf%ae%e6%94%b9applicationpy">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#coding: utf-8</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DJANGO_SETTINGS_MODULE&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;settings&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> settings
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> app.urls
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> django.core.handlers.wsgi <span style="color:#f92672">import</span> WSGIHandler
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tornado <span style="color:#f92672">import</span> options, wsgi
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tornado.httpserver
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>options<span style="color:#f92672">.</span>define(<span style="color:#e6db74">&#39;admin_port&#39;</span>, default<span style="color:#f92672">=</span><span style="color:#ae81ff">9900</span>, type<span style="color:#f92672">=</span>int, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Run admin platform on the given port&#39;</span>)
+</span></span><span style="display:flex;"><span>options<span style="color:#f92672">.</span>define(<span style="color:#e6db74">&#39;app_port&#39;</span>, default<span style="color:#f92672">=</span><span style="color:#ae81ff">9901</span>, type<span style="color:#f92672">=</span>int, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Run app platform on the given port&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tornado_env <span style="color:#f92672">=</span> dict(
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#    template_path       = os.path.join(os.path.dirname(__file__), &#39;templates&#39;),</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#    static_path         = os.path.join(os.path.dirname(__file__), &#39;static&#39;),</span>
+</span></span><span style="display:flex;"><span>    xsrf_cookies        <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>    cookie_secret       <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;11oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=&#34;</span>,
+</span></span><span style="display:flex;"><span>    autoescape          <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>,
+</span></span><span style="display:flex;"><span>    debug               <span style="color:#f92672">=</span> settings<span style="color:#f92672">.</span>DEBUG,
+</span></span><span style="display:flex;"><span>    login_url           <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;/&#39;</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+</span></span><span style="display:flex;"><span>    options<span style="color:#f92672">.</span>parse_command_line()
+</span></span><span style="display:flex;"><span>    address, admin_port, app_port <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;0.0.0.0&#39;</span>, options<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>admin_port, options<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>app_port 
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">admin_listen</span>():
+</span></span><span style="display:flex;"><span>        wsgi_app <span style="color:#f92672">=</span> wsgi<span style="color:#f92672">.</span>WSGIContainer(WSGIHandler())
+</span></span><span style="display:flex;"><span>        tornado_app <span style="color:#f92672">=</span> tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>Application([
+</span></span><span style="display:flex;"><span>            (<span style="color:#e6db74">&#39;/admin/(.*)&#39;</span>, tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>FallbackHandler, dict(fallback<span style="color:#f92672">=</span>wsgi_app)),
+</span></span><span style="display:flex;"><span>        ])
+</span></span><span style="display:flex;"><span>        tornado<span style="color:#f92672">.</span>httpserver<span style="color:#f92672">.</span>HTTPServer(tornado_app)<span style="color:#f92672">.</span>listen(admin_port)
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;run admin platform on (</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">)&#39;</span> <span style="color:#f92672">%</span> (address, admin_port)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">app_listen</span>():
+</span></span><span style="display:flex;"><span>        tornado_app <span style="color:#f92672">=</span> tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>Application(app<span style="color:#f92672">.</span>urls<span style="color:#f92672">.</span>urls)
+</span></span><span style="display:flex;"><span>        tornado_app<span style="color:#f92672">.</span>listen(app_port)
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;run app platform on (</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">)&#39;</span> <span style="color:#f92672">%</span> (address, app_port)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>    app_listen()
+</span></span><span style="display:flex;"><span>    admin_listen()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    tornado<span style="color:#f92672">.</span>ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>start()
+</span></span></code></pre></div><h3 id="创建db">
+  创建db
+  <a class="anchor" href="#%e5%88%9b%e5%bb%badb">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>python manager<span style="color:#f92672">.</span>py syncdb
+</span></span></code></pre></div><h3 id="启动">
+  启动
+  <a class="anchor" href="#%e5%90%af%e5%8a%a8">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>python application<span style="color:#f92672">.</span>py
+</span></span></code></pre></div><h3 id="浏览器访问">
+  浏览器访问
+  <a class="anchor" href="#%e6%b5%8f%e8%a7%88%e5%99%a8%e8%ae%bf%e9%97%ae">#</a>
+</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>http:<span style="color:#f92672">//</span>localhost:<span style="color:#ae81ff">9901</span><span style="color:#f92672">/</span>            <span style="color:#75715e"># tornado app</span>
+</span></span><span style="display:flex;"><span>http:<span style="color:#f92672">//</span>localhost:<span style="color:#ae81ff">9900</span><span style="color:#f92672">/</span>admin<span style="color:#f92672">/</span>      <span style="color:#75715e"># django admin</span>
+</span></span></code></pre></div><p>这样整个步骤就完成了。</p>
+<h3 id="加载django环境">
+  加载Django环境
+  <a class="anchor" href="#%e5%8a%a0%e8%bd%bddjango%e7%8e%af%e5%a2%83">#</a>
+</h3>
+<p>django很优秀的，只需要有一个settings.py就把django需要的环境都包含了。所以，在application.py的上面要写上：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    <span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>    os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;DJANGO_SETTINGS_MODULE&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;settings&#39;</span>
+</span></span></code></pre></div><h3 id="启动django服务">
+  启动django服务
+  <a class="anchor" href="#%e5%90%af%e5%8a%a8django%e6%9c%8d%e5%8a%a1">#</a>
+</h3>
+<p>django是http基于wsgi的，所以如果你要用django的admin，就必须启动wsgi。所以，在application.py里面有这样的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">admin_listen</span>():
+</span></span><span style="display:flex;"><span>    wsgi_app <span style="color:#f92672">=</span> wsgi<span style="color:#f92672">.</span>WSGIContainer(WSGIHandler())
+</span></span><span style="display:flex;"><span>    tornado_app <span style="color:#f92672">=</span> tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>Application([
+</span></span><span style="display:flex;"><span>        (<span style="color:#e6db74">&#39;/admin/(.*)&#39;</span>, tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>FallbackHandler, dict(fallback<span style="color:#f92672">=</span>wsgi_app)),
+</span></span><span style="display:flex;"><span>    ])
+</span></span><span style="display:flex;"><span>    tornado<span style="color:#f92672">.</span>httpserver<span style="color:#f92672">.</span>HTTPServer(tornado_app)<span style="color:#f92672">.</span>listen(admin_port)
+</span></span><span style="display:flex;"><span>    print <span style="color:#e6db74">&#39;run admin platform on (</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">)&#39;</span> <span style="color:#f92672">%</span> (address, admin_port)
+</span></span></code></pre></div><h3 id="要修改工程的urlspy">
+  要修改工程的urls.py
+  <a class="anchor" href="#%e8%a6%81%e4%bf%ae%e6%94%b9%e5%b7%a5%e7%a8%8b%e7%9a%84urlspy">#</a>
+</h3>
+<p>对于纯粹的django环境，django的admin对应的url可以自动的找到。但是由于我们是通过tornado的IOLoop代理过去的，就需要自己手动配置。所以，在urls.py里面有这样的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>admin<span style="color:#f92672">.</span>autodiscover()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MEDIA_ROOT <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(django<span style="color:#f92672">.</span>__file__), <span style="color:#e6db74">&#39;contrib&#39;</span>, <span style="color:#e6db74">&#39;admin&#39;</span>, <span style="color:#e6db74">&#39;media&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>urlpatterns <span style="color:#f92672">=</span> patterns(<span style="color:#e6db74">&#39;&#39;</span>,
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^admin/media/(?P&lt;path&gt;.*)$&#39;</span>, <span style="color:#e6db74">&#39;django.views.static.serve&#39;</span>,{<span style="color:#e6db74">&#39;document_root&#39;</span>: MEDIA_ROOT, <span style="color:#e6db74">&#39;show_indexes&#39;</span>: <span style="color:#66d9ef">False</span>}),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^admin/&#39;</span>, include(admin<span style="color:#f92672">.</span>site<span style="color:#f92672">.</span>urls)),
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="要修改settingspy里面的admin_media_prefix">
+  要修改settings.py里面的ADMIN_MEDIA_PREFIX
+  <a class="anchor" href="#%e8%a6%81%e4%bf%ae%e6%94%b9settingspy%e9%87%8c%e9%9d%a2%e7%9a%84admin_media_prefix">#</a>
+</h3>
+<p>ADMIN_MEDIA_PREFIX 需要配置成为urls.py里面的urlpatterns对应的地址，否则会找不到静态资源</p>
+<h2 id="使用django的orm">
+  使用Django的orm
+  <a class="anchor" href="#%e4%bd%bf%e7%94%a8django%e7%9a%84orm">#</a>
+</h2>
+<p>怎么使用django的orm。下面来说一说。</p>
+<h3 id="orm本身">
+  orm本身
+  <a class="anchor" href="#orm%e6%9c%ac%e8%ba%ab">#</a>
+</h3>
+<p>直接使用django的orm，不管是django的admin还是tornado都是一样的。</p>
+<h3 id="事务">
+  事务
+  <a class="anchor" href="#%e4%ba%8b%e5%8a%a1">#</a>
+</h3>
+<p>直接看
+  <a href="https://docs.djangoproject.com/en/1.3/topics/db/transactions/">Django 1.3 的事务相关的文档</a></p>
+<h3 id="对于commit_on_success的方式">
+  对于commit_on_success的方式
+  <a class="anchor" href="#%e5%af%b9%e4%ba%8ecommit_on_success%e7%9a%84%e6%96%b9%e5%bc%8f">#</a>
+</h3>
+<p>一定要注意一下：要自动提交，需要django的middleware。但是django的middelware又只有在django的http环境中才生效，那么对于tornado的http环境，如何生效呢？</p>
+<p>大家都知道django的middelware是在进入request之后，和response之前。所以，我们完全可以考虑直接把middelware的方法拿来用。下面是django的traction middelware的源代码。</p>
+<p>django.middleware.transaction.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TransactionMiddleware</span>(object):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Transaction middleware. If this is enabled, each view function will be run
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    with commit_on_response activated - that way a save() doesn&#39;t do a direct
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    commit, the commit is done when a successful response is created. If an
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exception happens, the database is rolled back.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_request</span>(self, request):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Enters transaction management&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        transaction<span style="color:#f92672">.</span>enter_transaction_management()
+</span></span><span style="display:flex;"><span>        transaction<span style="color:#f92672">.</span>managed(<span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_exception</span>(self, request, exception):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Rolls back the database and leaves transaction management&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> transaction<span style="color:#f92672">.</span>is_dirty():
+</span></span><span style="display:flex;"><span>            transaction<span style="color:#f92672">.</span>rollback()
+</span></span><span style="display:flex;"><span>        transaction<span style="color:#f92672">.</span>leave_transaction_management()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_response</span>(self, request, response):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Commits and leaves transaction management.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> transaction<span style="color:#f92672">.</span>is_managed():
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> transaction<span style="color:#f92672">.</span>is_dirty():
+</span></span><span style="display:flex;"><span>                transaction<span style="color:#f92672">.</span>commit()
+</span></span><span style="display:flex;"><span>            transaction<span style="color:#f92672">.</span>leave_transaction_management()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> response
+</span></span></code></pre></div><p>所以，我们完全可以写这样一个BaseController，用来解决这个问题</p>
+<p>base_controller.py</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseController</span>(tornado<span style="color:#f92672">.</span>web<span style="color:#f92672">.</span>RequestHandler):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">initialize</span>(self, application, request, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>has_except <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">prepare</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Enters transaction management&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        transaction<span style="color:#f92672">.</span>enter_transaction_management()
+</span></span><span style="display:flex;"><span>        transaction<span style="color:#f92672">.</span>managed(<span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_error_html</span>(self, status_code, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>has_except <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> transaction<span style="color:#f92672">.</span>is_dirty():
+</span></span><span style="display:flex;"><span>                transaction<span style="color:#f92672">.</span>rollback()
+</span></span><span style="display:flex;"><span>            transaction<span style="color:#f92672">.</span>leave_transaction_management()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>            super(BaseController, self)<span style="color:#f92672">.</span>get_error_html(status_code, <span style="color:#f92672">**</span>kwargs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">finish</span>(self, chunk<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> super(BaseController, self)<span style="color:#f92672">.</span>finish(chunk<span style="color:#f92672">=</span>chunk)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">finally</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>has_except <span style="color:#f92672">and</span> transaction<span style="color:#f92672">.</span>is_managed():
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> transaction<span style="color:#f92672">.</span>is_dirty():
+</span></span><span style="display:flex;"><span>                    transaction<span style="color:#f92672">.</span>commit()
+</span></span><span style="display:flex;"><span>                transaction<span style="color:#f92672">.</span>leave_transaction_management()
+</span></span><span style="display:flex;"><span>            django<span style="color:#f92672">.</span>db<span style="color:#f92672">.</span>reset_queries()
+</span></span><span style="display:flex;"><span>            django<span style="color:#f92672">.</span>db<span style="color:#f92672">.</span>close_connection()
+</span></span></code></pre></div><p>这样就达到了自动提交或者回滚transaction的目的。</p>
+<h2 id="异步调用">
+  异步调用
+  <a class="anchor" href="#%e5%bc%82%e6%ad%a5%e8%b0%83%e7%94%a8">#</a>
+</h2>
+<p>Tornado是一个异步框架，在单独的实例跑的时候，要注意。对于一些响应很长的操作，需要进行异步处理。</p>
+<p>比方说，有一个第3方的api调用，一般都修改为异步处理。这样能保证你的服务正常被响应，而不会出现阻塞。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Download</span>(BaseController):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@tornado.web.asynchronous</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_</span>(response):
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>finish(response<span style="color:#f92672">.</span>body)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_argument(<span style="color:#e6db74">&#39;download_url&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        httpclient<span style="color:#f92672">.</span>AsyncHTTPClient()<span style="color:#f92672">.</span>fetch(url, _)
+</span></span></code></pre></div><p>上面是这种写法比较麻烦，后来在tornado中加入了一个新的写方，叫做gen，看起来好像写同步代码一样。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Download</span>(BaseController):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@tornado.web.asynchronous</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@gen.engine</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get</span>(self):
+</span></span><span style="display:flex;"><span>        url <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_argument(<span style="color:#e6db74">&#39;download_url&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        response <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> gen<span style="color:#f92672">.</span>Task(client<span style="color:#f92672">.</span>fetch, url)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>finish(response<span style="color:#f92672">.</span>body)
+</span></span></code></pre></div><p><strong>注意 @tornado.web.asynchronous 要在 @gen.engine 之前。</strong>
+是不是简洁了很多？但原理是什么？</p>
+<h2 id="基础知识">
+  基础知识
+  <a class="anchor" href="#%e5%9f%ba%e7%a1%80%e7%9f%a5%e8%af%86">#</a>
+</h2>
+<h3 id="yield和generator">
+  yield和generator
+  <a class="anchor" href="#yield%e5%92%8cgenerator">#</a>
+</h3>
+<p>对于python中的yield, 大家应该都知道。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(n):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">yield</span> i
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> foo(<span style="color:#ae81ff">2</span>):
+</span></span><span style="display:flex;"><span>    print x
+</span></span></code></pre></div><p>上面的代码输出的就是1，2。注意上面的代码，可以看到foo(1)其实返回的就是一个generator。
+可以理解为一旦遇到yield的语句，就会返回一个generator。看看官方的解释：</p>
+<blockquote>
+<p>Any function containing a yield keyword is a generator function;</p></blockquote>
+<p>从上面的基本代码来看，我们可以简单的理解为：遇到yield i, 就返回i，并且产生函数的临时中断，控制权交给外面的代码。等外面的代码消耗了这个返回值后，控制权在交回给函数，从之前的临时中断处再接着执行。</p>
+<p>当然，上述的理解并不完全正确。我们再来看看下面的代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(n):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">yield</span> i
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>g <span style="color:#f92672">=</span> foo(<span style="color:#ae81ff">2</span>)      <span style="color:#75715e"># 1</span>
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()  <span style="color:#75715e"># 2</span>
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()  <span style="color:#75715e"># 3</span>
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()  <span style="color:#75715e"># 4</span>
+</span></span></code></pre></div><p>上面的代码输出的是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>Traceback (most recent call last):
+</span></span><span style="display:flex;"><span>    File <span style="color:#e6db74">&#34;/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py&#34;</span>, line <span style="color:#ae81ff">10</span>, <span style="color:#f92672">in</span> <span style="color:#f92672">&lt;</span>module<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    print g<span style="color:#f92672">.</span>next()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">StopIteration</span>
+</span></span></code></pre></div><p>现在明白了么？因为foo方法里面有yield，所以调用它总是会返回一个generator。所以</p>
+<p>1 得到一个generator，且在1的时候，foo函数不会有任何的执行。在解释器分析代码的时候，发现foo里面有yield，就已经把它当成一个generator了。</p>
+<p>2 得到generator的第一个值 0</p>
+<p>3 得到generator的第二个值 1</p>
+<p>4 由于generator已经完毕，所以，抛出StopIteration异常</p>
+<p>再来看下面的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(n):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        v <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> i
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;v_</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> = </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (i, v) <span style="color:#75715e"># 5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>g <span style="color:#f92672">=</span> foo(<span style="color:#ae81ff">2</span>)       <span style="color:#75715e"># 1</span>
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()   <span style="color:#75715e"># 2</span>
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()   <span style="color:#75715e"># 3</span>
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()   <span style="color:#75715e"># 4</span>
+</span></span></code></pre></div><p>这个时候，结果是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>v_0 <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>v_1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>Traceback (most recent call last):
+</span></span><span style="display:flex;"><span>    File <span style="color:#e6db74">&#34;/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py&#34;</span>, line <span style="color:#ae81ff">11</span>, <span style="color:#f92672">in</span> <span style="color:#f92672">&lt;</span>module<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    print g<span style="color:#f92672">.</span>next()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">StopIteration</span>
+</span></span></code></pre></div><p>发现了么？ v的值是None哦。如果你是一个初学者，你肯定会认为 v 的值应该等于i。但是其实不是的。那么v为什么等于None呢 ？</p>
+<p>再看下面的代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(n):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        v <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> i
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;v_</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> = </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (i, v)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>g <span style="color:#f92672">=</span> foo(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>next()
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;a&#39;</span>)
+</span></span></code></pre></div><p>结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>v_0 <span style="color:#f92672">=</span> a
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>可以看出。g.send(&lsquo;a&rsquo;)的时候，把&rsquo;a&rsquo;的值付给了v。</p>
+<p>那我们这样写呢？</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">foo</span>(n):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        v <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> i
+</span></span><span style="display:flex;"><span>        print <span style="color:#e6db74">&#39;v_</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> = </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (i, v)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>g <span style="color:#f92672">=</span> foo(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>print g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;a&#39;</span>)
+</span></span></code></pre></div><p>出现了如下的错误：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    Traceback (most recent call last):
+</span></span><span style="display:flex;"><span>      File <span style="color:#e6db74">&#34;/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py&#34;</span>, line <span style="color:#ae81ff">9</span>, <span style="color:#f92672">in</span> <span style="color:#f92672">&lt;</span>module<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>        print g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;a&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">TypeError</span>: can<span style="color:#e6db74">&#39;t send non-None value to a just-started generator</span>
+</span></span></code></pre></div><p>所以得出如下的结论：</p>
+<ul>
+<li>
+<p><strong>generator.next() 等价于 generator.send(None)</strong></p>
+</li>
+<li>
+<p><strong>对于一个generator，一定要先调用一个next，或者send(None)。才能再调用send(value)</strong></p>
+</li>
+<li>
+<p><strong>调用send(value)的时候，会把value的值赋给里面的接收者，且是上一次next的中断位置</strong></p>
+</li>
+</ul>
+<p>前面，我们说过tornado的web异步调用。下面我们来分析一下。</p>
+<p>先看下面的代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tornado <span style="color:#f92672">import</span> ioloop, httpclient
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">deal</span>(response):
+</span></span><span style="display:flex;"><span>    print <span style="color:#e6db74">&#39;response.length =&#39;</span>, len(response<span style="color:#f92672">.</span>body)
+</span></span><span style="display:flex;"><span>    ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>stop()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download</span>(url):
+</span></span><span style="display:flex;"><span>    http_client <span style="color:#f92672">=</span> httpclient<span style="color:#f92672">.</span>AsyncHTTPClient()
+</span></span><span style="display:flex;"><span>    http_client<span style="color:#f92672">.</span>fetch(url, deal)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>download(<span style="color:#e6db74">&#34;http://www.baidu.com/&#34;</span>)    
+</span></span><span style="display:flex;"><span>ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>start()
+</span></span></code></pre></div><p>结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>response<span style="color:#f92672">.</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">10233</span>
+</span></span></code></pre></div><p>很明显的可以看出。http_client的fetch只是一个异步调用。需要传递一个deal方法，作为callback来去处理fetch后的response。</p>
+<p>如果我们用tornado的gen.engine方式可以这样写：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> tornado <span style="color:#f92672">import</span> ioloop, httpclient, gen
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tornado.gen <span style="color:#f92672">import</span> Task
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@gen.engine</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download</span>(url):
+</span></span><span style="display:flex;"><span>    http_client <span style="color:#f92672">=</span> httpclient<span style="color:#f92672">.</span>AsyncHTTPClient()
+</span></span><span style="display:flex;"><span>    response <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> Task(http_client<span style="color:#f92672">.</span>fetch, url)
+</span></span><span style="display:flex;"><span>    print <span style="color:#e6db74">&#39;response.length =&#39;</span>, len(response<span style="color:#f92672">.</span>body) 
+</span></span><span style="display:flex;"><span>    ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>stop()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>download(<span style="color:#e6db74">&#34;http://www.baidu.com/&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>start()
+</span></span></code></pre></div><p>这样就好像你在写同步代码一样。而不需要想之前那样处理回调了。如果要你实现一个gen.engine 和 Task 你会怎么实现呢？根据我们之前谈的
+  <a href="yield%e5%92%8cgenerator">yield 和 generator</a>，我们可以这样写代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># -*- coding:utf-8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tornado <span style="color:#f92672">import</span> ioloop, httpclient
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> functools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyTask</span>(object):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, func, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>func <span style="color:#f92672">=</span> func
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>args <span style="color:#f92672">=</span> args
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>kwargs <span style="color:#f92672">=</span> kwargs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">callback</span>(self, response):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>gen<span style="color:#f92672">.</span>send(response)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">StopIteration</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run</span>(self, gen):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gen <span style="color:#f92672">=</span> gen
+</span></span><span style="display:flex;"><span>        partail_func <span style="color:#f92672">=</span> functools<span style="color:#f92672">.</span>partial(self<span style="color:#f92672">.</span>func, <span style="color:#f92672">*</span>self<span style="color:#f92672">.</span>args, <span style="color:#f92672">**</span>self<span style="color:#f92672">.</span>kwargs)
+</span></span><span style="display:flex;"><span>        partail_func(callback <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>callback)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">myengine</span>(func):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>        task_generator <span style="color:#f92672">=</span> func(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
+</span></span><span style="display:flex;"><span>        task <span style="color:#f92672">=</span> task_generator<span style="color:#f92672">.</span>next()
+</span></span><span style="display:flex;"><span>        task<span style="color:#f92672">.</span>run(task_generator)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> _
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@myengine</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">download</span>(url):
+</span></span><span style="display:flex;"><span>    http_client <span style="color:#f92672">=</span> httpclient<span style="color:#f92672">.</span>AsyncHTTPClient()
+</span></span><span style="display:flex;"><span>    response <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> MyTask(http_client<span style="color:#f92672">.</span>fetch, url)
+</span></span><span style="display:flex;"><span>    print <span style="color:#e6db74">&#39;response.length =&#39;</span>, len(response<span style="color:#f92672">.</span>body)
+</span></span><span style="display:flex;"><span>    ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>stop()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>download(<span style="color:#e6db74">&#34;http://www.baidu.com/&#34;</span>)
+</span></span><span style="display:flex;"><span>ioloop<span style="color:#f92672">.</span>IOLoop<span style="color:#f92672">.</span>instance()<span style="color:#f92672">.</span>start()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>这个时候<span style="color:#960050;background-color:#1e0010">，</span>结果是<span style="color:#960050;background-color:#1e0010">：</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">```</span>python
+</span></span><span style="display:flex;"><span>response<span style="color:#f92672">.</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">10233</span>
+</span></span></code></pre></div><p>这样，属于我们自己的engine和task就出来了。</p></div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/RyanPoy/blog/edit/main/exampleSite/content/posts/a%20quick%20guide%20to%20using%20tornado.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#简单尝试">简单尝试</a></li>
+        <li><a href="#主要核心">主要核心</a>
+          <ul>
+            <li><a href="#handler">Handler</a></li>
+            <li><a href="#db操作">DB操作</a></li>
+            <li><a href="#templates">Templates</a></li>
+            <li><a href="#route">Route</a></li>
+          </ul>
+        </li>
+        <li><a href="#合体django">合体Django</a>
+          <ul>
+            <li><a href="#修改-urlpy">修改 url.py</a></li>
+            <li><a href="#修改settingspy">修改settings.py</a></li>
+            <li><a href="#修改appcontrollerpy">修改app.controller.py</a></li>
+            <li><a href="#修改applicationpy">修改application.py</a></li>
+            <li><a href="#创建db">创建db</a></li>
+            <li><a href="#启动">启动</a></li>
+            <li><a href="#浏览器访问">浏览器访问</a></li>
+            <li><a href="#加载django环境">加载Django环境</a></li>
+            <li><a href="#启动django服务">启动django服务</a></li>
+            <li><a href="#要修改工程的urlspy">要修改工程的urls.py</a></li>
+            <li><a href="#要修改settingspy里面的admin_media_prefix">要修改settings.py里面的ADMIN_MEDIA_PREFIX</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用django的orm">使用Django的orm</a>
+          <ul>
+            <li><a href="#orm本身">orm本身</a></li>
+            <li><a href="#事务">事务</a></li>
+            <li><a href="#对于commit_on_success的方式">对于commit_on_success的方式</a></li>
+          </ul>
+        </li>
+        <li><a href="#异步调用">异步调用</a></li>
+        <li><a href="#基础知识">基础知识</a>
+          <ul>
+            <li><a href="#yield和generator">yield和generator</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tech on 一哥黑板报</title>
+    <link>/categories/Tech/</link>
+    <description>Recent content in Tech on 一哥黑板报</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 18 Aug 2011 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/categories/Tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>webpy教程</title>
+      <link>/posts/a-user-guild-to-using-webpy/</link>
+      <pubDate>Thu, 18 Aug 2011 00:00:00 +0000</pubDate>
+      <guid>/posts/a-user-guild-to-using-webpy/</guid>
+      <description>&lt;p&gt;来&#xA;  &lt;a href=&#34;https://sohu.com&#34;&gt;搜狐&lt;/a&gt;后，这里做的系统几乎都是 webpy + twsited 写的。所以，有必要好好学习一下这两个东西了。从今天开始介绍webpy。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
