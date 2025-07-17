@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Crawler on 一哥黑板报</title>
+    <link>/tags/Crawler/</link>
+    <description>Recent content in Crawler on 一哥黑板报</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 17 Jul 2025 10:11:18 +0800</lastBuildDate>
+    <atom:link href="/tags/Crawler/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网页解析</title>
+      <link>/posts/parse-html-with-python/</link>
+      <pubDate>Sun, 27 Feb 2011 00:00:00 +0000</pubDate>
+      <guid>/posts/parse-html-with-python/</guid>
+      <description>&lt;p&gt;对于crawler, parse html 是一个必不可少的工作。现阶段有很多的开源库，python中也有自己的标准库。都是为了方便的解析html的。但是，由于我们的需求可能会变得很奇怪，比方说：对于script的东西也许也要解析。对于comment的东西可能也要分析。或者，还有其它的需求。为此，我重新造个轮子。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>关于垂直网站爬虫的思考</title>
+      <link>/posts/thoughts-on-vertical-website-crawler/</link>
+      <pubDate>Tue, 01 Sep 2009 00:00:00 +0000</pubDate>
+      <guid>/posts/thoughts-on-vertical-website-crawler/</guid>
+      <description>&lt;h2 id=&#34;基本指标和难点&#34;&gt;&#xA;  基本指标和难点&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%9f%ba%e6%9c%ac%e6%8c%87%e6%a0%87%e5%92%8c%e9%9a%be%e7%82%b9&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;实时性&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;新的内容，需要很快的抓到&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;2&#34;&gt;&#xA;&lt;li&gt;全面性&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;老的内容和新的内容都需要能抓到，不能只侧重某一方面&lt;/li&gt;&#xA;&lt;li&gt;新的内容在一定时间后就是老的内容了&lt;/li&gt;&#xA;&lt;li&gt;基于1，可能新内容要抓取的优先级更高，但不能只抓新的，不要旧的&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;3&#34;&gt;&#xA;&lt;li&gt;去除重复&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;不同的网站可能有相同的内容，抓完后可能需要去掉重复的内容&lt;/li&gt;&#xA;&lt;li&gt;有写网站的url后面带有随机数，或者无效的参数，但是内容却是固定的，需要想办法去掉，只抓一次&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;4&#34;&gt;&#xA;&lt;li&gt;去除循环抓取&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;各个网站之间可能相互link，需要职能的分析出已经抓取过的&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;5&#34;&gt;&#xA;&lt;li&gt;可持续抓取性&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;一个入口可以一直在抓取，无需人工干预，7*24小时服务&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;6&#34;&gt;&#xA;&lt;li&gt;人工干预&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;抓取速度&lt;/li&gt;&#xA;&lt;li&gt;抓取进程个数&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;7&#34;&gt;&#xA;&lt;li&gt;可能被封&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;利用6 降低抓取频率&lt;/li&gt;&#xA;&lt;li&gt;多IP对外抓取&lt;/li&gt;&#xA;&lt;li&gt;通过Proxy&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;子系统简单分析&#34;&gt;&#xA;  子系统简单分析&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%ad%90%e7%b3%bb%e7%bb%9f%e7%ae%80%e5%8d%95%e5%88%86%e6%9e%90&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;crawler，专门负责抓取的服务，输入是一个url，输入是一个url对应的页面&lt;/li&gt;&#xA;&lt;li&gt;scheduler，专门负责crawler的调度，能够控制crawler的各方面参数，可能需要多进程共享&lt;/li&gt;&#xA;&lt;li&gt;linkdb, 用来存取link的，非常简单，只有增删改查，注意大数据，要提供对于link抓取优先级的接口，永远提供优先级的topN个link&lt;/li&gt;&#xA;&lt;li&gt;repository, 用来存取content的，非常简单，只有增删改查，注意大数据&lt;/li&gt;&#xA;&lt;li&gt;analyzer, 分析repository的内容，进行去重复，为索引服务&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;抓取模型&#34;&gt;&#xA;  抓取模型&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e6%8a%93%e5%8f%96%e6%a8%a1%e5%9e%8b&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;多线程&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;实现简单，python的多线程无法重复利用多核&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;2&#34;&gt;&#xA;&lt;li&gt;多进程&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;实现简单，python的多进程能利用多核&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;3&#34;&gt;&#xA;&lt;li&gt;异步&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;实现复杂，重复利用多核&lt;/li&gt;&#xA;&lt;li&gt;性能高&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -6,7 +6,7 @@
     <description>Recent content in Tags on 一哥黑板报</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Jul 2025 19:20:31 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 17 Jul 2025 10:12:01 +0800</lastBuildDate>
     <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Thinking</title>
@@ -118,6 +118,27 @@
       <link>/tags/Webpy/</link>
       <pubDate>Thu, 18 Aug 2011 00:00:00 +0000</pubDate>
       <guid>/tags/Webpy/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Crawler</title>
+      <link>/tags/Crawler/</link>
+      <pubDate>Sun, 27 Feb 2011 00:00:00 +0000</pubDate>
+      <guid>/tags/Crawler/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Data Analysis</title>
+      <link>/tags/Data-Analysis/</link>
+      <pubDate>Tue, 09 Mar 2010 00:00:00 +0000</pubDate>
+      <guid>/tags/Data-Analysis/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Data Statistics</title>
+      <link>/tags/Data-Statistics/</link>
+      <pubDate>Tue, 09 Mar 2010 00:00:00 +0000</pubDate>
+      <guid>/tags/Data-Statistics/</guid>
       <description></description>
     </item>
     <item>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="
+  基本指标和难点
+  #
+
+
+实时性
+
+
+新的内容，需要很快的抓到
+
+
+全面性
+
+
+老的内容和新的内容都需要能抓到，不能只侧重某一方面
+新的内容在一定时间后就是老的内容了
+基于1，可能新内容要抓取的优先级更高，但不能只抓新的，不要旧的
+
+
+去除重复
+
+
+不同的网站可能有相同的内容，抓完后可能需要去掉重复的内容
+有写网站的url后面带有随机数，或者无效的参数，但是内容却是固定的，需要想办法去掉，只抓一次
+
+
+去除循环抓取
+
+
+各个网站之间可能相互link，需要职能的分析出已经抓取过的
+
+
+可持续抓取性
+
+
+一个入口可以一直在抓取，无需人工干预，7*24小时服务
+
+
+人工干预
+
+
+抓取速度
+抓取进程个数
+
+
+可能被封
+
+
+利用6 降低抓取频率
+多IP对外抓取
+通过Proxy
+
+
+  子系统简单分析
+  #
+
+
+crawler，专门负责抓取的服务，输入是一个url，输入是一个url对应的页面
+scheduler，专门负责crawler的调度，能够控制crawler的各方面参数，可能需要多进程共享
+linkdb, 用来存取link的，非常简单，只有增删改查，注意大数据，要提供对于link抓取优先级的接口，永远提供优先级的topN个link
+repository, 用来存取content的，非常简单，只有增删改查，注意大数据
+analyzer, 分析repository的内容，进行去重复，为索引服务
+
+
+  抓取模型
+  #
+
+
+多线程
+
+
+实现简单，python的多线程无法重复利用多核
+
+
+多进程
+
+
+实现简单，python的多进程能利用多核
+
+
+异步
+
+
+实现复杂，重复利用多核
+性能高
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="/posts/thoughts-on-vertical-website-crawler/">
+  <meta property="og:site_name" content="一哥黑板报">
+  <meta property="og:title" content="关于垂直网站爬虫的思考">
+  <meta property="og:description" content="基本指标和难点 # 实时性 新的内容，需要很快的抓到 全面性 老的内容和新的内容都需要能抓到，不能只侧重某一方面 新的内容在一定时间后就是老的内容了 基于1，可能新内容要抓取的优先级更高，但不能只抓新的，不要旧的 去除重复 不同的网站可能有相同的内容，抓完后可能需要去掉重复的内容 有写网站的url后面带有随机数，或者无效的参数，但是内容却是固定的，需要想办法去掉，只抓一次 去除循环抓取 各个网站之间可能相互link，需要职能的分析出已经抓取过的 可持续抓取性 一个入口可以一直在抓取，无需人工干预，7*24小时服务 人工干预 抓取速度 抓取进程个数 可能被封 利用6 降低抓取频率 多IP对外抓取 通过Proxy 子系统简单分析 # crawler，专门负责抓取的服务，输入是一个url，输入是一个url对应的页面 scheduler，专门负责crawler的调度，能够控制crawler的各方面参数，可能需要多进程共享 linkdb, 用来存取link的，非常简单，只有增删改查，注意大数据，要提供对于link抓取优先级的接口，永远提供优先级的topN个link repository, 用来存取content的，非常简单，只有增删改查，注意大数据 analyzer, 分析repository的内容，进行去重复，为索引服务 抓取模型 # 多线程 实现简单，python的多线程无法重复利用多核 多进程 实现简单，python的多进程能利用多核 异步 实现复杂，重复利用多核 性能高">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2009-09-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-17T10:11:18+08:00">
+    <meta property="article:tag" content="Crawler">
+<title>关于垂直网站爬虫的思考 | 一哥黑板报</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="/posts/thoughts-on-vertical-website-crawler/">
+<link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.731817ec19e0e2bd1129b11a4d8c59a274bb04ceb6ab2d63f605299f8d9f0e07.js" ></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>一哥黑板报</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="/docs/example/" class="">Example Site</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/" class="">Table of Contents</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/with-toc/" class="">With ToC</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/table-of-contents/without-toc/" class="">Without ToC</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-3cac40e98ef6004516ceb5fd9190d720" class="toggle"  />
+    <label for="section-3cac40e98ef6004516ceb5fd9190d720" class="flex">
+      <a role="button" class="flex-auto ">Collapsed</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/collapsed/3rd-level/" class="">3rd Level</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/example/collapsed/3rd-level/4th-level/" class="">4th Level</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Shortcodes</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/buttons/" class="">Buttons</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/columns/" class="">Columns</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/details/" class="">Details</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/hints/" class="">Hints</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/mermaid/" class="">Mermaid</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/tabs/" class="">Tabs</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/shortcodes/katex/" class="">KaTeX</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/RyanPoy/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>关于垂直网站爬虫的思考</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#基本指标和难点">基本指标和难点</a></li>
+        <li><a href="#子系统简单分析">子系统简单分析</a></li>
+        <li><a href="#抓取模型">抓取模型</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h1>
+    关于垂直网站爬虫的思考
+  </h1>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>September 1, 2009</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tech/">Tech</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/Crawler/">Crawler</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><h2 id="基本指标和难点">
+  基本指标和难点
+  <a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e6%8c%87%e6%a0%87%e5%92%8c%e9%9a%be%e7%82%b9">#</a>
+</h2>
+<ol>
+<li>实时性</li>
+</ol>
+<ul>
+<li>新的内容，需要很快的抓到</li>
+</ul>
+<ol start="2">
+<li>全面性</li>
+</ol>
+<ul>
+<li>老的内容和新的内容都需要能抓到，不能只侧重某一方面</li>
+<li>新的内容在一定时间后就是老的内容了</li>
+<li>基于1，可能新内容要抓取的优先级更高，但不能只抓新的，不要旧的</li>
+</ul>
+<ol start="3">
+<li>去除重复</li>
+</ol>
+<ul>
+<li>不同的网站可能有相同的内容，抓完后可能需要去掉重复的内容</li>
+<li>有写网站的url后面带有随机数，或者无效的参数，但是内容却是固定的，需要想办法去掉，只抓一次</li>
+</ul>
+<ol start="4">
+<li>去除循环抓取</li>
+</ol>
+<ul>
+<li>各个网站之间可能相互link，需要职能的分析出已经抓取过的</li>
+</ul>
+<ol start="5">
+<li>可持续抓取性</li>
+</ol>
+<ul>
+<li>一个入口可以一直在抓取，无需人工干预，7*24小时服务</li>
+</ul>
+<ol start="6">
+<li>人工干预</li>
+</ol>
+<ul>
+<li>抓取速度</li>
+<li>抓取进程个数</li>
+</ul>
+<ol start="7">
+<li>可能被封</li>
+</ol>
+<ul>
+<li>利用6 降低抓取频率</li>
+<li>多IP对外抓取</li>
+<li>通过Proxy</li>
+</ul>
+<h2 id="子系统简单分析">
+  子系统简单分析
+  <a class="anchor" href="#%e5%ad%90%e7%b3%bb%e7%bb%9f%e7%ae%80%e5%8d%95%e5%88%86%e6%9e%90">#</a>
+</h2>
+<ol>
+<li>crawler，专门负责抓取的服务，输入是一个url，输入是一个url对应的页面</li>
+<li>scheduler，专门负责crawler的调度，能够控制crawler的各方面参数，可能需要多进程共享</li>
+<li>linkdb, 用来存取link的，非常简单，只有增删改查，注意大数据，要提供对于link抓取优先级的接口，永远提供优先级的topN个link</li>
+<li>repository, 用来存取content的，非常简单，只有增删改查，注意大数据</li>
+<li>analyzer, 分析repository的内容，进行去重复，为索引服务</li>
+</ol>
+<h2 id="抓取模型">
+  抓取模型
+  <a class="anchor" href="#%e6%8a%93%e5%8f%96%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<ol>
+<li>多线程</li>
+</ol>
+<ul>
+<li>实现简单，python的多线程无法重复利用多核</li>
+</ul>
+<ol start="2">
+<li>多进程</li>
+</ol>
+<ul>
+<li>实现简单，python的多进程能利用多核</li>
+</ul>
+<ol start="3">
+<li>异步</li>
+</ol>
+<ul>
+<li>实现复杂，重复利用多核</li>
+<li>性能高</li>
+</ul>
+</div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+  <div><a class="flex align-center" href="https://github.com/RyanPoy/blog/commit/8e95d884fec2558fa35de60797e1213bb68305ec" title='Last modified by pengyi | July 17, 2025' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="" />
+      <span>July 17, 2025</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/RyanPoy/blog/edit/main/exampleSite/content/posts/thoughts%20on%20vertical%20website%20crawler.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#基本指标和难点">基本指标和难点</a></li>
+        <li><a href="#子系统简单分析">子系统简单分析</a></li>
+        <li><a href="#抓取模型">抓取模型</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

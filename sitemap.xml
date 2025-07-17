@@ -24,13 +24,13 @@
     <lastmod>2025-07-14T19:16:46+08:00</lastmod>
   </url><url>
     <loc>/categories/</loc>
-    <lastmod>2025-07-16T19:20:31+08:00</lastmod>
+    <lastmod>2025-07-17T10:12:01+08:00</lastmod>
   </url><url>
     <loc>/tags/</loc>
-    <lastmod>2025-07-16T19:20:31+08:00</lastmod>
+    <lastmod>2025-07-17T10:12:01+08:00</lastmod>
   </url><url>
     <loc>/categories/Tech/</loc>
-    <lastmod>2025-07-16T19:20:31+08:00</lastmod>
+    <lastmod>2025-07-17T10:12:01+08:00</lastmod>
   </url><url>
     <loc>/tags/Thinking/</loc>
     <lastmod>2025-07-16T19:20:31+08:00</lastmod>
@@ -87,16 +87,16 @@
     <lastmod>2025-07-16T18:56:41+08:00</lastmod>
   </url><url>
     <loc>/tags/Essay/</loc>
-    <lastmod>2025-07-16T18:56:41+08:00</lastmod>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
   </url><url>
     <loc>/categories/Life/</loc>
-    <lastmod>2025-07-16T18:56:41+08:00</lastmod>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
   </url><url>
     <loc>/posts/QCon-Beijing-2013/</loc>
-    <lastmod>2025-07-16T18:56:41+08:00</lastmod>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
   </url><url>
     <loc>/tags/QCon/</loc>
-    <lastmod>2025-07-16T18:56:41+08:00</lastmod>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
   </url><url>
     <loc>/tags/Fudge/</loc>
     <lastmod>2025-07-16T17:39:23+08:00</lastmod>
@@ -105,7 +105,7 @@
     <lastmod>2025-07-16T17:39:23+08:00</lastmod>
   </url><url>
     <loc>/tags/Python/</loc>
-    <lastmod>2025-07-16T19:09:47+08:00</lastmod>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
   </url><url>
     <loc>/categories/Tutorials/</loc>
     <lastmod>2025-07-16T17:44:43+08:00</lastmod>
@@ -125,11 +125,35 @@
     <loc>/posts/a-user-guild-to-using-webpy/</loc>
     <lastmod>2025-07-16T17:44:43+08:00</lastmod>
   </url><url>
+    <loc>/posts/join-SOHU/</loc>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
+  </url><url>
+    <loc>/tags/Crawler/</loc>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
+  </url><url>
+    <loc>/posts/parse-html-with-python/</loc>
+    <lastmod>2025-07-17T09:46:54+08:00</lastmod>
+  </url><url>
+    <loc>/posts/python-validation/</loc>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
+  </url><url>
+    <loc>/tags/Data-Analysis/</loc>
+    <lastmod>2025-07-17T10:12:01+08:00</lastmod>
+  </url><url>
+    <loc>/tags/Data-Statistics/</loc>
+    <lastmod>2025-07-17T10:12:01+08:00</lastmod>
+  </url><url>
+    <loc>/posts/some-common-metrics-in-Data-Analysis-and-Statistics/</loc>
+    <lastmod>2025-07-17T10:12:01+08:00</lastmod>
+  </url><url>
     <loc>/posts/python-tricks-and-hacks/</loc>
     <lastmod>2025-07-16T19:09:47+08:00</lastmod>
   </url><url>
     <loc>/tags/Tricks/</loc>
     <lastmod>2025-07-16T19:09:47+08:00</lastmod>
+  </url><url>
+    <loc>/posts/thoughts-on-vertical-website-crawler/</loc>
+    <lastmod>2025-07-17T10:11:18+08:00</lastmod>
   </url><url>
     <loc>/tags/Hibernate/</loc>
     <lastmod>2025-07-16T17:39:23+08:00</lastmod>
