@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="/tags/MySQL/">
+  <meta property="og:site_name" content="一哥黑板报">
+  <meta property="og:title" content="MySQL">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="website">
+<title>MySQL | 一哥黑板报</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="/tags/MySQL/">
+<link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.1b54163ba33699d30ae95ade6aca3c1aab77db8407ee0eb2bed501765f3a8acb.js" ></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<link rel="alternate" type="application/rss+xml" href="/tags/MySQL/index.xml" title="一哥黑板报" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.jpeg" alt="Logo" class="book-icon" /><span>一哥黑板报</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/RyanPoy/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>MySQL</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <span>Categories</span>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Tech/">Tech</a>
+          <span>21</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Life/">Life</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Tutorials/">Tutorials</a>
+          <span>4</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <span>Tags</span>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/MySQL/">MySQL</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Essay/">Essay</a>
+          <span>6</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Growth-hacking/">Growth Hacking</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Thought/">Thought</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Testing/">Testing</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Homebrew/">Homebrew</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Optimization/">Optimization</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Gevent/">Gevent</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Pypy/">Pypy</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Python/">Python</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Kanban/">Kanban</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Translation/">Translation</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/QCon/">QCon</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/CSRF/">CSRF</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Fudge/">Fudge</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Production/">Production</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Tornado/">Tornado</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Webpy/">Webpy</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Crawler/">Crawler</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Architecture/">Architecture</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Socket/">Socket</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Agile/">Agile</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Data-Analysis/">Data Analysis</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Data-Statistics/">Data Statistics</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Tricks/">Tricks</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Java/">Java</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/PorterStemmer/">PorterStemmer</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Hibernate/">Hibernate</a>
+          <span>1</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/install-mysql-v5.7-on-centos_v7.9/">centos7.9安装mysql5.7</a>
+    </h2>
+    
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>December 30, 2021</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tech/">Tech</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/MySQL/">MySQL</a>
+  </div>
+  
+
+
+    <p><p>最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。</p></p>
+  </article>
+  
+  <article class="markdown book-post">
+    <h2>
+      <a href="/posts/loaddata-of-mysql/">mysql的loaddata加载数据的方式</a>
+    </h2>
+    
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>September 21, 2008</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tech/">Tech</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/MySQL/">MySQL</a>
+  </div>
+  
+
+
+    <p><p>经常先进入mysql的命令行，然后用source命令导入内容。当数据量达到一定程度，就会变得很慢。所以，采用了loaddata这种方式。</p>
+<p>进入数据库，敲入：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">load</span> <span style="color:#66d9ef">data</span> <span style="color:#66d9ef">local</span> infile <span style="color:#e6db74">&#39;d:\loaddata.txt&#39;</span> <span style="color:#66d9ef">into</span> <span style="color:#66d9ef">table</span> detail fields terminated <span style="color:#66d9ef">by</span> <span style="color:#e6db74">&#39;,&#39;</span> LINES terminated <span style="color:#66d9ef">by</span> <span style="color:#e6db74">&#39;\n&#39;</span>;
+</span></span></code></pre></div><ul>
+<li>&rsquo;d:\loaddata.txt&rsquo;：表示 loaddata.txt 的绝对路径</li>
+<li>&lsquo;,&rsquo;： 表示字段之间按照&rsquo;,&lsquo;分割。</li>
+<li>&lsquo;\n&rsquo;：表示记录之间以&rsquo;\n&rsquo;分割。即：1行1条记录</li>
+</ul></p>
+  </article>
+  
+
+  
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  <nav>
+  <ul>
+  
+    
+    <li class="book-section-flat">
+      <span>Categories</span>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Tech/">Tech</a>
+          <span>21</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Life/">Life</a>
+          <span>5</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/categories/Tutorials/">Tutorials</a>
+          <span>4</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <span>Tags</span>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/MySQL/">MySQL</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Essay/">Essay</a>
+          <span>6</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Growth-hacking/">Growth Hacking</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Thought/">Thought</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Testing/">Testing</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Homebrew/">Homebrew</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Optimization/">Optimization</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Gevent/">Gevent</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Pypy/">Pypy</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Python/">Python</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Kanban/">Kanban</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Translation/">Translation</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/QCon/">QCon</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/CSRF/">CSRF</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Fudge/">Fudge</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Production/">Production</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Tornado/">Tornado</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Webpy/">Webpy</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Crawler/">Crawler</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Architecture/">Architecture</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Socket/">Socket</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Agile/">Agile</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Data-Analysis/">Data Analysis</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Data-Statistics/">Data Statistics</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Tricks/">Tricks</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Java/">Java</a>
+          <span>2</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/PorterStemmer/">PorterStemmer</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/Hibernate/">Hibernate</a>
+          <span>1</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

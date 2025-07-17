@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Testing on 一哥黑板报</title>
+    <link>/tags/Testing/</link>
+    <description>Recent content in Testing on 一哥黑板报</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 17 Jul 2025 10:55:20 +0800</lastBuildDate>
+    <atom:link href="/tags/Testing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>也谈AB测试</title>
+      <link>/posts/ab-testing/</link>
+      <pubDate>Fri, 25 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/posts/ab-testing/</guid>
+      <description>&lt;h2 id=&#34;引子&#34;&gt;&#xA;  引子&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#%e5%bc%95%e5%ad%90&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;前一阵子，团队做了一套AB测试的通用解决方案。在这里，不想聊具体怎么实现的。反而想聊一下怎样才是正确AB测试。因为在内部推广的时候，发现大家对AB测还是不明白。&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;不明白为什么要AB测试&lt;/li&gt;&#xA;&lt;li&gt;不明白如何做AB测试&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+  </channel>
+</rss>

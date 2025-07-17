@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Production on 一哥黑板报</title>
+    <link>/tags/Production/</link>
+    <description>Recent content in Production on 一哥黑板报</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 17 Jul 2025 10:47:57 +0800</lastBuildDate>
+    <atom:link href="/tags/Production/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对产品的思考</title>
+      <link>/posts/thoughts-on-building-a-production/</link>
+      <pubDate>Sun, 02 Sep 2012 00:00:00 +0000</pubDate>
+      <guid>/posts/thoughts-on-building-a-production/</guid>
+      <description>&lt;p&gt;产品是一个很有意思的东西。可以很大，可以很小。但是无一例外，所有的大产品都是从小产品一步一步做起来的。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

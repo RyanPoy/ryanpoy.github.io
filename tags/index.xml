@@ -6,20 +6,76 @@
     <description>Recent content in Tags on 一哥黑板报</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 17 Jul 2025 10:12:01 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 17 Jul 2025 16:06:19 +0800</lastBuildDate>
     <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Thinking</title>
-      <link>/tags/Thinking/</link>
-      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/Thinking/</guid>
+      <title>MySQL</title>
+      <link>/tags/MySQL/</link>
+      <pubDate>Thu, 30 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>/tags/MySQL/</guid>
       <description></description>
     </item>
     <item>
-      <title>配置</title>
-      <link>/tags/%E9%85%8D%E7%BD%AE/</link>
+      <title>Essay</title>
+      <link>/tags/Essay/</link>
+      <pubDate>Tue, 05 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>/tags/Essay/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Growth Hacking</title>
+      <link>/tags/Growth-hacking/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/tags/Growth-hacking/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Thought</title>
+      <link>/tags/Thought/</link>
+      <pubDate>Mon, 28 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/tags/Thought/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Testing</title>
+      <link>/tags/Testing/</link>
+      <pubDate>Fri, 25 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>/tags/Testing/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Homebrew</title>
+      <link>/tags/Homebrew/</link>
       <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/%E9%85%8D%E7%BD%AE/</guid>
+      <guid>/tags/Homebrew/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Optimization</title>
+      <link>/tags/Optimization/</link>
+      <pubDate>Thu, 21 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/tags/Optimization/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gevent</title>
+      <link>/tags/Gevent/</link>
+      <pubDate>Wed, 20 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/tags/Gevent/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Pypy</title>
+      <link>/tags/Pypy/</link>
+      <pubDate>Wed, 20 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/tags/Pypy/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python</title>
+      <link>/tags/Python/</link>
+      <pubDate>Wed, 20 Aug 2014 00:00:00 +0000</pubDate>
+      <guid>/tags/Python/</guid>
       <description></description>
     </item>
     <item>
@@ -37,59 +93,17 @@
       <description></description>
     </item>
     <item>
-      <title>Development</title>
-      <link>/tags/development/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      <guid>/tags/development/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Go</title>
-      <link>/tags/go/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      <guid>/tags/go/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Golang</title>
-      <link>/tags/golang/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      <guid>/tags/golang/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Hugo</title>
-      <link>/tags/hugo/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      <guid>/tags/hugo/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Templates</title>
-      <link>/tags/templates/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      <guid>/tags/templates/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Themes</title>
-      <link>/tags/themes/</link>
-      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
-      <guid>/tags/themes/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Essay</title>
-      <link>/tags/Essay/</link>
-      <pubDate>Sat, 03 Aug 2013 00:00:00 +0000</pubDate>
-      <guid>/tags/Essay/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>QCon</title>
       <link>/tags/QCon/</link>
       <pubDate>Fri, 25 Jan 2013 00:00:00 +0000</pubDate>
       <guid>/tags/QCon/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CSRF</title>
+      <link>/tags/CSRF/</link>
+      <pubDate>Mon, 10 Dec 2012 00:00:00 +0000</pubDate>
+      <guid>/tags/CSRF/</guid>
       <description></description>
     </item>
     <item>
@@ -100,10 +114,10 @@
       <description></description>
     </item>
     <item>
-      <title>Python</title>
-      <link>/tags/Python/</link>
-      <pubDate>Sat, 20 Oct 2012 00:00:00 +0000</pubDate>
-      <guid>/tags/Python/</guid>
+      <title>Production</title>
+      <link>/tags/Production/</link>
+      <pubDate>Sun, 02 Sep 2012 00:00:00 +0000</pubDate>
+      <guid>/tags/Production/</guid>
       <description></description>
     </item>
     <item>
@@ -128,6 +142,27 @@
       <description></description>
     </item>
     <item>
+      <title>Architecture</title>
+      <link>/tags/Architecture/</link>
+      <pubDate>Mon, 26 Jul 2010 00:00:00 +0000</pubDate>
+      <guid>/tags/Architecture/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Socket</title>
+      <link>/tags/Socket/</link>
+      <pubDate>Sun, 13 Jun 2010 00:00:00 +0000</pubDate>
+      <guid>/tags/Socket/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Agile</title>
+      <link>/tags/Agile/</link>
+      <pubDate>Tue, 20 Apr 2010 00:00:00 +0000</pubDate>
+      <guid>/tags/Agile/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Data Analysis</title>
       <link>/tags/Data-Analysis/</link>
       <pubDate>Tue, 09 Mar 2010 00:00:00 +0000</pubDate>
@@ -149,17 +184,24 @@
       <description></description>
     </item>
     <item>
+      <title>Java</title>
+      <link>/tags/Java/</link>
+      <pubDate>Sat, 28 Mar 2009 00:00:00 +0000</pubDate>
+      <guid>/tags/Java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>PorterStemmer</title>
+      <link>/tags/PorterStemmer/</link>
+      <pubDate>Sat, 28 Mar 2009 00:00:00 +0000</pubDate>
+      <guid>/tags/PorterStemmer/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Hibernate</title>
       <link>/tags/Hibernate/</link>
       <pubDate>Thu, 24 Jul 2008 00:00:00 +0000</pubDate>
       <guid>/tags/Hibernate/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Java</title>
-      <link>/tags/Java/</link>
-      <pubDate>Thu, 24 Jul 2008 00:00:00 +0000</pubDate>
-      <guid>/tags/Java/</guid>
       <description></description>
     </item>
   </channel>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="/posts/install-mysql-v5.7-on-centos_v7.9/">
+  <meta property="og:site_name" content="一哥黑板报">
+  <meta property="og:title" content="centos7.9安装mysql5.7">
+  <meta property="og:description" content="最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-12-30T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-07-17T11:08:50+08:00">
+    <meta property="article:tag" content="MySQL">
+<title>centos7.9安装mysql5.7 | 一哥黑板报</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="/posts/install-mysql-v5.7-on-centos_v7.9/">
+<link rel="stylesheet" href="/book.min.e47103a2785905b5db8438d6a609c05371af6c90eabdc369de60b296f8bba830.css" >
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.1b54163ba33699d30ae95ade6aca3c1aab77db8407ee0eb2bed501765f3a8acb.js" ></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" ></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/logo.jpeg" alt="Logo" class="book-icon" /><span>一哥黑板报</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/RyanPoy/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>centos7.9安装mysql5.7</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#yum更新mysql源">yum更新mysql源</a></li>
+        <li><a href="#yum-安装并启动mysql">yum 安装并启动mysql</a></li>
+        <li><a href="#更新mysql的root密码">更新mysql的root密码</a></li>
+        <li><a href="#重新指定mysql的数据库位置">重新指定mysql的数据库位置</a></li>
+        <li><a href="#进一步排查错误">进一步排查错误</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h1>
+    centos7.9安装mysql5.7
+  </h1>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>December 30, 2021</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/Tech/">Tech</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/MySQL/">MySQL</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><p>最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。</p>
+<h2 id="yum更新mysql源">
+  yum更新mysql源
+  <a class="anchor" href="#yum%e6%9b%b4%e6%96%b0mysql%e6%ba%90">#</a>
+</h2>
+<p>因为yum默认是mariadb，所以，需要更新yum的mysql源
+具体如下：</p>
+<ul>
+<li><code>wget https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</code></li>
+<li><code>yum install -y mysql57-community-release-el7-10.noarch.rpm</code></li>
+</ul>
+<h2 id="yum-安装并启动mysql">
+  yum 安装并启动mysql
+  <a class="anchor" href="#yum-%e5%ae%89%e8%a3%85%e5%b9%b6%e5%90%af%e5%8a%a8mysql">#</a>
+</h2>
+<ul>
+<li><code>yum install mysql</code></li>
+<li><code>systemctl start mysqld</code></li>
+</ul>
+<h2 id="更新mysql的root密码">
+  更新mysql的root密码
+  <a class="anchor" href="#%e6%9b%b4%e6%96%b0mysql%e7%9a%84root%e5%af%86%e7%a0%81">#</a>
+</h2>
+<p>mysql安装完毕后，会给一个随机密码，具体可以通过执行 <code>grep 'password' /var/log/mysqld.log</code> 可以看到。</p>
+<p>通过mysql -uroot -p 登录成功后，执行 <code>alter user root@'localhost' identified by 'new-password';</code> 就修改新的root密码了</p>
+<h2 id="重新指定mysql的数据库位置">
+  重新指定mysql的数据库位置
+  <a class="anchor" href="#%e9%87%8d%e6%96%b0%e6%8c%87%e5%ae%9amysql%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e4%bd%8d%e7%bd%ae">#</a>
+</h2>
+<p>下面我们需要重新制定mysql数据库的位置。因为默认mysql数据库是在 /var/lib/mysql 目录下面 。而服务器的/var/lib/mysql一般没有多大空间。所以，我们把数据库位置放到 /data/lib/mysql上来。</p>
+<ul>
+<li>关闭mysql：<code>systemctl stop mysqld</code></li>
+<li>创建目标目录：<code>mkdir /data/lib</code></li>
+<li>把mysql目录转移到目标目录：<code>mv /var/lib/mysql /data/lib</code></li>
+<li>修改mysql配置：<code>vim /etc/my.cnf</code>，把里面的/var/lib/mysql 修改为 /data/lib/mysql</li>
+</ul>
+<h2 id="进一步排查错误">
+  进一步排查错误
+  <a class="anchor" href="#%e8%bf%9b%e4%b8%80%e6%ad%a5%e6%8e%92%e6%9f%a5%e9%94%99%e8%af%af">#</a>
+</h2>
+<p>按道理说该修改的都完成了，但是当我们重新启动mysql时候，系统报错：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; systemctl start mysqld
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; 
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; Job <span style="color:#66d9ef">for</span> mysqld.service failed because the control process exited with error code. See <span style="color:#e6db74">&#34;systemctl status mysqld.service&#34;</span> and <span style="color:#e6db74">&#34;journalctl -xe&#34;</span> <span style="color:#66d9ef">for</span> details.
+</span></span></code></pre></div><p>使用命令查看mysql状态，得到错误信息：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; service mysqld status
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; 
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; Redirecting to /bin/systemctl status  mysqld.service
+</span></span></code></pre></div><p>这个时候，我们需要做下面的步骤来进行对应的修改：</p>
+<ul>
+<li>修改 /etc/selinux/config。修改：selinux=disabled，重新启动系统。</li>
+<li>重启mysql：<code>systemctl start mysqld</code></li>
+</ul>
+<p>这时候mysql启动成功。</p></div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+  <div><a class="flex align-center" href="https://github.com/RyanPoy/blog/commit/c334d3c5d0bd533d52ba845f75a352b9260a21ef" title='Last modified by pengyi | July 17, 2025' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="" />
+      <span>July 17, 2025</span>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#yum更新mysql源">yum更新mysql源</a></li>
+        <li><a href="#yum-安装并启动mysql">yum 安装并启动mysql</a></li>
+        <li><a href="#更新mysql的root密码">更新mysql的root密码</a></li>
+        <li><a href="#重新指定mysql的数据库位置">重新指定mysql的数据库位置</a></li>
+        <li><a href="#进一步排查错误">进一步排查错误</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
