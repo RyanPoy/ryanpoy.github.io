@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2009-09-01 00:00:00 +0000">
+      September 01, 2009
+    </time>
+  </div>
+
+  <h1 class="post-title">关于垂直网站爬虫的思考</h1>
+  <div class="post-line"></div>
+
+  <p>我的思考，聚焦于<strong>技术实现</strong>与<strong>指标体系</strong>两个方面：在技术层面，涵盖了调度策略、页面解析、异步并发、反反爬机制、结构化提取与数据清洗等关键模块的设计与协同；在指标维度，则需要从抓取成功率、字段完整率、数据准确性、系统吞吐量、资源利用率等角度出发，构建可量化的质量与性能评价体系，以支撑爬虫系统的高效、稳定与可维护性。</p>
+<!---->
+
+<h2 id="_1">基本指标和难点</h2>
+<ol>
+<li>实时性</li>
+<li>新的内容，需要很快的抓到</li>
+<li>全面性</li>
+<li>老的内容和新的内容都需要能抓到，不能只侧重某一方面</li>
+<li>新的内容在一定时间后就是老的内容了</li>
+<li>基于1，可能新内容要抓取的优先级更高，但不能只抓新的，不要旧的</li>
+<li>去除重复</li>
+<li>不同的网站可能有相同的内容，抓完后可能需要去掉重复的内容</li>
+<li>有写网站的url后面带有随机数，或者无效的参数，但是内容却是固定的，需要想办法去掉，只抓一次</li>
+<li>去除循环抓取</li>
+<li>各个网站之间可能相互link，需要职能的分析出已经抓取过的</li>
+<li>可持续抓取性</li>
+<li>一个入口可以一直在抓取，无需人工干预，7*24小时服务</li>
+<li>人工干预</li>
+<li>抓取速度</li>
+<li>抓取进程个数</li>
+<li>可能被封</li>
+<li>利用6 降低抓取频率</li>
+<li>多IP对外抓取</li>
+<li>通过Proxy</li>
+</ol>
+<h2 id="_2">子系统简单分析</h2>
+<ol>
+<li>crawler，专门负责抓取的服务，输入是一个url，输入是一个url对应的页面</li>
+<li>scheduler，专门负责crawler的调度，能够控制crawler的各方面参数，可能需要多进程共享</li>
+<li>linkdb, 用来存取link的，非常简单，只有增删改查，注意大数据，要提供对于link抓取优先级的接口，永远提供优先级的topN个link</li>
+<li>repository, 用来存取content的，非常简单，只有增删改查，注意大数据</li>
+<li>analyzer, 分析repository的内容，进行去重复，为索引服务</li>
+</ol>
+<h2 id="_3">抓取模型</h2>
+<ol>
+<li>多线程</li>
+<li>实现简单，python的多线程无法重复利用多核</li>
+<li>多进程</li>
+<li>实现简单，python的多进程能利用多核</li>
+<li>异步</li>
+<li>实现复杂，重复利用多核</li>
+<li>性能高</li>
+</ol>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

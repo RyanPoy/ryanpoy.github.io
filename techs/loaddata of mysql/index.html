@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2008-09-21 00:00:00 +0000">
+      September 21, 2008
+    </time>
+  </div>
+
+  <h1 class="post-title">mysql的loaddata加载数据的方式</h1>
+  <div class="post-line"></div>
+
+  <p>LOAD DATA 是 MySQL 中用于 高效批量导入数据 的命令，适合把 CSV 或 TSV 文件中的数据直接加载到表中，速度远远高于逐条插入（INSERT）。</p>
+<!---->
+
+<p>进入数据库，敲入：</p>
+<pre><code class="language-sql">load data local infile 'd:\loaddata.txt' into table detail fields terminated by ',' LINES terminated by '\n';
+</code></pre>
+<ul>
+<li>'d:\loaddata.txt'：表示 loaddata.txt 的绝对路径</li>
+<li>','： 表示字段之间按照','分割。</li>
+<li>'\n'：表示记录之间以'\n'分割。即：1行1条记录</li>
+</ul>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

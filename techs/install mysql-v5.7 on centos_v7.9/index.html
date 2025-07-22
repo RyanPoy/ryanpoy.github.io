@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2021-12-30 00:00:00 +0000">
+      December 30, 2021
+    </time>
+  </div>
+
+  <h1 class="post-title">centos7.9安装mysql5.7</h1>
+  <div class="post-line"></div>
+
+  <p>最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。</p>
+<!--more-->
+
+<h2 id="yummysql">yum更新mysql源</h2>
+<p>因为yum默认是mariadb，所以，需要更新yum的mysql源
+具体如下：
+- <code>wget https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</code>
+- <code>yum install -y mysql57-community-release-el7-10.noarch.rpm</code></p>
+<h2 id="yum-mysql">yum 安装并启动mysql</h2>
+<ul>
+<li><code>yum install mysql</code></li>
+<li><code>systemctl start mysqld</code></li>
+</ul>
+<h2 id="mysqlroot">更新mysql的root密码</h2>
+<p>mysql安装完毕后，会给一个随机密码，具体可以通过执行 <code>grep 'password' /var/log/mysqld.log</code> 可以看到。</p>
+<p>通过mysql -uroot -p 登录成功后，执行 <code>alter user root@'localhost' identified by 'new-password';</code> 就修改新的root密码了</p>
+<h2 id="mysql">重新指定mysql的数据库位置</h2>
+<p>下面我们需要重新制定mysql数据库的位置。因为默认mysql数据库是在 /var/lib/mysql 目录下面 。而服务器的/var/lib/mysql一般没有多大空间。所以，我们把数据库位置放到 /data/lib/mysql上来。</p>
+<ul>
+<li>关闭mysql：<code>systemctl stop mysqld</code></li>
+<li>创建目标目录：<code>mkdir /data/lib</code></li>
+<li>把mysql目录转移到目标目录：<code>mv /var/lib/mysql /data/lib</code></li>
+<li>修改mysql配置：<code>vim /etc/my.cnf</code>，把里面的/var/lib/mysql 修改为 /data/lib/mysql</li>
+</ul>
+<h2 id="_1">进一步排查错误</h2>
+<p>按道理说该修改的都完成了，但是当我们重新启动mysql时候，系统报错： </p>
+<pre><code class="language-shell">&gt;&gt;&gt; systemctl start mysqld
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Job for mysqld.service failed because the control process exited with error code. See &quot;systemctl status mysqld.service&quot; and &quot;journalctl -xe&quot; for details.
+</code></pre>
+<p>使用命令查看mysql状态，得到错误信息：</p>
+<pre><code class="language-shell">&gt;&gt;&gt; service mysqld status
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Redirecting to /bin/systemctl status  mysqld.service
+</code></pre>
+<p>这个时候，我们需要做下面的步骤来进行对应的修改：
+- 修改 /etc/selinux/config。修改：selinux=disabled，重新启动系统。
+- 重启mysql：<code>systemctl start mysqld</code></p>
+<p>这时候mysql启动成功。</p>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../../techs/">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2011-08-18 00:00:00 +0000">
+      August 18, 2011
+    </time>
+  </div>
+
+  <h1 class="post-title">Webpy使用教程</h1>
+  <div class="post-line"></div>
+
+  <p>Web.py 是一个轻量级的 Python Web 框架，它以简单、直接而闻名，旨在让 Web 应用开发变得快速而容易。Web.py的核心代码库非常小巧，只提供构建 Web 应用所需的基本功能，如 URL 路由、请求/响应处理、模板渲染等。这让它非常容易学习和上手。</p>
+<!--more-->
+
+<p>来<a href="https://sohu.com">搜狐</a>后，这里做的系统几乎都是 webpy + twsited 写的。所以，有必要好好学习一下这两个东西了。从今天开始介绍Web.py。</p>
+<h2 id="server">Server</h2>
+<p><strong>安装</strong></p>
+<pre><code class="language-shell">sudo pip install web.py
+</code></pre>
+<p><strong>第一个demo</strong></p>
+<pre><code class="language-python">#coding: utf-8    
+import web
+
+urls = (
+    '/', 'Index'
+)
+
+class Index:
+
+    def GET(self):
+        return 'Hello, world ! GET \n'
+
+    def POST(self):
+        return 'Hello, world ! POST \n'
+
+
+def start():
+    app = web.application(urls, globals())
+    app.run()
+
+
+if __name__ == '__main__':
+    start()
+</code></pre>
+<p><strong>启动</strong></p>
+<pre><code class="language-shell">python webpy_test.py 0.0.0.0:4321
+</code></pre>
+<p><strong>GET 测试</strong></p>
+<pre><code class="language-shell">&gt;&gt;&gt; curl http://localhost:4321
+&gt;&gt;&gt; Hello, world ! GET
+</code></pre>
+<p><strong>POST 测试</strong></p>
+<pre><code class="language-shell">&gt;&gt;&gt; curl http://localhost:4321 -d't=1'
+&gt;&gt;&gt; Hello, world ! POST
+</code></pre>
+<p><strong>总结</strong>
+1. url 简单的就是字符串，和django很类似
+2. 对于Controller而言，get请求执行GET方法，post请求执行POST方法，估计PUT和DELETE等也是一样的</p>
+<h2 id="template">Template</h2>
+<p>公司直接用的jinja。jinja和django template的太相似了。说说如果在webpy中使用jinja。</p>
+<p><strong>webpy_jinja.py</strong></p>
+<pre><code class="language-python">#coding: utf-8
+
+import web
+from web.contrib.template import render_jinja
+
+urls = (
+    '/', 'hello'
+)
+
+app = web.application(urls, globals())
+
+render = render_jinja(
+    'templates',           # 模板位置.
+    encoding = 'utf-8',    # 编码.
+)
+
+
+class Hello:
+
+    def GET(self):
+        return render.hello(value='hello, World! GET')
+
+    def POST(self):
+        return web.seeother('/')
+
+
+if __name__ == &quot;__main__&quot;:
+    app.run()
+</code></pre>
+<p><strong>hello.html</strong></p>
+<pre><code class="language-python">{{value}}
+</code></pre>
+<p><strong>跳转</strong>
+- Hello 的 GET 请求就是直接的服务器渲染页面，发送给客户端(一般是browser)
+- Hello 的 POST 就是服务器端返回给客户端http code，然后客户端直接进行跳转，再次跳转到Hello的GET上</p>
+<h2 id="_1">数据库操作</h2>
+<p><strong>得到连接</strong></p>
+<pre><code class="language-python">db = web.database(dbn='postgres', db='mydata', user='dbuser', pw='')
+</code></pre>
+<p><strong>简单查询</strong></p>
+<pre><code class="language-python">db.select(
+    'table_name',                   # 表名
+    vars  = {'name'='py'},          # 用来填充查询条件, 这个例子中对应的就是where的$name
+    where = 'username=$name',       # 查询条件
+    what  = 'id, username',         # 表示你要查询的field是哪些，默认为*。这个例子中表示查询id和username字段
+    order = 'age DESC',             # 排序方式，表示按照年龄的倒排
+    group = 'gender',               # 表示按照gender分组
+    limit = 10,                     # 查询10条
+    offset = 10,                    # 表示从第10条开始
+    _test  = True/False             # 日志打印出查询语句，True表示打印，False表示不打印。一般debug环境设置为True
+)
+</code></pre>
+<p><strong>高级查询</strong></p>
+<pre><code class="language-python">db.query(&quot;SELECT COUNT(*) AS total_users FROM users&quot;)
+
+# 有sql注入，可以修改为下面的
+db.query(&quot;SELECT * FROM user WHERE user.id = %s&quot; % 10) 
+
+# 没有sql注入
+db.query(&quot;SELECT * FROM user WHERE user.id = $id&quot;, vars = {'id': 10 }) 
+</code></pre>
+<p><strong>更新</strong></p>
+<pre><code class="language-python"># 把id=10的记录的username修改为pengyi
+db.update('table_name', where=&quot;id = 10&quot;, username = &quot;pengyi&quot;) 
+</code></pre>
+<p><strong>插入</strong></p>
+<pre><code class="language-python">db.insert('table_name', username=&quot;Poy&quot;) # 插入一条记录，设置username=Poy
+</code></pre>
+<p><strong>删除</strong></p>
+<pre><code class="language-python">db.delete('table_name', where=&quot;id = 10&quot;) # 删除id=10的记录
+</code></pre>
+<p><strong>事务</strong></p>
+<pre><code class="language-python">with db.transaction():
+    db.insert('table_name', name='py')
+    db.insert('table_name', name='pengyi')
+</code></pre>
+<p>部署就不用说太多。直接fastcgi</p>
+<h3 id="cgi">cgi配置</h3>
+<p><strong>安装flug</strong></p>
+<pre><code class="language-shell">sudo pip install flup
+</code></pre>
+<p><strong>webpy启动代码中写</strong></p>
+<pre><code class="language-python">def run_cgi(func, addr):
+    return flups.WSGIServer(func, multiplexed=False, bindAddress=addr).run()
+
+def start_fcgi():
+    app = web.application(urls, globals())
+    web.wsgi.runwsgi = lambda func, addr = None: flups.WSGIServer(func, multiplexed=False, bindAddress=addr).run()
+    app.run()
+</code></pre>
+<h3 id="_2">性能测试</h3>
+<p>webpy的性能真的是不敢恭维啊</p>
+<p>代码如下：</p>
+<pre><code class="language-python">#coding: utf-8    
+import web
+
+urls = (
+    '/', 'Index'
+)
+
+class Index:
+    def GET(self):
+        return 'Hello, world !\n'
+
+def start():
+    app = web.application(urls, globals())
+    app.run()
+
+if __name__ == '__main__':
+    start()
+</code></pre>
+<p>利用apache 的ab进行压力测试，10并发1000次请求：</p>
+<pre><code class="language-shell">&gt;&gt;&gt; ab -c 10 -n 1000 http://192.168.95.222:4321/
+&gt;&gt;&gt; 
+&gt;&gt;&gt; This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+&gt;&gt;&gt; Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+&gt;&gt;&gt; Licensed to The Apache Software Foundation, http://www.apache.org/
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Benchmarking 192.168.95.222 (be patient)
+&gt;&gt;&gt; Completed 100 requests
+&gt;&gt;&gt; Completed 200 requests
+&gt;&gt;&gt; Completed 300 requests
+&gt;&gt;&gt; Completed 400 requests
+&gt;&gt;&gt; Completed 500 requests
+&gt;&gt;&gt; Completed 600 requests
+&gt;&gt;&gt; Completed 700 requests
+&gt;&gt;&gt; Completed 800 requests
+&gt;&gt;&gt; Completed 900 requests
+&gt;&gt;&gt; Completed 1000 requests
+&gt;&gt;&gt; Finished 1000 requests
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Server Software:        CherryPy/3.1.2
+&gt;&gt;&gt; Server Hostname:        192.168.95.222
+&gt;&gt;&gt; Server Port:            4321
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Document Path:          /
+&gt;&gt;&gt; Document Length:        16 bytes
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Concurrency Level:      10
+&gt;&gt;&gt; Time taken for tests:   6.269 seconds
+&gt;&gt;&gt; Complete requests:      1000
+&gt;&gt;&gt; Failed requests:        0
+&gt;&gt;&gt; Write errors:           0
+&gt;&gt;&gt; Total transferred:      108000 bytes
+&gt;&gt;&gt; HTML transferred:       16000 bytes
+&gt;&gt;&gt; Requests per second:    159.51 [#/sec] (mean)
+&gt;&gt;&gt; Time per request:       62.691 [ms] (mean)
+&gt;&gt;&gt; Time per request:       6.269 [ms] (mean, across all concurrent requests)
+&gt;&gt;&gt; Transfer rate:          16.82 [Kbytes/sec] received
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Connection Times (ms)
+&gt;&gt;&gt;               min  mean[+/-sd] median   max
+&gt;&gt;&gt; Connect:        1    1   0.3      1       5
+&gt;&gt;&gt; Processing:    29   61  14.7     61     373
+&gt;&gt;&gt; Waiting:       29   61  14.7     61     372
+&gt;&gt;&gt; Total:         30   62  14.7     62     374
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Percentage of the requests served within a certain time (ms)
+&gt;&gt;&gt;   50%     62
+&gt;&gt;&gt;   66%     64
+&gt;&gt;&gt;   75%     65
+&gt;&gt;&gt;   80%     66
+&gt;&gt;&gt;   90%     68
+&gt;&gt;&gt;   95%     70
+&gt;&gt;&gt;   98%     71
+&gt;&gt;&gt;   99%     73
+&gt;&gt;&gt;  100%    374 (longest request)
+</code></pre>
+<p>平均每秒只能在160s，太低了。</p>
+<p><strong>再来看 100并发，2000请求</strong></p>
+<pre><code class="language-shell">&gt;&gt;&gt; ab -c 100 -n 2000 http://192.168.95.222:4321/
+&gt;&gt;&gt; 
+&gt;&gt;&gt; This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+&gt;&gt;&gt; Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+&gt;&gt;&gt; Licensed to The Apache Software Foundation, http://www.apache.org/
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Benchmarking 192.168.95.222 (be patient)
+&gt;&gt;&gt; Completed 200 requests
+&gt;&gt;&gt; Completed 400 requests
+&gt;&gt;&gt; Completed 600 requests
+&gt;&gt;&gt; Completed 800 requests
+&gt;&gt;&gt; Completed 1000 requests
+&gt;&gt;&gt; Completed 1200 requests
+&gt;&gt;&gt; Completed 1400 requests
+&gt;&gt;&gt; Completed 1600 requests
+&gt;&gt;&gt; Completed 1800 requests
+&gt;&gt;&gt; Completed 2000 requests
+&gt;&gt;&gt; Finished 2000 requests
+&gt;&gt;&gt; 
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Server Software:        CherryPy/3.1.2
+&gt;&gt;&gt; Server Hostname:        192.168.95.222
+&gt;&gt;&gt; Server Port:            4321
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Document Path:          /
+&gt;&gt;&gt; Document Length:        20 bytes
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Concurrency Level:      100
+&gt;&gt;&gt; Time taken for tests:   15.158 seconds
+&gt;&gt;&gt; Complete requests:      2000
+&gt;&gt;&gt; Failed requests:        0
+&gt;&gt;&gt; Write errors:           0
+&gt;&gt;&gt; Total transferred:      224000 bytes
+&gt;&gt;&gt; HTML transferred:       40000 bytes
+&gt;&gt;&gt; Requests per second:    131.94 [#/sec] (mean)
+&gt;&gt;&gt; Time per request:       757.902 [ms] (mean)
+&gt;&gt;&gt; Time per request:       7.579 [ms] (mean, across all concurrent requests)
+&gt;&gt;&gt; Transfer rate:          14.43 [Kbytes/sec] received
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Connection Times (ms)
+&gt;&gt;&gt;               min  mean[+/-sd] median   max
+&gt;&gt;&gt; Connect:        1   37 203.5      1    1207
+&gt;&gt;&gt; Processing:    58  707 915.3    640    6597
+&gt;&gt;&gt; Waiting:       57  707 915.3    639    6596
+&gt;&gt;&gt; Total:         61  744 1076.6    641    7802
+&gt;&gt;&gt; 
+&gt;&gt;&gt; Percentage of the requests served within a certain time (ms)
+&gt;&gt;&gt;   50%    641
+&gt;&gt;&gt;   66%    647
+&gt;&gt;&gt;   75%    650
+&gt;&gt;&gt;   80%    652
+&gt;&gt;&gt;   90%    667
+&gt;&gt;&gt;   95%   2641
+&gt;&gt;&gt;   98%   7173
+&gt;&gt;&gt;   99%   7674
+&gt;&gt;&gt;  100%   7802 (longest request)
+</code></pre>
+<p>每秒：131个请求，响应时间是：757ms左右。无法忍受了。</p>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2010/04/20 00:00:00 +0000">
+      2010/04/20
+    </time>
+  </div>
+
+  <h1 class="post-title">敏捷实践</h1>
+  <div class="post-line"></div>
+
+  <p>本文不是描述敏捷的文章，也不是用来褒扬敏捷的文章。
+记录了这一年来在敏捷实践中的一些东西。这些东西不一定是符合教科书的，仅仅是我们的一些实践。</p>
+<!--more-->
+
+<h2 id="_1">沟通</h2>
+<p>作为技术人员，我们的交付者是产品人员，与产品人员沟通很重要。往往产品人品就是一份产品文档. 而且会提前发给技术, 那么在仔细阅读了产品文档后, 需要做的事情就是沟通。在沟通的过程中要注意：
+- 不能急，很多产品不懂得技术，所以，对于一些冲突的问题，不能够用技术语言来描述，需要想清楚，好好的组织语言，组织出产品能够明白的语言，并且加以说服
+- 沟通的过程中，记录下product backlog
+- product backlog 需要排好优先级(按照价值观)
+- 优先级别高的, 往往会比较细, 优先级别低的, 往往会比较粗
+- 这些backlog是需要产品最终点头确认的</p>
+<h2 id="_2">开发</h2>
+<h3 id="pair">pair</h3>
+<ul>
+<li>结对要做到定时的rotate, 因为每个人都有自己的优点，要通过和不同的人进行pair，学习到他们身上的有点，提升自己</li>
+<li>结对的过程中，一定会出现冲突。怎么解决？</li>
+<li>遇到冲突不要激动，不要急。代码是不会骗人的。先以某一个人的思路进行，如果成功了，就证明他的是对的。</li>
+<li>如果另一个人还不服气，可以再用他的思路进行，如果也成功了，那么表示也是对的。</li>
+<li>如果都是对的，那么采用较好的一种思路即可</li>
+</ul>
+<h3 id="unittest">unittest</h3>
+<ul>
+<li>以test开始，以test结束</li>
+<li>当存在一个没有通过的test，不要写下一个test，直到这个test通过为止</li>
+<li>当存在一个没有通过的test，不要写下一段实现，直到这个test通过为止</li>
+<li>mock是一个好东西，但是不要经常用到，如果发现test很难写，或者经常要用mock，那么很可能是设计出了问题。可以回过头来重新考虑代码的结构和设计</li>
+<li>Python中的Fudge是一个用来做mock的第3方开源lib，很好用</li>
+<li>第一个test往往是最直观的，能表明编码意图和思路的，所以，值得下功夫</li>
+</ul>
+<h3 id="code-review">code review</h3>
+<ul>
+<li>每天需要有人进行code review</li>
+</ul>
+<h3 id="refactoring">refactoring</h3>
+<ul>
+<li>发现了bad smell，就应该及时的 refactoring</li>
+<li>"以后再重构吧。"  这是不可能的事情</li>
+<li>"先这样，实现功能，到时候在改。"  这也是不可能的事情</li>
+</ul>
+<h2 id="_3">交付</h2>
+<ol>
+<li>小步提交代码</li>
+<li>每次提交代码就可以给产品人员看最终的效果</li>
+<li>每次当效果和产品的不一致的时候，需要马上沟通</li>
+<li>沟通结束后，需要马上迭代</li>
+</ol>
+<h2 id="_4">几个会议</h2>
+<h3 id="sprint-planning-meeting">sprint planning meeting</h3>
+<ul>
+<li>与Team和产品同时沟通</li>
+<li>拿到backlog后, 针对里面的优先级别高的, 会进行任务的细分, 给出能完成的时间. <blockquote>
+<p>注意会影响系统架构的地方 和 有依赖关系, 前后顺序 的地方要及时发现, 并把优先级调高</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="daily-standup-meeting">daily standup meeting</h3>
+<ul>
+<li>一共5分钟左右</li>
+<li>只允许一个人发言，发言者需要拥有Talk Token，比方一个玩具小熊</li>
+<li>昨天做了什么</li>
+<li>今天预计做什么</li>
+<li>昨天遇到了什么问题</li>
+<li>如何解决昨天问题的</li>
+<li>如果发生冲突，一定要有一个主持人中断冲突，请会下解决冲突</li>
+</ul>
+<h3 id="retrospective-meeting">retrospective meeting</h3>
+<ul>
+<li>个人认为最重要的一个会议</li>
+<li>总结出阶段内的well，less，puzzle</li>
+<li>列出action list</li>
+<li>每个的action list 需要找到对应的actor</li>
+</ul>
+<h2 id="_5">结论</h2>
+<ol>
+<li>agile 提升了开发效率</li>
+<li>agile 提升了代码质量</li>
+<li>agile 解决了一个萝卜一个坑的问题，最大限度上允许了成员的离开</li>
+<li>agile 需要长期的坚持，就算是自己一个人写代码，也可以用它</li>
+</ol>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

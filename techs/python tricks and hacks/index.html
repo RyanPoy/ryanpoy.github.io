@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2009-09-11 00:00:00 +0000">
+      September 11, 2009
+    </time>
+  </div>
+
+  <h1 class="post-title">python奇技淫巧</h1>
+  <div class="post-line"></div>
+
+  <p>在Python中，有一些常见不常用又很有用的<strong>奇技淫巧</strong></p>
+<!--more-->
+
+<h2 id="getattribute"><strong>getattribute</strong></h2>
+<p>先上代码</p>
+<pre><code class="language-python">class Foo(object):
+
+    def __init__(self):
+        self.value = '1'*10
+
+    def __getattribute__(self, name):
+        print 'in get attribute'
+        return super(Foo, self).__getattribute__(name)
+
+    def hello(self):
+        return 'hello'
+
+f = Foo()
+print f.value
+</code></pre>
+<p>打印出：</p>
+<pre><code class="language-shell">&gt;&gt;&gt; in get attribute
+&gt;&gt;&gt; 1111111111
+&gt;&gt;&gt; in get attribute
+&gt;&gt;&gt; hello
+</code></pre>
+<p>可见 当调用一个Instance.attr 或者 Instance.method的时候，实际上是调用了<code>__getattribute__</code>
+注意不要在__getattribute__的方法里面写Intance.xx，否则会进入死递归，直到溢出</p>
+<h2 id="getattr"><strong>getattr</strong></h2>
+<p>上代码：</p>
+<pre><code class="language-python">#coding: utf-8
+
+class Foo(object):
+
+    def __init__(self):
+        self.value = '1'*10
+
+    def __getattribute__(self, name):
+        print 'in get attribute'
+        return super(Foo, self).__getattribute__(name)
+
+    def __getattr__(self, name):
+        print 'in get attr'
+
+
+    def hello(self):
+        return 'hello'
+
+f = Foo()
+print f.value
+print f.hello()
+print f.value1
+</code></pre>
+<p>打印出：</p>
+<pre><code class="language-shell">&gt;&gt;&gt; in get attribute
+&gt;&gt;&gt; 1111111111
+&gt;&gt;&gt; in get attribute
+&gt;&gt;&gt; hello
+&gt;&gt;&gt; in get attribute
+&gt;&gt;&gt; in get attr
+&gt;&gt;&gt; None
+</code></pre>
+<p>可见 当调用一个Instance.attr 或者 Instance.method的时候，实际上先调用了<code>__getattribute__</code>，当没有找到的时候，</p>
+<p>再调用<code>__getattr__</code>方法。</p>
+<p>利用上面的方法，其实类似于rails里面的missing_method在Python中也可以实现</p>
+<h2 id="setattr"><strong>setattr</strong></h2>
+<p>上代码：</p>
+<pre><code class="language-python">#coding: utf-8
+
+class Foo(object):
+
+    def __init__(self):
+        pass
+
+    def __setattribute__(self, name, value):
+        self.__dict__[name] = value
+        print 'in set attribute'
+
+    def __setattr__(self, name, value):
+        self.__dict__[name] = value
+        print 'in set attr'
+
+f = Foo()
+f.value = '1'*10
+f.hello = lambda: 'hello'
+print f.value
+print f.hello()
+</code></pre>
+<p>打印出：</p>
+<pre><code class="language-shell">&gt;&gt;&gt; in set attr
+&gt;&gt;&gt; in set attr
+&gt;&gt;&gt; 1111111111
+&gt;&gt;&gt; hello
+</code></pre>
+<p>可见</p>
+<pre><code class="language-python">Instance.attr = value
+Instance.method = xxx
+</code></pre>
+<p>都是调用的<code>__setattr__</code>方法，注意不要在<code>__setattr__</code>里面再调用Instance.xx = yy或者 setattr的方法，否则会进行死递归，直到溢出</p>
+<h2 id="with-as">with ... as ...</h2>
+<p>python2.6中有一个特殊的用法：<code>with...as...</code>  ；  在2.5中需要<code>import __feature__</code>;</p>
+<p>先来说说他的用法，先看看一般我们如何打开并且读取一个文件的：</p>
+<pre><code class="language-python">f = None
+try:
+    f = open('/etc/hosts', 'r')
+    print f.readlines()
+except:
+    raise
+finally:
+    if f:
+        try:
+            f.close()
+        except:
+            pass
+        finally:
+            f = None
+</code></pre>
+<p>一个简单的文件操作，但是对于文件的打开和关闭我们做了太多的处理。那么如果减少这些资源的打开和释放的代码呢？请看下面：</p>
+<pre><code class="language-python">    with open('/etc/hosts', 'r') as f:
+        print f.readlines()
+</code></pre>
+<p>实现了同样的功能，但是文件的关闭在哪里呢？这个就是with ... as ... 的作用了。它最大的好处就是自动释放一些资源。那么原理是怎么样的呢？看看下面的代码吧：</p>
+<pre><code class="language-python">class Foo(object):
+
+    def __enter__(self):
+        print 'in enter' 
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        print 'exit'    
+
+with Foo() as f:
+    pass
+</code></pre>
+<p>打印出：</p>
+<pre><code class="language-shell">&gt;&gt;&gt; in enter
+&gt;&gt;&gt; exit
+</code></pre>
+<p>可见 <code>with ... as ...</code> 的时候，嗲用了 <code>__enter__</code> 的方法，当跳出with 代码段的时候，自动调用了 <code>__exit__</code>的方法。对于高版本的python来说，可以直接用contextmanager来进行相同的工作。而我们可以利用这个写出很多有意思的代码，例如在操作数据库的时候，假设有一个User的ORM。</p>
+<p>那么对于事务的处理，我们完全可以写成：</p>
+<pre><code class="language-python">class Transaction(object):
+
+    def __init__(self, db):
+        self._conn = db
+        self._conn._db.autocommit(False)
+
+    def commit(self):
+        if self._conn._db:
+            self._conn._db.commit()
+            self._conn._db.autocommit(True)
+
+    def rollback(self):
+        if self._conn._db:
+            self._conn._db.rollback()
+            self._conn._db.autocommit(True)
+
+
+class User(object):
+
+    @classmethod
+    @contextmanager
+    def transaction(cls):
+        t = Transaction(db)
+        try:
+            yield None
+        except Exception, ex:
+            t.rollback()
+            raise
+        else:
+            t.commit()
+
+with User.transaction():
+    # do sth.
+</code></pre>
+<h2 id="_1">巧用异常得到代码片段的信息</h2>
+<p>python 有<code>__file__</code>, 但没有<code>__funcname__</code>, <code>__line__</code> 这样的东西，来描述目前执行到什么方法，哪一行。怎么办？巧用异常，可以得到相应的信息。</p>
+<pre><code class="language-python">#utf-8
+import sys
+
+def func_name_and_line():
+    &quot;&quot;&quot;Return the frame object for the caller's stack frame.&quot;&quot;&quot;
+    try:
+        raise Exception
+    except:
+        f = sys.exc_info()[2].tb_frame.f_back
+    return f.f_code.co_name, f.f_lineno
+
+def test():
+    print func_name_and_line()
+
+if __name__ == '__main__':
+    test()
+</code></pre>
+<h2 id="_2">基本数学</h2>
+<p><strong>一个方法得到整数和余数</strong></p>
+<pre><code class="language-python">print divmod(5, 3)
+</code></pre>
+<p><strong>利用两个*号，求幂</strong></p>
+<pre><code class="language-python">print 2**3
+</code></pre>
+<p><strong>利用namedtuple代替常量的dict</strong></p>
+<p>dict的优势在于简单，缺点在于key可以是随意的，所以，有时候key填错了，也不容易找出来。而且，由于dict的完全对外开发性。所以，通过某些步骤后，可能内容就完全变化了。所以，当你的dict作为一个常量的时候，可以考虑用namedtuple，这样增加了代码的可读性。而且，减少了出错的概率</p>
+<pre><code class="language-python">from collections import namedtuple
+user = namedtuple('User', ['name', 'password'])._make(['pengyi', '888888'])
+print user.name, user.password
+</code></pre>
+<p><strong>快速拉平一个list</strong></p>
+<p>对于一个list，里面的元素可能又是一个list或者tuple。那么有没有方式快速拉平？</p>
+<pre><code class="language-python">def flatten(sequnce):
+    for x in sequnce:
+        if isinstance(x, (list, tuple)):
+            for y in flatten(x):
+                yield y
+        else:
+            yield x
+
+for x in flatten(['a', ['b', 'c'], range(10), 'f']):
+    print x
+</code></pre>
+<p><strong>元素组合</strong></p>
+<p>组合一个集合里面的所有元素</p>
+<pre><code class="language-python">from itertools import combinations
+
+for x in combinations(range(10), 2):
+    print x
+for x in combinations(range(10), 3):
+    print x
+</code></pre>
+<p><strong>对list进行排序</strong>
+- 不忽略大小写</p>
+<pre><code class="language-python">l = ['B', 'a', 'A', 'b' ]
+l.sort()
+</code></pre>
+<ul>
+<li>忽略大小写</li>
+</ul>
+<pre><code class="language-python">l = ['B', 'a', 'A', 'b' ]
+l.sort(key = str.lower)
+</code></pre>
+<p><strong>对字典进行排序</strong></p>
+<ul>
+<li>元素很多的字典：</li>
+</ul>
+<pre><code class="language-python">def sort_dict(d):
+    for k in sorted(d.iterkeys()):
+        yield k, d[k]
+</code></pre>
+<ul>
+<li>元素不多的字典：</li>
+</ul>
+<pre><code class="language-python">[ k, d[k] for k in sorted(d.iterkeys()) ]
+</code></pre>
+<p><strong><em>SortedDict</em> 保证字典的插入顺序</strong>
+对于字典来说，key是hash算法。那么，无法保证插入顺序。但是python的标准库里面提供了一个SortedDict，用法和dict一样。</p>
+<pre><code class="language-python">for k, v in SortedDict(a=1, b=2, c=3, aa=4, bb=5).iteritems():
+    print k, v
+</code></pre>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

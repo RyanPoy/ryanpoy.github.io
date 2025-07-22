@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2009-03-28 00:00:00 +0000">
+      March 28, 2009
+    </time>
+  </div>
+
+  <h1 class="post-title">java常用工具-PorterStemmer</h1>
+  <div class="post-line"></div>
+
+  <p>在搜索引擎的索引和检索场景中，在自然语言处理（NLP） 场景，需要将单词还原为“词干”形式。而PorterStemmer 是 Java 中常用的 词干提取工具，它的作用:</p>
+<ul>
+<li>connection → connect</li>
+<li>connected → connect</li>
+<li>connecting → connect</li>
+<li>connections → connect</li>
+</ul>
+<p>在 Lucene 中，就提供了这样的一个java文件。</p>
+<!---->
+
+<pre><code class="language-java">import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import StringUtil;
+
+/**
+ * Copyright 2004 The Apache Software Foundation
+ * &lt;p&gt;
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * &lt;p&gt;
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * &lt;p&gt;
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+
+    Porter stemmer in Java. The original paper is in
+
+    Porter, 1980, An algorithm for suffix stripping, Program, Vol. 14,
+    no. 3, pp 130-137,
+
+    See also http://www.tartarus.org/~martin/PorterStemmer/index.html
+
+    Bug 1 (reported by Gonzalo Parra 16/10/99) fixed as marked below.
+    Tthe words 'aed', 'eed', 'oed' leave k at 'a' for step 3, and b[k-1]
+    is then out outside the bounds of b.
+
+    Similarly,
+
+    Bug 2 (reported by Steve Dyrdahl 22/2/00) fixed as marked below.
+    'ion' by itself leaves j = -1 in the test for 'ion' in step 5, and
+    b[j] is then outside the bounds of b.
+
+    Release 3.
+
+    [ This version is derived from Release 3, modified by Brian Goetz to
+    optimize for fewer object creations.  ]
+
+    */
+
+/**
+ * Stemmer, implementing the Porter Stemming Algorithm The Stemmer class transforms a word into its root form. The input word can be provided a character at
+ * time (by calling add()), or at once by calling one of the various stem(something) methods.
+ */
+
+public class PorterStemmer {
+    private char[] b;
+
+    private int i, /* offset into b */
+            j, k, k0;
+
+    private boolean dirty = false;
+
+    private static final int INC = 50; /* unit of size whereby b is increased */
+
+    private static final int EXTRA = 1;
+
+    public PorterStemmer() {
+        b = new char[INC];
+        i = 0;
+    }
+
+    /**
+     * reset() resets the stemmer so it can stem another word. If you invoke the stemmer by calling add(char) and then stem(), you must call reset() before
+     * starting another word.
+     */
+    public void reset() {
+        i = 0;
+        dirty = false;
+    }
+
+    /**
+     * Add a character to the word being stemmed. When you are finished adding characters, you can call stem(void) to process the word.
+     */
+    public void add(char ch) {
+        if (b.length &lt;= i + EXTRA) {
+            char[] new_b = new char[b.length + INC];
+            for (int c = 0; c &lt; b.length; c++)
+                new_b[c] = b[c];
+            b = new_b;
+        }
+        b[i++] = ch;
+    }
+
+    /**
+     * After a word has been stemmed, it can be retrieved by toString(), or a reference to the internal buffer can be retrieved by getResultBuffer and
+     * getResultLength (which is generally more efficient.)
+     */
+    public String toString() {
+        return new String(b, 0, i);
+    }
+
+    /**
+     * Returns the length of the word resulting from the stemming process.
+     */
+    public int getResultLength() {
+        return i;
+    }
+
+    /**
+     * Returns a reference to a character buffer containing the results of the stemming process. You also need to consult getResultLength() to determine the
+     * length of the result.
+     */
+    public char[] getResultBuffer() {
+        return b;
+    }
+
+    /* cons(i) is true &lt;=&gt; b[i] is a consonant. */
+
+    private final boolean cons(int i) {
+        switch (b[i]) {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+                return false;
+            case 'y':
+                return (i == k0) ? true : !cons(i - 1);
+            default:
+                return true;
+        }
+    }
+
+    /*
+     * m() measures the number of consonant sequences between k0 and j. if c is a consonant sequence and v a vowel sequence, and &lt;..&gt; indicates arbitrary
+     * presence, &lt;c&gt;&lt;v&gt; gives 0 &lt;c&gt;vc&lt;v&gt; gives 1 &lt;c&gt;vcvc&lt;v&gt; gives 2 &lt;c&gt;vcvcvc&lt;v&gt; gives 3 ....
+     */
+    private final int m() {
+        int n = 0;
+        int i = k0;
+        while (true) {
+            if (i &gt; j)
+                return n;
+            if (!cons(i))
+                break;
+            i++;
+        }
+        i++;
+        while (true) {
+            while (true) {
+                if (i &gt; j)
+                    return n;
+                if (cons(i))
+                    break;
+                i++;
+            }
+            i++;
+            n++;
+            while (true) {
+                if (i &gt; j)
+                    return n;
+                if (!cons(i))
+                    break;
+                i++;
+            }
+            i++;
+        }
+    }
+
+    /* vowelinstem() is true &lt;=&gt; k0,...j contains a vowel */
+    private final boolean vowelinstem() {
+        int i;
+        for (i = k0; i &lt;= j; i++)
+            if (!cons(i))
+                return true;
+        return false;
+    }
+
+    /* doublec(j) is true &lt;=&gt; j,(j-1) contain a double consonant. */
+    private final boolean doublec(int j) {
+        if (j &lt; k0 + 1)
+            return false;
+        if (b[j] != b[j - 1])
+            return false;
+        return cons(j);
+    }
+
+    /*
+     * cvc(i) is true &lt;=&gt; i-2,i-1,i has the form consonant - vowel - consonant and also if the second c is not w,x or y. this is used when trying to restore an
+     * e at the end of a short word. e.g. cav(e), lov(e), hop(e), crim(e), but snow, box, tray.
+     */
+    private final boolean cvc(int i) {
+        if (i &lt; k0 + 2 || !cons(i) || cons(i - 1) || !cons(i - 2))
+            return false;
+        else {
+            int ch = b[i];
+            if (ch == 'w' || ch == 'x' || ch == 'y')
+                return false;
+        }
+        return true;
+    }
+
+    private final boolean ends(String s) {
+        int l = s.length();
+        int o = k - l + 1;
+        if (o &lt; k0)
+            return false;
+        for (int i = 0; i &lt; l; i++)
+            if (b[o + i] != s.charAt(i))
+                return false;
+        j = k - l;
+        return true;
+    }
+
+    /*
+     * setto(s) sets (j+1),...k to the characters in the string s, readjusting k.
+     */
+    void setto(String s) {
+        int l = s.length();
+        int o = j + 1;
+        for (int i = 0; i &lt; l; i++)
+            b[o + i] = s.charAt(i);
+        k = j + l;
+        dirty = true;
+    }
+
+    /* r(s) is used further down. */
+    void r(String s) {
+        if (m() &gt; 0)
+            setto(s);
+    }
+
+    /*
+     * step1() gets rid of plurals and -ed or -ing. e.g. caresses -&gt; caress ponies -&gt; poni ties -&gt; ti caress -&gt; caress cats -&gt; cat feed -&gt; feed agreed -&gt; agree
+     * disabled -&gt; disable matting -&gt; mat mating -&gt; mate meeting -&gt; meet milling -&gt; mill messing -&gt; mess meetings -&gt; meet
+     */
+    private final void step1() {
+        if (b[k] == 's') {
+            if (ends(&quot;sses&quot;))
+                k -= 2;
+            else if (ends(&quot;ies&quot;))
+                setto(&quot;i&quot;);
+            else if (b[k - 1] != 's')
+                k--;
+        }
+        if (ends(&quot;eed&quot;)) {
+            if (m() &gt; 0)
+                k--;
+        } else if ((ends(&quot;ed&quot;) || ends(&quot;ing&quot;)) &amp;&amp; vowelinstem()) {
+            k = j;
+            if (ends(&quot;at&quot;))
+                setto(&quot;ate&quot;);
+            else if (ends(&quot;bl&quot;))
+                setto(&quot;ble&quot;);
+            else if (ends(&quot;iz&quot;))
+                setto(&quot;ize&quot;);
+            else if (doublec(k)) {
+                int ch = b[k--];
+                if (ch == 'l' || ch == 's' || ch == 'z')
+                    k++;
+            } else if (m() == 1 &amp;&amp; cvc(k))
+                setto(&quot;e&quot;);
+        }
+    }
+
+    /* step2() turns terminal y to i when there is another vowel in the stem. */
+    private final void step2() {
+        if (ends(&quot;y&quot;) &amp;&amp; vowelinstem()) {
+            b[k] = 'i';
+            dirty = true;
+        }
+    }
+
+    /*
+     * step3() maps double suffices to single ones. so -ization ( = -ize plus -ation) maps to -ize etc. note that the string before the suffix must give m() &gt; *
+     * 0.
+     */
+    private final void step3() {
+        if (k == k0)
+            return; /* For Bug 1 */
+        switch (b[k - 1]) {
+            case 'a':
+                if (ends(&quot;ational&quot;)) {
+                    r(&quot;ate&quot;);
+                    break;
+                }
+                if (ends(&quot;tional&quot;)) {
+                    r(&quot;tion&quot;);
+                    break;
+                }
+                break;
+            case 'c':
+                if (ends(&quot;enci&quot;)) {
+                    r(&quot;ence&quot;);
+                    break;
+                }
+                if (ends(&quot;anci&quot;)) {
+                    r(&quot;ance&quot;);
+                    break;
+                }
+                break;
+            case 'e':
+                if (ends(&quot;izer&quot;)) {
+                    r(&quot;ize&quot;);
+                    break;
+                }
+                break;
+            case 'l':
+                if (ends(&quot;bli&quot;)) {
+                    r(&quot;ble&quot;);
+                    break;
+                }
+                if (ends(&quot;alli&quot;)) {
+                    r(&quot;al&quot;);
+                    break;
+                }
+                if (ends(&quot;entli&quot;)) {
+                    r(&quot;ent&quot;);
+                    break;
+                }
+                if (ends(&quot;eli&quot;)) {
+                    r(&quot;e&quot;);
+                    break;
+                }
+                if (ends(&quot;ousli&quot;)) {
+                    r(&quot;ous&quot;);
+                    break;
+                }
+                break;
+            case 'o':
+                if (ends(&quot;ization&quot;)) {
+                    r(&quot;ize&quot;);
+                    break;
+                }
+                if (ends(&quot;ation&quot;)) {
+                    r(&quot;ate&quot;);
+                    break;
+                }
+                if (ends(&quot;ator&quot;)) {
+                    r(&quot;ate&quot;);
+                    break;
+                }
+                break;
+            case 's':
+                if (ends(&quot;alism&quot;)) {
+                    r(&quot;al&quot;);
+                    break;
+                }
+                if (ends(&quot;iveness&quot;)) {
+                    r(&quot;ive&quot;);
+                    break;
+                }
+                if (ends(&quot;fulness&quot;)) {
+                    r(&quot;ful&quot;);
+                    break;
+                }
+                if (ends(&quot;ousness&quot;)) {
+                    r(&quot;ous&quot;);
+                    break;
+                }
+                break;
+            case 't':
+                if (ends(&quot;aliti&quot;)) {
+                    r(&quot;al&quot;);
+                    break;
+                }
+                if (ends(&quot;iviti&quot;)) {
+                    r(&quot;ive&quot;);
+                    break;
+                }
+                if (ends(&quot;biliti&quot;)) {
+                    r(&quot;ble&quot;);
+                    break;
+                }
+                break;
+            case 'g':
+                if (ends(&quot;logi&quot;)) {
+                    r(&quot;log&quot;);
+                    break;
+                }
+        }
+    }
+
+    /* step4() deals with -ic-, -full, -ness etc. similar strategy to step3. */
+    private final void step4() {
+        switch (b[k]) {
+            case 'e':
+                if (ends(&quot;icate&quot;)) {
+                    r(&quot;ic&quot;);
+                    break;
+                }
+                if (ends(&quot;ative&quot;)) {
+                    r(&quot;&quot;);
+                    break;
+                }
+                if (ends(&quot;alize&quot;)) {
+                    r(&quot;al&quot;);
+                    break;
+                }
+                break;
+            case 'i':
+                if (ends(&quot;iciti&quot;)) {
+                    r(&quot;ic&quot;);
+                    break;
+                }
+                break;
+            case 'l':
+                if (ends(&quot;ical&quot;)) {
+                    r(&quot;ic&quot;);
+                    break;
+                }
+                if (ends(&quot;ful&quot;)) {
+                    r(&quot;&quot;);
+                    break;
+                }
+                break;
+            case 's':
+                if (ends(&quot;ness&quot;)) {
+                    r(&quot;&quot;);
+                    break;
+                }
+                break;
+        }
+    }
+
+    /* step5() takes off -ant, -ence etc., in context &lt;c&gt;vcvc&lt;v&gt;. */
+    private final void step5() {
+        if (k == k0)
+            return; /* for Bug 1 */
+        switch (b[k - 1]) {
+            case 'a':
+                if (ends(&quot;al&quot;))
+                    break;
+                return;
+            case 'c':
+                if (ends(&quot;ance&quot;))
+                    break;
+                if (ends(&quot;ence&quot;))
+                    break;
+                return;
+            case 'e':
+                if (ends(&quot;er&quot;))
+                    break;
+                return;
+            case 'i':
+                if (ends(&quot;ic&quot;))
+                    break;
+                return;
+            case 'l':
+                if (ends(&quot;able&quot;))
+                    break;
+                if (ends(&quot;ible&quot;))
+                    break;
+                return;
+            case 'n':
+                if (ends(&quot;ant&quot;))
+                    break;
+                if (ends(&quot;ement&quot;))
+                    break;
+                if (ends(&quot;ment&quot;))
+                    break;
+                /* element etc. not stripped before the m */
+                if (ends(&quot;ent&quot;))
+                    break;
+                return;
+            case 'o':
+                if (ends(&quot;ion&quot;) &amp;&amp; j &gt;= 0 &amp;&amp; (b[j] == 's' || b[j] == 't'))
+                    break;
+                /* j &gt;= 0 fixes Bug 2 */
+                if (ends(&quot;ou&quot;))
+                    break;
+                return;
+            /* takes care of -ous */
+            case 's':
+                if (ends(&quot;ism&quot;))
+                    break;
+                return;
+            case 't':
+                if (ends(&quot;ate&quot;))
+                    break;
+                if (ends(&quot;iti&quot;))
+                    break;
+                return;
+            case 'u':
+                if (ends(&quot;ous&quot;))
+                    break;
+                return;
+            case 'v':
+                if (ends(&quot;ive&quot;))
+                    break;
+                return;
+            case 'z':
+                if (ends(&quot;ize&quot;))
+                    break;
+                return;
+            default:
+                return;
+        }
+        if (m() &gt; 1)
+            k = j;
+    }
+
+    /* step6() removes a final -e if m() &gt; 1. */
+
+    private final void step6() {
+        j = k;
+        if (b[k] == 'e') {
+            int a = m();
+            if (a &gt; 1 || a == 1 &amp;&amp; !cvc(k - 1))
+                k--;
+        }
+        if (b[k] == 'l' &amp;&amp; doublec(k) &amp;&amp; m() &gt; 1)
+            k--;
+    }
+
+    /**
+     * Stem a word provided as a String. Returns the result as a String.
+     */
+    public String stem(String s) {
+        if (stem(s.toCharArray(), s.length()))
+            return toString();
+        else
+            return s;
+    }
+
+    /**
+     * Stem a word contained in a char[]. Returns true if the stemming process resulted in a word different from the input. You can retrieve the result with
+     * getResultLength()/getResultBuffer() or toString().
+     */
+    public boolean stem(char[] word) {
+        return stem(word, word.length);
+    }
+
+    /**
+     * Stem a word contained in a portion of a char[] array. Returns true if the stemming process resulted in a word different from the input. You can retrieve
+     * the result with getResultLength()/getResultBuffer() or toString().
+     */
+    public boolean stem(char[] wordBuffer, int offset, int wordLen) {
+        reset();
+        if (b.length &lt; wordLen) {
+            char[] new_b = new char[wordLen + EXTRA];
+            b = new_b;
+        }
+        for (int j = 0; j &lt; wordLen; j++)
+            b[j] = wordBuffer[offset + j];
+        i = wordLen;
+        return stem(0);
+    }
+
+    /**
+     * Stem a word contained in a leading portion of a char[] array. Returns true if the stemming process resulted in a word different from the input. You can
+     * retrieve the result with getResultLength()/getResultBuffer() or toString().
+     */
+    public boolean stem(char[] word, int wordLen) {
+        return stem(word, 0, wordLen);
+    }
+
+    /**
+     * Stem the word placed into the Stemmer buffer through calls to add(). Returns true if the stemming process resulted in a word different from the input.
+     * You can retrieve the result with getResultLength()/getResultBuffer() or toString().
+     */
+    public boolean stem() {
+        return stem(0);
+    }
+
+    public boolean stem(int i0) {
+        k = i - 1;
+        k0 = i0;
+        if (k &gt; k0 + 1) {
+            step1();
+            step2();
+            step3();
+            step4();
+            step5();
+            step6();
+        }
+        // Also, a word is considered dirty if we lopped off letters
+        // Thanks to Ifigenia Vairelles for pointing this out.
+        if (i != k + 1)
+            dirty = true;
+        i = k + 1;
+        return dirty;
+    }
+
+    /**
+     * Test program for demonstrating the Stemmer. It reads a file and stems each word, writing the result to standard out. Usage: Stemmer file-name
+     *
+     * @throws IOException
+     */
+    public static void main(String[] args) throws IOException {
+        PorterStemmer s = new PorterStemmer();
+        String[] str = new String[]{&quot;d://stop.txt&quot;};
+        for (String key : str) {
+            InputStream in = new FileInputStream(key);
+            byte[] buffer = new byte[1024];
+            int bufferLen, offset, ch;
+
+            bufferLen = in.read(buffer);
+            offset = 0;
+            s.reset();
+
+            while (true) {
+                if (offset &lt; bufferLen)
+                    ch = buffer[offset++];
+                else {
+                    bufferLen = in.read(buffer);
+                    offset = 0;
+                    if (bufferLen &lt; 0)
+                        ch = -1;
+                    else
+                        ch = buffer[offset++];
+                }
+
+                if (StringUtil.isLetter((char) ch)) {
+                    s.add(Character.toLowerCase((char) ch));
+                } else {
+                    s.stem();
+                    System.out.print(s.toString());
+                    s.reset();
+                    if (ch &lt; 0)
+                        break;
+                    else
+                        System.out.print((char) ch);
+                }
+            }
+            in.close();
+        }
+    }
+}
+</code></pre>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>

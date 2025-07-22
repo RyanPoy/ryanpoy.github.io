@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="/assets/styles/main.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+    
+</head>
+<body>
+    <header><nav class="nav">
+  <div class="nav-container">
+    <a href="/">
+      <h2 class="nav-title">一哥黑板报</h2>
+    </a>
+    <ul>
+    
+      <li >
+        <a href="../">Tech</a>
+      </li>
+    
+      <li >
+        <a href="../../lifes/">Life</a>
+      </li>
+    
+      <li >
+        <a href="../../tutorials/">Tutorial</a>
+      </li>
+    
+      <li >
+        <a href="../../about/">About</a>
+      </li>
+    
+    </ul>
+  </div>
+</nav></header>
+
+    <!-- 这是 MkDocs 注入页面内容的地方 -->
+    <main>
+<div class="post">
+  <div class="post-info">
+    <span>Written by</span>
+    彭一
+    <br />
+    <span>on</span>
+    <time datetime="2020-12-19 00:00:00 +0000">
+      December 19, 2020
+    </time>
+  </div>
+
+  <h1 class="post-title">Homebrew修改国内源</h1>
+  <div class="post-line"></div>
+
+  <p>因为众所周知的原因，正常访问homebrew是很难的。所以，我们需要修改它的源，让其指向国内。</p>
+<!--more-->
+
+<h1 id="homebrew4">对于 homebrew，需要替换的是4个模块的镜像：</h1>
+<ul>
+<li>Homebrew</li>
+<li>Homebrew Core</li>
+<li>Homebrew-bottles</li>
+<li>Homebrew Cask</li>
+</ul>
+<h3 id="homebrew">替换 Homebrew</h3>
+<p>git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git</p>
+<h3 id="homebrew-core">替换 Homebrew Core</h3>
+<p>git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git</p>
+<h3 id="homebrew-cask">替换 Homebrew Cask</h3>
+<p>git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git</p>
+<h3 id="homebrew-bottles">替换 Homebrew-bottles</h3>
+<ul>
+<li>对于 bash 用户：</li>
+</ul>
+<p>echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' &gt;&gt; ~/.bash_profile
+source ~/.bash_profile</p>
+<ul>
+<li>对于 zsh 用户：</li>
+</ul>
+<p>echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' &gt;&gt; ~/.zshrc
+source ~/.zshrc</p>
+</div>
+</main>
+
+    <!-- 你的网站页脚 (可选的) -->
+    <footer>  <span>
+    Copyright © <time datetime="2008-07-21 00:00:00 +0000">2008</time> <a href="https://github.com/RyanPoy/blog">彭一</a> Rights Reserved | Made with <a href="https://github.com/mkdocs/mkdocs/">mkdocs</a> using the <a href="https://github.com/RyanPoy/mkdocs-tale/">Tale</a> theme.
+  </span></footer>
+
+    <!-- 你的 JavaScript 脚本在这里 -->
+    
+</body>
+</html>
