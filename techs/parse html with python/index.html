@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
 
-    <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
-    
+  <link rel="stylesheet" href="../../assets/styles/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+  
 </head>
 <body>
+  <div class="body-wrapper">
     <header><nav class="nav">
   <div class="nav-container">
     <a href="/">
@@ -46,7 +47,7 @@
     <br />
     <span>on</span>
     <time datetime="2011-02-27 00:00:00 +0000">
-      February 27, 2011
+      Feb 27, 2011
     </time>
   </div>
 
@@ -67,15 +68,14 @@
   - 解析标签的工具
   - 遍历网页，找出标签的东西
   - 找出标签，并且解析后，存放解析后的数据的东西</p>
-<p>接下来，讲讲如何进行网页里面标签块的解析。例如，我们要解析下面的内容：</p>
-<pre><code class="language-html">&lt;a href='#' class=&quot;anavy&quot;&gt;
-</code></pre>
+<p>接下来，讲讲如何进行网页里面标签块的解析。例如，我们要解析下面的内容：
+<pre class="highlight"><code class="language-html">&lt;a href='#' class="anavy"&gt;</code></pre></p>
 <p>其实就是要解析出里面的<strong>href</strong>和<strong>class</strong>分别是什么。不过，要注意下面的几点：
 1. 可以检查标签是否可见，这个有利于以后的html分析，从而知道这个内容是否要显示出来
 2. 支持不规范的标签，比方说只有开，没有闭；少一个空格 等等</p>
 <p>直接上代码：
-<strong>html_util.py</strong></p>
-<pre><code class="language-python">#coding=utf-8
+<strong>html_util.py</strong>
+<pre class="highlight"><code class="language-python">#coding=utf-8
 class AttributeUtil(object):
 
     @classmethod
@@ -102,7 +102,7 @@ class AttributeUtil(object):
             return ''
 
         c = html_string[p]
-        if c == &quot;'&quot; or c == '&quot;':
+        if c == "'" or c == '"':
             p1 = html_string.find(c, p + 1)
             if p1 == -1:
                 return ''
@@ -154,7 +154,7 @@ class AttributeUtil(object):
             if p &gt; 0:
                 c = html_string[p - 1]
 
-                if c.isspace() or c == '&quot;' or c == &quot;'&quot;:
+                if c.isspace() or c == '"' or c == "'":
                     if p + attribute_name_length == len(html_string):
                         return p
                     c = html_string[p + attribute_name_length]
@@ -190,10 +190,10 @@ class AttributeUtil(object):
 
     @classmethod
     def style_visibility(cls, value):
-        &quot;&quot;&quot;
+        """
         查看是否可见，
         @return: 如果可见返回True,否则返回False
-        &quot;&quot;&quot;
+        """
         style = cls.get_attribute(value, 'style')
         if style is None:
             return True
@@ -217,80 +217,78 @@ class AttributeUtil(object):
 
         if v == 'hidden' or v == 'false':
             return False
-        return True
-</code></pre>
+        return True</code></pre></p>
 <p>测试代码如下：
-<strong>test_html_util.py</strong></p>
-<pre><code class="language-python">#coding=utf-8    
+<strong>test_html_util.py</strong>
+<pre class="highlight"><code class="language-python">#coding=utf-8    
 import unittest
 from html_util import AttributeUtil
 
 class AttributeAnalyzerTest(unittest.TestCase):
 
     def test_style_visibility(self):
-        tag_string = &quot;&lt;DIV ID=\&quot;investInfo\&quot; STYLE=\&quot;position:absolute; width:106px; z-index:7; visibility: hiden\&quot; onMouseOver=\&quot;MM_showHideLayers('newsCenter','','hide','dataCenter','','hide','viewGovernment','','hide','chengxinCenter','','hide','workHall','','hide','superviseAppeal','','hide','participateGovern','','hide','investInfo','','show','serviceGuide','','hide')\&quot;  onMouseOut=\&quot;MM_showHideLayers('newsCenter','','hide','dataCenter','','hide','viewGovernment','','hide','chengxinCenter','','hide','workHall','','hide','superviseAppeal','','hide','participateGovern','','hide','investInfo','','hide','serviceGuide','','hide')\&quot;&gt;&quot;
+        tag_string = "&lt;DIV ID=\"investInfo\" STYLE=\"position:absolute; width:106px; z-index:7; visibility: hiden\" onMouseOver=\"MM_showHideLayers('newsCenter','','hide','dataCenter','','hide','viewGovernment','','hide','chengxinCenter','','hide','workHall','','hide','superviseAppeal','','hide','participateGovern','','hide','investInfo','','show','serviceGuide','','hide')\"  onMouseOut=\"MM_showHideLayers('newsCenter','','hide','dataCenter','','hide','viewGovernment','','hide','chengxinCenter','','hide','workHall','','hide','superviseAppeal','','hide','participateGovern','','hide','investInfo','','hide','serviceGuide','','hide')\"&gt;"
         visibility = AttributeUtil.style_visibility(tag_string)
         self.assertTrue(visibility)
 
     def test_get_simple_attribute(self):
-        tag_string = &quot;window.location.href='bbsShowTopic.aspx?BoardID=148&amp;Page=182'&quot;
-        value = AttributeUtil.get_attribute(tag_string, &quot;window.location.href&quot;)
+        tag_string = "window.location.href='bbsShowTopic.aspx?BoardID=148&amp;Page=182'"
+        value = AttributeUtil.get_attribute(tag_string, "window.location.href")
         self.assertEquals(value, 'bbsShowTopic.aspx?BoardID=148&amp;Page=182')
 
     def test_get_none_attribute(self):
-        &quot;&quot;&quot;
-        There is an error. why the result value became #&quot;? the last version is none
-        &quot;&quot;&quot;
-        value = AttributeUtil.get_attribute(&quot;&lt;a href=#\&quot; class=\&quot;anavy\&quot;&gt;&quot;, &quot;href&quot;)
-        self.assertEquals(value, '#&quot;')
+        """
+        There is an error. why the result value became #"? the last version is none
+        """
+        value = AttributeUtil.get_attribute("&lt;a href=#\" class=\"anavy\"&gt;", "href")
+        self.assertEquals(value, '#"')
 
     def test_get_attribute_from_no_standrand_format_html(self):
-        value = AttributeUtil.get_attribute(&quot;&lt;sdgsadg witht=\&quot;123\&quot;src=ddsg&quot;, &quot;src&quot;)
+        value = AttributeUtil.get_attribute("&lt;sdgsadg witht=\"123\"src=ddsg", "src")
         self.assertEquals(value, 'ddsg')
 
     def test_get_empty_attribute_from_no_standrand_format_html(self):
-        value = AttributeUtil.get_attribute(&quot;&lt;sdgsadg src='&quot;, &quot;src&quot;)
+        value = AttributeUtil.get_attribute("&lt;sdgsadg src='", "src")
         self.assertEquals('', value)
 
     def test_get_upper_attribute(self):
-        value = AttributeUtil.get_attribute(&quot;&lt;sdgsadg src='SD'&quot;, &quot;src&quot;)
+        value = AttributeUtil.get_attribute("&lt;sdgsadg src='SD'", "src")
         self.assertEquals('SD', value)
 
     def test_get_no_standrand_attribute(self):
-        html_string = &quot;&lt;A class=blue href = \&quot;http://shanghai.sohu.com/\&quot; target=_blank&gt;&quot;
-        value = AttributeUtil.get_attribute(html_string, &quot;href&quot;)
+        html_string = "&lt;A class=blue href = \"http://shanghai.sohu.com/\" target=_blank&gt;"
+        value = AttributeUtil.get_attribute(html_string, "href")
         self.assertEquals(value, 'http://shanghai.sohu.com/')
 
     def test_get_attribute_with_upper_attribute_name(self):
-        value = AttributeUtil.get_attribute(&quot;&lt;sdgsadg src='SD' &lt;aa&gt;&quot;, &quot;SRC&quot;)
+        value = AttributeUtil.get_attribute("&lt;sdgsadg src='SD' &lt;aa&gt;", "SRC")
         self.assertEquals(value, 'SD')
 
     def test_get_none_attribute_2(self):
-        value = AttributeUtil.get_attribute(&quot;&lt;script&gt;window.location='http://www.shang360.com'&lt;/script&gt;&quot;, &quot;a&quot;)
+        value = AttributeUtil.get_attribute("&lt;script&gt;window.location='http://www.shang360.com'&lt;/script&gt;", "a")
         self.assertTrue(value is None)
 
     def test_tuge_page_fetch(self):
-        value = AttributeUtil.get_attribute(&quot;&lt;script&gt;window.location='http://www.shang360.com'&lt;/script&gt;&quot;, &quot;a&quot;)
+        value = AttributeUtil.get_attribute("&lt;script&gt;window.location='http://www.shang360.com'&lt;/script&gt;", "a")
         self.assertTrue(value is None)
 
     def test_img_tag_and_no_standrand_attribute(self):
         tag_string = '''&lt;IMG alt=在纽约联合国总部安理会会议厅，中国常驻联合国代表李保东 （左二） 与其他一些国家与会代表交谈。 
-src=&quot;http://photocdn.sohu.com/20100610/Img272688535.jpg&quot; align=middle&gt;'''
-        value = AttributeUtil.get_attribute(tag_string, &quot;src&quot;)
+src="http://photocdn.sohu.com/20100610/Img272688535.jpg" align=middle&gt;'''
+        value = AttributeUtil.get_attribute(tag_string, "src")
         self.assertEquals('http://photocdn.sohu.com/20100610/Img272688535.jpg', value)
 
 if __name__ == '__main__':
-    unittest.main()
-</code></pre>
+    unittest.main()</code></pre></p>
 <p>讲明了如何解析标签。接下来，我们要做的事情就是解析html的内容了。参考以往解析xml，可以采用sax的方式。这样更加清晰，代码也更加好写。</p>
 <p>我们的设计是有一个 HtmlHandler 和 HtmlParser。有HtmlHandler里面保留html的可见内容。而HtmlParser进行真正的解析。</p>
-<p><strong>html_handler.py</strong></p>
-<pre><code class="language-python">#coding=utf-8
+<p><strong>html_handler.py</strong>
+<pre class="highlight"><code class="language-python">#coding=utf-8
 
 class HtmlHandler(object):
-    &quot;&quot;&quot;
+    """
     拿到标签后，进行相应处理的handler
-    &quot;&quot;&quot;
+    """
     def __init__(self, handle_comment=False, handle_text=True):
         self.handle_comment = handle_comment
         self.handle_text    = handle_text
@@ -329,11 +327,10 @@ class HtmlHandler(object):
         return connect_mark.join(self.html_list)
 
     def clear_memory(self):
-        self.html_list = []
-</code></pre>
+        self.html_list = []</code></pre></p>
 <p>上面代码中，我们通过 handler.text 方法来text的追加。最后调用get_html_exclude_script就可以拿到网页的内容了。接下来，看html_parser的逻辑。</p>
-<p><strong>html_parser.py</strong></p>
-<pre><code class="language-python">#coding=utf-8
+<p><strong>html_parser.py</strong>
+<pre class="highlight"><code class="language-python">#coding=utf-8
 import re
 
 class HtmlParser(object):
@@ -353,7 +350,7 @@ class HtmlParser(object):
           '&amp;lt;': '&lt;',
           '&amp;gt;': '&gt;',
           '&amp;brvbar;': '?',
-          '&amp;quot;': '&quot;',
+          '&amp;quot;': '"',
           '&amp;middot;': '?',
           '&amp;bull;': '?',
           '\n': ' ',
@@ -393,7 +390,7 @@ class HtmlParser(object):
         if last_tag_end &lt; 0: # 可能是无效字符，也可能是没有关键字
           last_tag_end = current_tag_begin + 1
           if self.handle_text:
-            self.handler.text(&quot;&lt;&quot;)
+            self.handler.text("&lt;")
           continue
 
         last_tag_end = self.find_tag_end(html, last_tag_end) # 找到了会返回位置
@@ -451,8 +448,8 @@ class HtmlParser(object):
         return self.rx.sub(lambda match: self.replace_dict[match.group(0)], html)
 
     def comment(self, html, p):
-      if html.startswith(&quot;&lt;!--&quot;, p):
-        p1 = html.find(&quot;--&gt;&quot;, p + 2)
+      if html.startswith("&lt;!--", p):
+        p1 = html.find("--&gt;", p + 2)
         if p1 == -1:
           return -1
         p1 += 3
@@ -484,9 +481,9 @@ class HtmlParser(object):
         if c == match:
           if match == '&gt;':
             return i
-          if match == &quot;'&quot; or match == '&quot;':
+          if match == "'" or match == '"':
             match = '&gt;'
-        elif (c == &quot;'&quot; or c == '&quot;') and lastIsEqual:
+        elif (c == "'" or c == '"') and lastIsEqual:
           if match == '&gt;':
             match = c
 
@@ -542,11 +539,10 @@ class HtmlParser(object):
     def is_tag_stop_flag(self, c):
       if c.isspace() or c == '&gt;' or c == '/':
         return True
-      return False
-</code></pre>
-<p>接下来，是测试代码：</p>
-<p><strong>test_parser.py</strong></p>
-<pre><code class="language-python">#coding=utf-8
+      return False</code></pre>
+接下来，是测试代码：</p>
+<p><strong>test_parser.py</strong>
+<pre class="highlight"><code class="language-python">#coding=utf-8
 
 import unittest
 from time import time
@@ -562,7 +558,7 @@ class TestHandler(HtmlHandler):
         self.hrefs = []
 
     def start(self, name, value, p):
-        print &quot;start:name=&quot;, name, &quot;;value=&quot;, value, &quot;;p=&quot;, p
+        print "start:name=", name, ";value=", value, ";p=", p
         if name.lower() == 'a':
             href = AttributeUtil.get_attribute(value, 'href')
             if href:
@@ -570,60 +566,60 @@ class TestHandler(HtmlHandler):
                 self.anum += 1
 
     def end(self, name, value, p):
-        print &quot;end:name=&quot;, name, &quot;;value=&quot;, value, &quot;;p=&quot;, p
+        print "end:name=", name, ";value=", value, ";p=", p
 
     def text(self, text):
-        print &quot;text:&quot;, text
+        print "text:", text
 
     def comment(self, c, p):
-        print &quot;comment:&quot;, c
+        print "comment:", c
 
     def finish(self):
         print 'finish'
 
     def print_hrefs(self):
         for href in set(self.hrefs):
-#            print href.replace(&quot;javascript:changeCity('&quot;, &quot;http://&quot;).replace(&quot;','')&quot;, &quot;.city8.com&quot;)
+#            print href.replace("javascript:changeCity('", "http://").replace("','')", ".city8.com")
             print href
 
 class TestParser(unittest.TestCase):
 
     def setUp(self):
-        self.html = &quot;&quot;&quot;开始的文本内容&lt;!--这是一个注释--&gt;
-&lt;div class=&quot;colRight&quot;&gt;
-&lt;h2&gt;&lt;a href=&quot;http://ent.163.com/09/0901/07/5I40E0S200031H2L.html&quot;&gt;金越任虎年春晚总导演&lt;/a&gt;&lt;/h2&gt;
-&lt;div class=&quot;list&quot;&gt;
+        self.html = """开始的文本内容&lt;!--这是一个注释--&gt;
+&lt;div class="colRight"&gt;
+&lt;h2&gt;&lt;a href="http://ent.163.com/09/0901/07/5I40E0S200031H2L.html"&gt;金越任虎年春晚总导演&lt;/a&gt;&lt;/h2&gt;
+&lt;div class="list"&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/05/5I3P9S7T00031H2L.html&quot;&gt;曾轶可《狮子座》涉嫌抄袭纯音乐《天际》&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/07/5I41RRCR00031H2L.html&quot;&gt;金马奖报名截止 郭富城刘德华黎明争夺影帝&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/04/5I3LJ0QE00031H2L.html&quot;&gt;赵雅芝准备接演古董收藏剧 支持阿娇演白娘子&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/03/5I3I031200032DGD.html&quot;&gt;李玟:与男友前妻成了姐妹 暂时没时间结婚&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/02/5I3E96TU00032KMI.html&quot;&gt;潘粤明:已经在蜜罐里 有信心与董洁白头偕老&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/05/5I3P9S7T00031H2L.html"&gt;曾轶可《狮子座》涉嫌抄袭纯音乐《天际》&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/07/5I41RRCR00031H2L.html"&gt;金马奖报名截止 郭富城刘德华黎明争夺影帝&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/04/5I3LJ0QE00031H2L.html"&gt;赵雅芝准备接演古董收藏剧 支持阿娇演白娘子&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/03/5I3I031200032DGD.html"&gt;李玟:与男友前妻成了姐妹 暂时没时间结婚&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/02/5I3E96TU00032KMI.html"&gt;潘粤明:已经在蜜罐里 有信心与董洁白头偕老&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 中间的文本内容
-&lt;ul class=&quot;line&quot;&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/05/5I3OPHO600031H2L.html&quot;&gt;《气喘吁吁》被批“难看” 葛优票房神话难续&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/02/5I3FAUL000032KMI.html&quot;&gt;关锦鹏：梁朝伟斗心强  张曼玉曾苦练走路&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/06/5I3V00IF00031H2L.html&quot;&gt;郁可唯成长经历揭秘 父亲:常骂得她痛哭流涕&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/04/5I3NPGGT00031H2L.html&quot;&gt;李英爱结婚后继续完成博士学业 9月初回韩国&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ent.163.com/09/0901/04/5I3NGA2F00031H2L.html&quot;&gt;导演张元直面吸毒事件:感谢全社会的关注&lt;/a&gt;&lt;/li&gt;
+&lt;ul class="line"&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/05/5I3OPHO600031H2L.html"&gt;《气喘吁吁》被批“难看” 葛优票房神话难续&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/02/5I3FAUL000032KMI.html"&gt;关锦鹏：梁朝伟斗心强  张曼玉曾苦练走路&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/06/5I3V00IF00031H2L.html"&gt;郁可唯成长经历揭秘 父亲:常骂得她痛哭流涕&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/04/5I3NPGGT00031H2L.html"&gt;李英爱结婚后继续完成博士学业 9月初回韩国&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ent.163.com/09/0901/04/5I3NGA2F00031H2L.html"&gt;导演张元直面吸毒事件:感谢全社会的关注&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
-&lt;    script type=&quot;text/javascript&quot;       &gt;
-&lt;div class=&quot;more&quot;&gt;
-&lt;span&gt;&lt;a href=&quot;http://ent.163.com/&quot;&gt;更多娱乐新闻&lt;/a&gt;&lt;/span&gt;
+&lt;    script type="text/javascript"       &gt;
+&lt;div class="more"&gt;
+&lt;span&gt;&lt;a href="http://ent.163.com/"&gt;更多娱乐新闻&lt;/a&gt;&lt;/span&gt;
 &lt;/script&gt;
-&lt;span style=&quot;background: transparent none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: rgb(31, 58, 135); float: left;&quot;&gt;&lt;a href=&quot;http://popme.163.com/link/005975_0804_8307.html&quot;&gt;[热点:痘印难消为痘抓狂]&lt;/a&gt;&lt;/span&gt;
+&lt;span style="background: transparent none repeat scroll 0% 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; color: rgb(31, 58, 135); float: left;"&gt;&lt;a href="http://popme.163.com/link/005975_0804_8307.html"&gt;[热点:痘印难消为痘抓狂]&lt;/a&gt;&lt;/span&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&quot;&quot;&quot;
+"""
 
     def test_is_closed(self):
         p = HtmlParser(HtmlHandler())
-        self.assertFalse(p.is_self_closed(&quot;&lt;sdgsdg&gt;&quot;))
-        self.assertTrue(p.is_self_closed(&quot;&lt;sdgsdg/&gt;&quot;))
-        self.assertTrue(p.is_self_closed(&quot;&lt;sdgsdg/ &gt;&quot;))
-        self.assertTrue(p.is_self_closed(&quot;&lt;sdgsdg  /   &gt;&quot;))
+        self.assertFalse(p.is_self_closed("&lt;sdgsdg&gt;"))
+        self.assertTrue(p.is_self_closed("&lt;sdgsdg/&gt;"))
+        self.assertTrue(p.is_self_closed("&lt;sdgsdg/ &gt;"))
+        self.assertTrue(p.is_self_closed("&lt;sdgsdg  /   &gt;"))
 
     def test_html(self):
         handler = TestHandler(handle_comment=True, handle_text=True)
@@ -638,19 +634,19 @@ class TestParser(unittest.TestCase):
         connect_mark = ''
         html_removed = handler.get_html_exclude_script(connect_mark)
         self.assertEquals(html_removed, connect_mark.join([
-            &quot;开始的文本内容&lt;!--这是一个注释--&gt;金越任虎年春晚总导演&quot;,
-            &quot;曾轶可《狮子座》涉嫌抄袭纯音乐《天际》&quot;,
-            &quot;金马奖报名截止 郭富城刘德华黎明争夺影帝&quot;,
-            &quot;赵雅芝准备接演古董收藏剧 支持阿娇演白娘子&quot;,
-            &quot;李玟:与男友前妻成了姐妹 暂时没时间结婚&quot;,
-            &quot;潘粤明:已经在蜜罐里 有信心与董洁白头偕老&quot;,
-            &quot;中间的文本内容&quot;,
-            &quot;《气喘吁吁》被批“难看” 葛优票房神话难续&quot;,
-            &quot;关锦鹏：梁朝伟斗心强  张曼玉曾苦练走路&quot;,
-            &quot;郁可唯成长经历揭秘 父亲:常骂得她痛哭流涕&quot;,
-            &quot;李英爱结婚后继续完成博士学业 9月初回韩国&quot;,
-            &quot;导演张元直面吸毒事件:感谢全社会的关注&quot;,
-            &quot;[热点:痘印难消为痘抓狂]&quot;
+            "开始的文本内容&lt;!--这是一个注释--&gt;金越任虎年春晚总导演",
+            "曾轶可《狮子座》涉嫌抄袭纯音乐《天际》",
+            "金马奖报名截止 郭富城刘德华黎明争夺影帝",
+            "赵雅芝准备接演古董收藏剧 支持阿娇演白娘子",
+            "李玟:与男友前妻成了姐妹 暂时没时间结婚",
+            "潘粤明:已经在蜜罐里 有信心与董洁白头偕老",
+            "中间的文本内容",
+            "《气喘吁吁》被批“难看” 葛优票房神话难续",
+            "关锦鹏：梁朝伟斗心强  张曼玉曾苦练走路",
+            "郁可唯成长经历揭秘 父亲:常骂得她痛哭流涕",
+            "李英爱结婚后继续完成博士学业 9月初回韩国",
+            "导演张元直面吸毒事件:感谢全社会的关注",
+            "[热点:痘印难消为痘抓狂]"
         ]))
 
 def test_main():
@@ -702,599 +698,599 @@ def test_main():
 
 def test_main_2():
     from time import time
-    html = &quot;&quot;&quot;
-&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
-&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+    html = """
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
 &lt;head&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=gb2312&quot; /&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=gb2312" /&gt;
 &lt;title&gt;三亚酒店预订列表 三亚宾馆查询订房&lt;/title&gt;
-&lt;meta name=&quot;Description&quot; content=&quot;三亚酒店列表宾馆查询订房&quot; /&gt;
-&lt;meta name=&quot;Keywords&quot; content=&quot;三亚酒店预订宾馆查询订房&quot; /&gt;
-&lt;link href=&quot;/hotel/css/hotellist.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-&lt;script src=&quot;http://pic.yoyv.com/scripts/gwindow.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;http://pic.yoyv.com/scripts/stuHover.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;http://pic.yoyv.com/top/scripts/newtop.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;http://pic.yoyv.com/scripts/ajax.js&quot;&gt;&lt;/script&gt;
-&lt;link href=&quot;http://pic.yoyv.com/css/gwindow.css&quot; type=text/css rel=stylesheet&gt;&lt;/link&gt;
-&lt;link href=&quot;http://pic.yoyv.com/css/newtop.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-&lt;script language=&quot;javascript&quot; src=&quot;/hotel/scripts/search.js&quot;&gt;&lt;/script&gt;
-&lt;script language=&quot;javascript&quot; src=&quot;/hotel/scripts/mycal.js&quot;&gt;&lt;/script&gt;
+&lt;meta name="Description" content="三亚酒店列表宾馆查询订房" /&gt;
+&lt;meta name="Keywords" content="三亚酒店预订宾馆查询订房" /&gt;
+&lt;link href="/hotel/css/hotellist.css" rel="stylesheet" type="text/css" /&gt;
+&lt;script src="http://pic.yoyv.com/scripts/gwindow.js"&gt;&lt;/script&gt;
+&lt;script src="http://pic.yoyv.com/scripts/stuHover.js"&gt;&lt;/script&gt;
+&lt;script src="http://pic.yoyv.com/top/scripts/newtop.js"&gt;&lt;/script&gt;
+&lt;script src="http://pic.yoyv.com/scripts/ajax.js"&gt;&lt;/script&gt;
+&lt;link href="http://pic.yoyv.com/css/gwindow.css" type=text/css rel=stylesheet&gt;&lt;/link&gt;
+&lt;link href="http://pic.yoyv.com/css/newtop.css" rel="stylesheet" type="text/css" /&gt;
+&lt;script language="javascript" src="/hotel/scripts/search.js"&gt;&lt;/script&gt;
+&lt;script language="javascript" src="/hotel/scripts/mycal.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 
-&lt;body style=&quot;margin-top:0px;&quot; onload=&quot;init('2201',0,0,0,0)&quot;&gt;
-&lt;div style=&quot;position:absolute; width:980px!important;width:983px; border:0px; top:0px; z-index:1000;&quot;&gt;
-    &lt;div id=&quot;loginBox&quot; name=&quot;loginBox&quot; class=&quot;signin&quot; style=&quot;position: absolute; display:none; float:right; right:0px; width:10px; height:10px; overflow: hidden;&quot;&gt;
-        &lt;div style=&quot;margin-top:10px;&quot;&gt;
-        &lt;div class=&quot;signintop&quot;&gt;
-        &lt;div style=&quot;text-align:right; margin-top:-10px; margin-right:-10px; z-index:500; position:relative;&quot;&gt;&lt;img src=&quot;/images/close_LoginBox.gif&quot; alt=&quot;关闭&quot; style=&quot;cursor:pointer;&quot; onclick=&quot;closeloginBox()&quot;&gt;&lt;/div&gt;
-        &lt;div class=&quot;loginword&quot;&gt;&lt;img src=&quot;/images/usericon.gif&quot; align=&quot;absmiddle&quot;&gt;游鱼会员登陆&lt;/div&gt;
-        &lt;table width=&quot;260&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;margin-top:0px; margin-left:20px;&quot;&gt;
+&lt;body style="margin-top:0px;" onload="init('2201',0,0,0,0)"&gt;
+&lt;div style="position:absolute; width:980px!important;width:983px; border:0px; top:0px; z-index:1000;"&gt;
+    &lt;div id="loginBox" name="loginBox" class="signin" style="position: absolute; display:none; float:right; right:0px; width:10px; height:10px; overflow: hidden;"&gt;
+        &lt;div style="margin-top:10px;"&gt;
+        &lt;div class="signintop"&gt;
+        &lt;div style="text-align:right; margin-top:-10px; margin-right:-10px; z-index:500; position:relative;"&gt;&lt;img src="/images/close_LoginBox.gif" alt="关闭" style="cursor:pointer;" onclick="closeloginBox()"&gt;&lt;/div&gt;
+        &lt;div class="loginword"&gt;&lt;img src="/images/usericon.gif" align="absmiddle"&gt;游鱼会员登陆&lt;/div&gt;
+        &lt;table width="260" border="0" cellspacing="0" cellpadding="0" style="margin-top:0px; margin-left:20px;"&gt;
             &lt;tr&gt;
-                &lt;td width=&quot;62&quot; height=&quot;18&quot;&gt;&lt;/td&gt;
-                &lt;td width=&quot;198&quot; id=&quot;errorLog&quot; align=&quot;left&quot; valign=&quot;bottom&quot; class=&quot;errorInfo&quot;&gt;&lt;/td&gt;
+                &lt;td width="62" height="18"&gt;&lt;/td&gt;
+                &lt;td width="198" id="errorLog" align="left" valign="bottom" class="errorInfo"&gt;&lt;/td&gt;
             &lt;/tr&gt;
             &lt;tr&gt;
-                &lt;td width=&quot;62&quot; height=&quot;34&quot; align=&quot;right&quot; class=&quot;loginword2&quot;&gt;用户名：&lt;/td&gt;
-                &lt;td width=&quot;198&quot;&gt;&lt;input type=&quot;text&quot; id=&quot;username_login&quot; style=&quot;width:180px; height:17px; background-color:#FFFFFF;&quot; /&gt;&lt;/td&gt;
+                &lt;td width="62" height="34" align="right" class="loginword2"&gt;用户名：&lt;/td&gt;
+                &lt;td width="198"&gt;&lt;input type="text" id="username_login" style="width:180px; height:17px; background-color:#FFFFFF;" /&gt;&lt;/td&gt;
             &lt;/tr&gt;
-            &lt;tr class=&quot;loginword2&quot;&gt;
-                &lt;td height=&quot;39&quot; align=&quot;right&quot;&gt;登录密码：&lt;/td&gt;
-                &lt;td&gt;&lt;input type=&quot;password&quot; id=&quot;password_login&quot; style=&quot;width:100px; height:17px; background-color:#FFFFFF;&quot; onkeyup=&quot;Javascript:if (event.which==13||event.keyCode==13){logOn();}&quot;/&gt;&amp;nbsp;&lt;a href=&quot;/land/getpwd.htm&quot; rel=&quot;nofollow&quot;&gt;忘记了密码?&lt;/a&gt;&lt;/td&gt;
+            &lt;tr class="loginword2"&gt;
+                &lt;td height="39" align="right"&gt;登录密码：&lt;/td&gt;
+                &lt;td&gt;&lt;input type="password" id="password_login" style="width:100px; height:17px; background-color:#FFFFFF;" onkeyup="Javascript:if (event.which==13||event.keyCode==13){logOn();}"/&gt;&amp;nbsp;&lt;a href="/land/getpwd.htm" rel="nofollow"&gt;忘记了密码?&lt;/a&gt;&lt;/td&gt;
             &lt;/tr&gt;
-            &lt;tr class=&quot;loginword3&quot;&gt;
-                &lt;td height=&quot;30&quot; colspan=&quot;2&quot;&gt;还不是会员？&lt;a href=&quot;/tour/guideintr.html&quot; rel=&quot;nofollow&quot;&gt;了解一下游鱼&lt;/a&gt;或者&lt;a href=&quot;/reg/reg.asp&quot; rel=&quot;nofollow&quot;&gt;立即注册&lt;/a&gt;&lt;/td&gt;
+            &lt;tr class="loginword3"&gt;
+                &lt;td height="30" colspan="2"&gt;还不是会员？&lt;a href="/tour/guideintr.html" rel="nofollow"&gt;了解一下游鱼&lt;/a&gt;或者&lt;a href="/reg/reg.asp" rel="nofollow"&gt;立即注册&lt;/a&gt;&lt;/td&gt;
                 &lt;/tr&gt;
-            &lt;tr class=&quot;loginword3&quot;&gt;
-                &lt;td height=&quot;12&quot; colspan=&quot;2&quot;&gt;&lt;div class=&quot;loginline1&quot;&gt;&lt;/div&gt;&lt;div class=&quot;loginline2&quot;&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;tr class="loginword3"&gt;
+                &lt;td height="12" colspan="2"&gt;&lt;div class="loginline1"&gt;&lt;/div&gt;&lt;div class="loginline2"&gt;&lt;/div&gt;&lt;/td&gt;
                 &lt;/tr&gt;
-            &lt;tr class=&quot;loginword3&quot;&gt;
-                &lt;td height=&quot;34&quot; colspan=&quot;2&quot;&gt;&lt;input name=&quot;remember&quot; type=&quot;checkbox&quot; hidefocus=&quot;true&quot; value=&quot;&quot; checked=&quot;checked&quot;/&gt;在这台电脑上记住我的密码。&amp;nbsp;&lt;img src=&quot;/images/sign_in_form_hover.gif&quot; align=&quot;absmiddle&quot; onclick=&quot;logOn()&quot; alt=&quot;登录&quot; style=&quot;cursor:pointer;&quot;/&gt;&lt;/td&gt;
+            &lt;tr class="loginword3"&gt;
+                &lt;td height="34" colspan="2"&gt;&lt;input name="remember" type="checkbox" hidefocus="true" value="" checked="checked"/&gt;在这台电脑上记住我的密码。&amp;nbsp;&lt;img src="/images/sign_in_form_hover.gif" align="absmiddle" onclick="logOn()" alt="登录" style="cursor:pointer;"/&gt;&lt;/td&gt;
                 &lt;/tr&gt;
         &lt;/table&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;signinbottom&quot;&gt;&lt;/div&gt;
+        &lt;div class="signinbottom"&gt;&lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div id=&quot;progressBar&quot; name=&quot;progressBar&quot; class=&quot;signin&quot; style=&quot;position: absolute; display:none; float:right; right:0px; width:310px; height:280px; overflow: hidden;&quot;&gt;
-        &lt;div style=&quot;margin-top:10px;&quot;&gt;
-        &lt;div class=&quot;signin&quot;&gt;
-        &lt;div class=&quot;signintop&quot;&gt;
-        &lt;div style=&quot;text-align:right; margin-top:-10px; margin-right:-10px; z-index:500; position:relative;&quot;&gt;&lt;img src=&quot;/images/close_LoginBox.gif&quot;&gt;&lt;/div&gt;
-        &lt;div class=&quot;loginword&quot;&gt;&lt;img src=&quot;/images/usericon.gif&quot; align=&quot;absmiddle&quot;&gt;游鱼会员登陆&lt;/div&gt;
-        &lt;table width=&quot;260&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; style=&quot;margin-top:10px; margin-left:20px;&quot;&gt;
+    &lt;div id="progressBar" name="progressBar" class="signin" style="position: absolute; display:none; float:right; right:0px; width:310px; height:280px; overflow: hidden;"&gt;
+        &lt;div style="margin-top:10px;"&gt;
+        &lt;div class="signin"&gt;
+        &lt;div class="signintop"&gt;
+        &lt;div style="text-align:right; margin-top:-10px; margin-right:-10px; z-index:500; position:relative;"&gt;&lt;img src="/images/close_LoginBox.gif"&gt;&lt;/div&gt;
+        &lt;div class="loginword"&gt;&lt;img src="/images/usericon.gif" align="absmiddle"&gt;游鱼会员登陆&lt;/div&gt;
+        &lt;table width="260" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px; margin-left:20px;"&gt;
             &lt;tr&gt;
-                &lt;td width=&quot;198&quot; height=&quot;22&quot;&gt;&amp;nbsp;&lt;/td&gt;
+                &lt;td width="198" height="22"&gt;&amp;nbsp;&lt;/td&gt;
             &lt;/tr&gt;
-            &lt;tr class=&quot;loginword2&quot;&gt;
-                &lt;td height=&quot;40&quot; align=&quot;center&quot;&gt;&lt;img src=&quot;/images/progressBar_Log.gif&quot; width=&quot;40&quot; /&gt;&lt;/td&gt;
+            &lt;tr class="loginword2"&gt;
+                &lt;td height="40" align="center"&gt;&lt;img src="/images/progressBar_Log.gif" width="40" /&gt;&lt;/td&gt;
             &lt;/tr&gt;
 
-            &lt;tr class=&quot;loginword3&quot;&gt;
-                &lt;td height=&quot;38&quot; align=&quot;center&quot; valign=&quot;bottom&quot; id=&quot;progressInfo&quot;&gt;正在登录……&lt;/td&gt;
+            &lt;tr class="loginword3"&gt;
+                &lt;td height="38" align="center" valign="bottom" id="progressInfo"&gt;正在登录……&lt;/td&gt;
                 &lt;/tr&gt;
         &lt;/table&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;signinbottom&quot;&gt;&lt;/div&gt;
+        &lt;div class="signinbottom"&gt;&lt;/div&gt;
         &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&quot;navarea&quot; style=&quot;background-color:#FFFFFF&quot;&gt;
-    &lt;div class=&quot;loginarea&quot;&gt;
-        &lt;div class=&quot;logoarea&quot;&gt;&lt;a href=&quot;/&quot; title=&quot;游鱼——发现旅游！分享旅游！&quot;&gt;&lt;img src=&quot;/images/logo4.gif&quot; border=&quot;0&quot; alt=&quot;游鱼——发现旅游！分享旅游！&quot; /&gt;&lt;/a&gt;&lt;/div&gt;
-        &lt;div class=&quot;pagetopright&quot;&gt;
-            &lt;div style=&quot;display:none; color:#999999;&quot; id=&quot;loginsuc&quot;&gt;&lt;/div&gt;
-            &lt;div id=&quot;login&quot; style=&quot;color:#999999;&quot;&gt;第一次来游鱼？&lt;img src=&quot;/images/toprightarrow.gif&quot; align=&quot;absmiddle&quot; /&gt;&lt;a href=&quot;/tour/guideintr.html&quot; rel=&quot;nofollow&quot;&gt;了解游鱼&lt;/a&gt;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;/reg/reg.asp&quot; rel=&quot;nofollow&quot;&gt;注册&lt;/a&gt;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;javascript:showLoginBox1()&quot; rel=&quot;nofollow&quot;&gt;登陆&lt;/a&gt;&lt;/div&gt;
-            &lt;div class=&quot;topsearch&quot;&gt;
+&lt;div class="navarea" style="background-color:#FFFFFF"&gt;
+    &lt;div class="loginarea"&gt;
+        &lt;div class="logoarea"&gt;&lt;a href="/" title="游鱼——发现旅游！分享旅游！"&gt;&lt;img src="/images/logo4.gif" border="0" alt="游鱼——发现旅游！分享旅游！" /&gt;&lt;/a&gt;&lt;/div&gt;
+        &lt;div class="pagetopright"&gt;
+            &lt;div style="display:none; color:#999999;" id="loginsuc"&gt;&lt;/div&gt;
+            &lt;div id="login" style="color:#999999;"&gt;第一次来游鱼？&lt;img src="/images/toprightarrow.gif" align="absmiddle" /&gt;&lt;a href="/tour/guideintr.html" rel="nofollow"&gt;了解游鱼&lt;/a&gt;&amp;nbsp;|&amp;nbsp;&lt;a href="/reg/reg.asp" rel="nofollow"&gt;注册&lt;/a&gt;&amp;nbsp;|&amp;nbsp;&lt;a href="javascript:showLoginBox1()" rel="nofollow"&gt;登陆&lt;/a&gt;&lt;/div&gt;
+            &lt;div class="topsearch"&gt;
                 &lt;!-- Google CSE Search Box Begins  --&gt;
-                &lt;form id=&quot;searchbox_017628897638471485970:hceobi7ukkq&quot; action=&quot;http://www.yoyv.com/search/result.html&quot; target=&quot;_blank&quot; style=&quot;margin:0px&quot;&gt;
-                    &lt;input type=&quot;hidden&quot; value=&quot;017628897638471485970:hceobi7ukkq&quot; name=&quot;cx&quot; /&gt;
-                    &lt;input type=&quot;hidden&quot; value=&quot;FORID:9&quot; name=&quot;cof&quot; /&gt;
-                    &lt;input size=&quot;25&quot; name=&quot;q&quot; align=&quot;absmiddle&quot; class=&quot;inputarea&quot; /&gt;
-                    &lt;input name=&quot;Input&quot; type=&quot;image&quot; src=&quot;/images/yoyvsearch.gif&quot; align=&quot;absmiddle&quot;/&gt;
+                &lt;form id="searchbox_017628897638471485970:hceobi7ukkq" action="http://www.yoyv.com/search/result.html" target="_blank" style="margin:0px"&gt;
+                    &lt;input type="hidden" value="017628897638471485970:hceobi7ukkq" name="cx" /&gt;
+                    &lt;input type="hidden" value="FORID:9" name="cof" /&gt;
+                    &lt;input size="25" name="q" align="absmiddle" class="inputarea" /&gt;
+                    &lt;input name="Input" type="image" src="/images/yoyvsearch.gif" align="absmiddle"/&gt;
                 &lt;/form&gt;
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div style=&quot;width:928px; text-align:left; clear:both;background-color:#FFFFFF&quot;&gt; &lt;span class=&quot;preload1&quot;&gt;&lt;/span&gt; &lt;span class=&quot;preload2&quot;&gt;&lt;/span&gt;
-            &lt;ul id=&quot;nav&quot;&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;首页&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/guide/&quot; rel=&quot;nofollow&quot; class=&quot;top_link&quot;&gt;&lt;span class=&quot;down&quot;&gt;旅游指南&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                        &lt;ul class=&quot;sub&quot;&gt;
+    &lt;div style="width:928px; text-align:left; clear:both;background-color:#FFFFFF"&gt; &lt;span class="preload1"&gt;&lt;/span&gt; &lt;span class="preload2"&gt;&lt;/span&gt;
+            &lt;ul id="nav"&gt;
+                &lt;li class="top"&gt;&lt;a href="/" class="top_link"&gt;&lt;span&gt;首页&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="top"&gt;&lt;a href="/guide/" rel="nofollow" class="top_link"&gt;&lt;span class="down"&gt;旅游指南&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                        &lt;ul class="sub"&gt;
                             &lt;li&gt;&lt;b&gt;目的地旅游指南&lt;/b&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/guide/&quot;&gt;国内旅游指南&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/continent/asia.html&quot;&gt;亚洲旅游指南&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/continent/europe.html&quot;&gt;欧洲旅游指南&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/continent/africa.html&quot;&gt;非洲旅游指南&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/continent/namerica.html&quot;&gt;北美洲旅游指南&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/continent/samerica.html&quot;&gt;南美洲旅游指南&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/continent/oceania.html&quot;&gt;大洋洲旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/guide/"&gt;国内旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/continent/asia.html"&gt;亚洲旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/continent/europe.html"&gt;欧洲旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/continent/africa.html"&gt;非洲旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/continent/namerica.html"&gt;北美洲旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/continent/samerica.html"&gt;南美洲旅游指南&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/continent/oceania.html"&gt;大洋洲旅游指南&lt;/a&gt;&lt;/li&gt;
                         &lt;/ul&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/top/traveltool.html&quot; class=&quot;top_link&quot;&gt;&lt;span class=&quot;down&quot;&gt;预订查询&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                        &lt;ul class=&quot;sub&quot;&gt;
+                &lt;li class="top"&gt;&lt;a href="/top/traveltool.html" class="top_link"&gt;&lt;span class="down"&gt;预订查询&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                        &lt;ul class="sub"&gt;
                             &lt;li&gt;&lt;b&gt;旅游查询预订&lt;/b&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/dflight.asp&quot;&gt;国内航班查询&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/iflight.asp&quot;&gt;国际航班查询&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/hotel.asp&quot;&gt;国内酒店查询&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/overseas/hotelsearch.asp&quot;&gt;海外酒店查询&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/dflight.asp"&gt;国内航班查询&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/iflight.asp"&gt;国际航班查询&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/hotel.asp"&gt;国内酒店查询&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/overseas/hotelsearch.asp"&gt;海外酒店查询&lt;/a&gt;&lt;/li&gt;
                             &lt;li&gt;&lt;b&gt;分类查询工具&lt;/b&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/map/satellite.asp&quot;&gt;地图搜索&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/sightseeing.asp&quot; class=&quot;fly&quot;&gt;景点搜索&lt;/a&gt;
+                            &lt;li&gt;&lt;a href="/map/satellite.asp"&gt;地图搜索&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/sightseeing.asp" class="fly"&gt;景点搜索&lt;/a&gt;
                                     &lt;ul&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/traveltool/sightseeing.asp&quot;&gt;国内景点搜索&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/overseas/sightsearch.asp&quot;&gt;世界景点搜索&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/traveltool/sightseeing.asp"&gt;国内景点搜索&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/overseas/sightsearch.asp"&gt;世界景点搜索&lt;/a&gt;&lt;/li&gt;
                                     &lt;/ul&gt;
                             &lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/easytour/index.asp&quot; class=&quot;fly&quot;&gt;旅行交通查询&lt;/a&gt;
+                            &lt;li&gt;&lt;a href="/easytour/index.asp" class="fly"&gt;旅行交通查询&lt;/a&gt;
                                     &lt;ul&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/easytour/index.asp&quot;&gt;行易通&amp;nbsp;&lt;img src=&quot;/guide/myview/images/good.gif&quot; align=&quot;absmiddle&quot; border=&quot;0&quot; /&gt;&lt;/a&gt;&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/traveltool/bus.asp&quot;&gt;国内260城市公交&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/overseas/metromap.asp&quot;&gt;地铁路线图(全球)&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/traveltool/train.asp&quot;&gt;国内火车查询&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/easytour/index.asp"&gt;行易通&amp;nbsp;&lt;img src="/guide/myview/images/good.gif" align="absmiddle" border="0" /&gt;&lt;/a&gt;&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/traveltool/bus.asp"&gt;国内260城市公交&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/overseas/metromap.asp"&gt;地铁路线图(全球)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/traveltool/train.asp"&gt;国内火车查询&lt;/a&gt;&lt;/li&gt;
                                     &lt;/ul&gt;
                             &lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/hostel.asp&quot;&gt;旅馆招待所查询&lt;/a&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/hostel.asp"&gt;旅馆招待所查询&lt;/a&gt;
                             &lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/restaurant.asp&quot; class=&quot;fly&quot;&gt;餐饮娱乐购物&lt;/a&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/restaurant.asp" class="fly"&gt;餐饮娱乐购物&lt;/a&gt;
                                     &lt;ul&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/traveltool/restaurant.asp&quot;&gt;餐馆搜索(国内)&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/overseas/restaurantsearch.asp&quot;&gt;餐馆搜索(海外)&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/traveltool/Entertainment.asp&quot;&gt;娱乐搜索(国内)&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/overseas/entertainmentsearch.asp&quot;&gt;娱乐搜索(海外)&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/traveltool/shopping.asp&quot;&gt;购物搜索(国内)&lt;/a&gt;&lt;/li&gt;
-                                        &lt;li&gt;&lt;a href=&quot;/overseas/shoppingsearch.asp&quot;&gt;购物搜索(海外)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/traveltool/restaurant.asp"&gt;餐馆搜索(国内)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/overseas/restaurantsearch.asp"&gt;餐馆搜索(海外)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/traveltool/Entertainment.asp"&gt;娱乐搜索(国内)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/overseas/entertainmentsearch.asp"&gt;娱乐搜索(海外)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/traveltool/shopping.asp"&gt;购物搜索(国内)&lt;/a&gt;&lt;/li&gt;
+                                        &lt;li&gt;&lt;a href="/overseas/shoppingsearch.asp"&gt;购物搜索(海外)&lt;/a&gt;&lt;/li&gt;
                                     &lt;/ul&gt;
                             &lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/traveltool/weather.asp&quot;&gt;各城市天气预报&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/traveltool/weather.asp"&gt;各城市天气预报&lt;/a&gt;&lt;/li&gt;
                         &lt;/ul&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/tripplanner/&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;旅行计划&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot; style=&quot;margin-top:8px;&quot;&gt;&lt;font color=&quot;#999999&quot;&gt;|&lt;/font&gt;&lt;/li&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/space/blogindex.asp&quot; rel=&quot;nofollow&quot; class=&quot;top_link&quot;&gt;&lt;span class=&quot;down&quot;&gt;博客&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                        &lt;ul class=&quot;sub&quot;&gt;
+                &lt;li class="top"&gt;&lt;a href="/tripplanner/" class="top_link"&gt;&lt;span&gt;旅行计划&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top" style="margin-top:8px;"&gt;&lt;font color="#999999"&gt;|&lt;/font&gt;&lt;/li&gt;
+                &lt;li class="top"&gt;&lt;a href="/space/blogindex.asp" rel="nofollow" class="top_link"&gt;&lt;span class="down"&gt;博客&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                        &lt;ul class="sub"&gt;
                             &lt;li&gt;&lt;b&gt;博客游记分享&lt;/b&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/space/blogindex.asp&quot;&gt;博客首页&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/platter/b-list/1&quot;&gt;博客拼盘&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/moving/blogmoving.asp&quot;&gt;博客搬家&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/moving/synservice.asp&quot;&gt;博客同步&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/space/blogindex.asp"&gt;博客首页&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/platter/b-list/1"&gt;博客拼盘&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/moving/blogmoving.asp"&gt;博客搬家&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/moving/synservice.asp"&gt;博客同步&lt;/a&gt;&lt;/li&gt;
                         &lt;/ul&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/Album/Index.asp&quot; rel=&quot;nofollow&quot; class=&quot;top_link&quot;&gt;&lt;span class=&quot;down&quot;&gt;图片相册&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                        &lt;ul class=&quot;sub&quot;&gt;
+                &lt;li class="top"&gt;&lt;a href="/Album/Index.asp" rel="nofollow" class="top_link"&gt;&lt;span class="down"&gt;图片相册&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                        &lt;ul class="sub"&gt;
                             &lt;li&gt;&lt;b&gt;相册与图片分享&lt;/b&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/Album/Index.asp&quot;&gt;图片相册首页&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/platter/p-list/1&quot;&gt;图片拼盘&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/album/more_1/&quot;&gt;最新相册列表&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/photos/calendar.asp&quot;&gt;图片日历&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/phototype9/1.html&quot;&gt;旅游图片分类&lt;/a&gt;&lt;/li&gt;
-                            &lt;li&gt;&lt;a href=&quot;/space/pkzone.asp&quot;&gt;靓照对决&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/Album/Index.asp"&gt;图片相册首页&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/platter/p-list/1"&gt;图片拼盘&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/album/more_1/"&gt;最新相册列表&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/photos/calendar.asp"&gt;图片日历&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/phototype9/1.html"&gt;旅游图片分类&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="/space/pkzone.asp"&gt;靓照对决&lt;/a&gt;&lt;/li&gt;
                         &lt;/ul&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/Map/&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;主题地图&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-                &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/group/&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;群组&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot; style=&quot;margin-top:8px;&quot;&gt;&lt;font color=&quot;#bbbbbb&quot;&gt;|&lt;/font&gt;&lt;/li&gt;
+                &lt;li class="top"&gt;&lt;a href="/Map/" class="top_link"&gt;&lt;span&gt;主题地图&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+                &lt;li class="top"&gt;&lt;a href="/group/" class="top_link"&gt;&lt;span&gt;群组&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top" style="margin-top:8px;"&gt;&lt;font color="#bbbbbb"&gt;|&lt;/font&gt;&lt;/li&gt;
 
-        &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/space/trailmap.asp&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;足迹&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/platter/&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;拼盘&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/quiz/travelquiz.asp&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;竞猜&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/vote/voteindex.asp&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;投票&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/ask/index.asp&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;问答&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;top&quot;&gt;&lt;a href=&quot;/Deal/Index.asp&quot; class=&quot;top_link&quot;&gt;&lt;span&gt;交易&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top"&gt;&lt;a href="/space/trailmap.asp" class="top_link"&gt;&lt;span&gt;足迹&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top"&gt;&lt;a href="/platter/" class="top_link"&gt;&lt;span&gt;拼盘&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top"&gt;&lt;a href="/quiz/travelquiz.asp" class="top_link"&gt;&lt;span&gt;竞猜&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top"&gt;&lt;a href="/vote/voteindex.asp" class="top_link"&gt;&lt;span&gt;投票&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top"&gt;&lt;a href="/ask/index.asp" class="top_link"&gt;&lt;span&gt;问答&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="top"&gt;&lt;a href="/Deal/Index.asp" class="top_link"&gt;&lt;span&gt;交易&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
             &lt;/ul&gt;
     &lt;/div&gt;
-&lt;/div&gt;&lt;script language=&quot;javascript&quot;&gt;login();&lt;/script&gt;
+&lt;/div&gt;&lt;script language="javascript"&gt;login();&lt;/script&gt;
 
-&lt;div class=&quot;main&quot;&gt;
-  &lt;div class=&quot;nowposition&quot;&gt;&lt;a href=&quot;/traveltool/hotel.asp&quot;&gt;酒店预订&lt;/a&gt;&amp;nbsp;&amp;gt;&amp;gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_1/&quot;&gt;三亚酒店&lt;/a&gt;&lt;/div&gt;
-  &lt;div class=&quot;leftbody&quot;&gt;
-    &lt;div class=&quot;hotelcount&quot;&gt;
-      &lt;div class=&quot;hotelsno&quot;&gt;134&lt;/div&gt;
-      &lt;div class=&quot;hotelsnointro&quot;&gt;间三亚的酒店宾馆&lt;br /&gt;
+&lt;div class="main"&gt;
+  &lt;div class="nowposition"&gt;&lt;a href="/traveltool/hotel.asp"&gt;酒店预订&lt;/a&gt;&amp;nbsp;&amp;gt;&amp;gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_1/"&gt;三亚酒店&lt;/a&gt;&lt;/div&gt;
+  &lt;div class="leftbody"&gt;
+    &lt;div class="hotelcount"&gt;
+      &lt;div class="hotelsno"&gt;134&lt;/div&gt;
+      &lt;div class="hotelsnointro"&gt;间三亚的酒店宾馆&lt;br /&gt;
         符合您的搜索要求&lt;/div&gt;
-      &lt;div class=&quot;hotelsnointro&quot; style=&quot;margin-top:30px; font-weight:bold;&quot;&gt;对搜索结果排序&lt;/div&gt;
+      &lt;div class="hotelsnointro" style="margin-top:30px; font-weight:bold;"&gt;对搜索结果排序&lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;hotelsfliterarrow&quot;&gt;&lt;/div&gt;
-    &lt;div class=&quot;fliterarea&quot;&gt;
-      &lt;div class=&quot;flitername1&quot;&gt;酒店价格排序&lt;/div&gt;
-      &lt;div class=&quot;flitervolum&quot;&gt;
-        &lt;select name=&quot;orderByPrice2&quot; class=&quot;selectmenu1&quot; onchange=&quot;orderType('price')&quot;&gt;
-          &lt;option value=&quot;请选择排序方式&quot;&gt;请选择排序方式&lt;/option&gt;
-          &lt;option value=&quot;asc&quot;&gt;从低到高&lt;/option&gt;
+    &lt;div class="hotelsfliterarrow"&gt;&lt;/div&gt;
+    &lt;div class="fliterarea"&gt;
+      &lt;div class="flitername1"&gt;酒店价格排序&lt;/div&gt;
+      &lt;div class="flitervolum"&gt;
+        &lt;select name="orderByPrice2" class="selectmenu1" onchange="orderType('price')"&gt;
+          &lt;option value="请选择排序方式"&gt;请选择排序方式&lt;/option&gt;
+          &lt;option value="asc"&gt;从低到高&lt;/option&gt;
         &lt;/select&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;flitername1&quot;&gt;酒店星级排序&lt;/div&gt;
-      &lt;div class=&quot;flitervolum&quot;&gt;
-        &lt;select name=&quot;orderByStar2&quot; class=&quot;selectmenu1&quot; onchange=&quot;orderType('star')&quot;&gt;
-          &lt;option value=&quot;请选择排序方式&quot;&gt;请选择排序方式&lt;/option&gt;
-          &lt;option value=&quot;asc&quot;&gt;从低到高&lt;/option&gt;
+      &lt;div class="flitername1"&gt;酒店星级排序&lt;/div&gt;
+      &lt;div class="flitervolum"&gt;
+        &lt;select name="orderByStar2" class="selectmenu1" onchange="orderType('star')"&gt;
+          &lt;option value="请选择排序方式"&gt;请选择排序方式&lt;/option&gt;
+          &lt;option value="asc"&gt;从低到高&lt;/option&gt;
         &lt;/select&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;leftothersearch&quot;&gt;
-      &lt;div class=&quot;searchvolum&quot; onclick=&quot;show2(this)&quot;&gt;
-        &lt;table width=&quot;168&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; align=&quot;center&quot; style=&quot;margin-top:12px;&quot;&gt;
+    &lt;div class="leftothersearch"&gt;
+      &lt;div class="searchvolum" onclick="show2(this)"&gt;
+        &lt;table width="168" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:12px;"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;153&quot;&gt;按商业区查看酒店&lt;/td&gt;
-            &lt;td width=&quot;15&quot; align=&quot;right&quot;&gt;&lt;img src=&quot;/hotel/images/displayarrow.gif&quot; border=&quot;0&quot; /&gt;&lt;/td&gt;
+            &lt;td width="153"&gt;按商业区查看酒店&lt;/td&gt;
+            &lt;td width="15" align="right"&gt;&lt;img src="/hotel/images/displayarrow.gif" border="0" /&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-            &lt;div class=&quot;rightlist&quot;&gt;
+            &lt;div class="rightlist"&gt;
                 &lt;ul&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/&quot;&gt;大东海&lt;/a&gt;(50        )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C4%CF%C9%BD_1/&quot;&gt;南山&lt;/a&gt;(3         )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C4%CF%CC%EF_1/&quot;&gt;南田&lt;/a&gt;(3         )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/&quot;&gt;三亚湾&lt;/a&gt;(65        )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%CA%D0%C4%DA_1/&quot;&gt;市内&lt;/a&gt;(27        )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%F2%DA%D6%A7%D6%DE_1/&quot;&gt;蜈支洲&lt;/a&gt;(1         )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%CE%F7%B5%BA_1/&quot;&gt;西岛&lt;/a&gt;(1         )&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot;&gt;亚龙湾&lt;/a&gt;(20        )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/"&gt;大东海&lt;/a&gt;(50        )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C4%CF%C9%BD_1/"&gt;南山&lt;/a&gt;(3         )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C4%CF%CC%EF_1/"&gt;南田&lt;/a&gt;(3         )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/"&gt;三亚湾&lt;/a&gt;(65        )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%CA%D0%C4%DA_1/"&gt;市内&lt;/a&gt;(27        )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%F2%DA%D6%A7%D6%DE_1/"&gt;蜈支洲&lt;/a&gt;(1         )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%CE%F7%B5%BA_1/"&gt;西岛&lt;/a&gt;(1         )&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/"&gt;亚龙湾&lt;/a&gt;(20        )&lt;/li&gt;
                 &lt;/ul&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;searchvolum&quot; onclick=&quot;show2(this)&quot;&gt;
-                &lt;table width=&quot;168&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; align=&quot;center&quot; style=&quot;margin-top:12px;&quot;&gt;
+            &lt;div class="searchvolum" onclick="show2(this)"&gt;
+                &lt;table width="168" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:12px;"&gt;
                     &lt;tr&gt;
-                        &lt;td width=&quot;153&quot;&gt;按行政区查看酒店&lt;/td&gt;
-                        &lt;td width=&quot;15&quot; align=&quot;right&quot;&gt;&lt;img src=&quot;/hotel/images/hidearrow.gif&quot; border=&quot;0&quot; /&gt;&lt;/td&gt;
+                        &lt;td width="153"&gt;按行政区查看酒店&lt;/td&gt;
+                        &lt;td width="15" align="right"&gt;&lt;img src="/hotel/images/hidearrow.gif" border="0" /&gt;&lt;/td&gt;
                     &lt;/tr&gt;
                 &lt;/table&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;rightlist&quot; style=&quot;display:none&quot;&gt;
+            &lt;div class="rightlist" style="display:none"&gt;
                 &lt;ul&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/&quot;&gt;大东海&lt;/a&gt;(14)&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%BA%D3%B6%AB%C7%F8_1/&quot;&gt;河东区&lt;/a&gt;(4)&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/&quot;&gt;三亚湾&lt;/a&gt;(25)&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot;&gt;亚龙湾&lt;/a&gt;(17)&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/district/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/"&gt;大东海&lt;/a&gt;(14)&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/district/%C8%FD%D1%C7_%BA%D3%B6%AB%C7%F8_1/"&gt;河东区&lt;/a&gt;(4)&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/district/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/"&gt;三亚湾&lt;/a&gt;(25)&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/"&gt;亚龙湾&lt;/a&gt;(17)&lt;/li&gt;
                 &lt;/ul&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;searchvolum&quot; onclick=&quot;show2(this)&quot;&gt;
-                &lt;table width=&quot;168&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; align=&quot;center&quot; style=&quot;margin-top:12px;&quot;&gt;
+            &lt;div class="searchvolum" onclick="show2(this)"&gt;
+                &lt;table width="168" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:12px;"&gt;
                     &lt;tr&gt;
-                        &lt;td width=&quot;153&quot;&gt;按星级查看酒店&lt;/td&gt;
-                        &lt;td width=&quot;15&quot; align=&quot;right&quot;&gt;&lt;img src=&quot;/hotel/images/hidearrow.gif&quot; border=&quot;0&quot; /&gt;&lt;/td&gt;
+                        &lt;td width="153"&gt;按星级查看酒店&lt;/td&gt;
+                        &lt;td width="15" align="right"&gt;&lt;img src="/hotel/images/hidearrow.gif" border="0" /&gt;&lt;/td&gt;
                     &lt;/tr&gt;
                 &lt;/table&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;rightlist&quot; style=&quot;display:none&quot;&gt;
+            &lt;div class="rightlist" style="display:none"&gt;
                 &lt;ul&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/star/%C8%FD%D1%C7_5_1/&quot;&gt;三亚五星级酒店&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/star/%C8%FD%D1%C7_4_1/&quot;&gt;三亚四星级酒店&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/star/%C8%FD%D1%C7_3_1/&quot;&gt;三亚三星级酒店&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/hotel/star/%C8%FD%D1%C7_2_1/&quot;&gt;三亚二星级酒店&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/star/%C8%FD%D1%C7_5_1/"&gt;三亚五星级酒店&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/star/%C8%FD%D1%C7_4_1/"&gt;三亚四星级酒店&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/star/%C8%FD%D1%C7_3_1/"&gt;三亚三星级酒店&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/hotel/star/%C8%FD%D1%C7_2_1/"&gt;三亚二星级酒店&lt;/a&gt;&lt;/li&gt;
                 &lt;/ul&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;searchvolum&quot; onclick=&quot;show2(this)&quot;&gt;
-                &lt;table width=&quot;168&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; align=&quot;center&quot; style=&quot;margin-top:12px;&quot;&gt;
+            &lt;div class="searchvolum" onclick="show2(this)"&gt;
+                &lt;table width="168" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:12px;"&gt;
                     &lt;tr&gt;
-                        &lt;td width=&quot;153&quot;&gt;热门城市酒店索引&lt;/td&gt;
-                        &lt;td width=&quot;15&quot; align=&quot;right&quot;&gt;&lt;img src=&quot;/hotel/images/hidearrow.gif&quot; border=&quot;0&quot; /&gt;&lt;/td&gt;
+                        &lt;td width="153"&gt;热门城市酒店索引&lt;/td&gt;
+                        &lt;td width="15" align="right"&gt;&lt;img src="/hotel/images/hidearrow.gif" border="0" /&gt;&lt;/td&gt;
                     &lt;/tr&gt;
                 &lt;/table&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;rightlist&quot; style=&quot;display:none&quot;&gt;
+            &lt;div class="rightlist" style="display:none"&gt;
                 &lt;ul&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%B1%B1%BE%A9_1/&quot;&gt;北京酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C9%CF%BA%A3_1/&quot;&gt;上海酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%B9%E3%D6%DD_1/&quot;&gt;广州酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C9%EE%DB%DA_1/&quot;&gt;深圳酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%BA%BC%D6%DD_1/&quot;&gt;杭州酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CE%F7%B0%B2_1/&quot;&gt;西安酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CE%E4%BA%BA_1/&quot;&gt;武汉酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%B3%C9%B6%BC_1/&quot;&gt;成都酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C4%CF%BE%A9_1/&quot;&gt;南京酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_1/&quot;&gt;三亚酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C9%F2%D1%F4_1/&quot;&gt;沈阳酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CB%D5%D6%DD_1/&quot;&gt;苏州酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C7%E0%B5%BA_1/&quot;&gt;青岛酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CC%EC%BD%F2_1/&quot;&gt;天津酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CF%C3%C3%C5_1/&quot;&gt;厦门酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%B1%B1%BE%A9_1/"&gt;北京酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C9%CF%BA%A3_1/"&gt;上海酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%B9%E3%D6%DD_1/"&gt;广州酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C9%EE%DB%DA_1/"&gt;深圳酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%BA%BC%D6%DD_1/"&gt;杭州酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CE%F7%B0%B2_1/"&gt;西安酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CE%E4%BA%BA_1/"&gt;武汉酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%B3%C9%B6%BC_1/"&gt;成都酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C4%CF%BE%A9_1/"&gt;南京酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C8%FD%D1%C7_1/"&gt;三亚酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C9%F2%D1%F4_1/"&gt;沈阳酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CB%D5%D6%DD_1/"&gt;苏州酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C7%E0%B5%BA_1/"&gt;青岛酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CC%EC%BD%F2_1/"&gt;天津酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CF%C3%C3%C5_1/"&gt;厦门酒店&lt;/a&gt;&lt;/li&gt;
                 &lt;/ul&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;searchvolum&quot;&gt;
-                &lt;table width=&quot;168&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; align=&quot;center&quot; style=&quot;margin-top:12px;&quot;&gt;
+            &lt;div class="searchvolum"&gt;
+                &lt;table width="168" border="0" cellspacing="0" cellpadding="0" align="center" style="margin-top:12px;"&gt;
                     &lt;tr&gt;
-                        &lt;td width=&quot;153&quot;&gt;酒店订单查询&lt;/td&gt;
-                        &lt;td width=&quot;15&quot; align=&quot;right&quot;&gt;&lt;/td&gt;
+                        &lt;td width="153"&gt;酒店订单查询&lt;/td&gt;
+                        &lt;td width="15" align="right"&gt;&lt;/td&gt;
                     &lt;/tr&gt;
                 &lt;/table&gt;
             &lt;/div&gt;
-      &lt;div class=&quot;rightlist&quot;&gt;&lt;form action=&quot;/hotel/browseorder.asp&quot; method=&quot;post&quot; style=&quot;margin:0px;&quot;&gt;
+      &lt;div class="rightlist"&gt;&lt;form action="/hotel/browseorder.asp" method="post" style="margin:0px;"&gt;
         &lt;ul&gt;
-          &lt;li style=&quot;margin-left:0px; list-style:none;&quot;&gt;&lt;font color=&quot;#666666&quot;&gt;联系人姓名：&lt;/font&gt;
-              &lt;input name=&quot;CName&quot; type=&quot;text&quot; /&gt;
+          &lt;li style="margin-left:0px; list-style:none;"&gt;&lt;font color="#666666"&gt;联系人姓名：&lt;/font&gt;
+              &lt;input name="CName" type="text" /&gt;
           &lt;/li&gt;
-          &lt;li style=&quot;margin-left:0px; list-style:none;&quot;&gt;&lt;font color=&quot;#666666&quot;&gt;手机号码：&lt;/font&gt;
-              &lt;input name=&quot;Mobile&quot; type=&quot;text&quot; /&gt;
+          &lt;li style="margin-left:0px; list-style:none;"&gt;&lt;font color="#666666"&gt;手机号码：&lt;/font&gt;
+              &lt;input name="Mobile" type="text" /&gt;
           &lt;/li&gt;
-          &lt;li style=&quot;margin-top:10px; margin-bottom:10px;margin-left:0px; list-style:none;&quot;&gt;&lt;input name=&quot;&quot; type=&quot;image&quot; src=&quot;/hotel/images/checkorder.gif&quot; /&gt;&lt;/li&gt;
+          &lt;li style="margin-top:10px; margin-bottom:10px;margin-left:0px; list-style:none;"&gt;&lt;input name="" type="image" src="/hotel/images/checkorder.gif" /&gt;&lt;/li&gt;
         &lt;/ul&gt;&lt;/form&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;rightbody&quot;&gt;
+  &lt;div class="rightbody"&gt;
     &lt;h1&gt;三亚酒店预订列表 三亚宾馆查询结果&lt;/h1&gt;
-    &lt;div class=&quot;hotellistintro&quot;&gt;您搜索的是&lt;font color=&quot;#FF6600&quot;&gt;&lt;strong&gt;2010-07-14&lt;/strong&gt;&lt;/font&gt;至&lt;font color=&quot;#FF6600&quot;&gt;&lt;strong&gt;2010-07-16&lt;/strong&gt;&lt;/font&gt;三亚酒店价格。这些价格是每个酒店宾馆的最低房型价格，您可以点击每个酒店右侧的“房型价格”链接来浏览该酒店的所有房型。同时您也可以选择左侧的行政区或商业区来缩小您的搜索范围。&lt;/div&gt;
-    &lt;div class=&quot;hotellistintro&quot; style=&quot;margin-top:20px;&quot;&gt;&lt;font class=&quot;changdate&quot;&gt;变更日期重新查询：&lt;/font&gt;&amp;nbsp;入住日期&amp;nbsp;&lt;input id=&quot;InDate2&quot; type=&quot;text&quot; class=&quot;datefill&quot; value=&quot;2010-07-14&quot; onClick=&quot;event.cancelBubble=true;showCalendar('InDate2',false,'InDate2')&quot;/&gt;&amp;nbsp;&amp;nbsp;离店日期&amp;nbsp;&lt;input id=&quot;OutDate2&quot; type=&quot;text&quot; class=&quot;datefill&quot; value=&quot;2010-07-16&quot; onClick=&quot;event.cancelBubble=true;showCalendar('OutDate2',false,'OutDate2')&quot;/&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;javascript:changeDate()&quot;&gt;&lt;img src=&quot;/hotel/images/searchbutton.gif&quot; align=&quot;absmiddle&quot; border=&quot;0&quot; /&gt;&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;#moresearch&quot;&gt;更多查询选项&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/searchmap/%C8%FD%D1%C7.html&quot; title=&quot;在三亚地图上查询酒店&quot;&gt;使用地图查询&lt;/a&gt;&lt;/div&gt;
-    &lt;div class=&quot;restpage&quot;&gt;&amp;nbsp;&lt;font class=&quot;curpage&quot;&gt;1&lt;/font&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_2/&quot;&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_3/&quot;&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_4/&quot;&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_5/&quot;&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_6/&quot;&gt;6&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_7/&quot;&gt;7&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_8/&quot;&gt;8&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_9/&quot;&gt;9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_10/&quot;&gt;10&lt;/a&gt;&amp;nbsp;&lt;font color=&quot;#666666&quot; style=&quot; font-weight:normal;&quot;&gt;共14页&lt;/font&gt;&amp;nbsp;&lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+    &lt;div class="hotellistintro"&gt;您搜索的是&lt;font color="#FF6600"&gt;&lt;strong&gt;2010-07-14&lt;/strong&gt;&lt;/font&gt;至&lt;font color="#FF6600"&gt;&lt;strong&gt;2010-07-16&lt;/strong&gt;&lt;/font&gt;三亚酒店价格。这些价格是每个酒店宾馆的最低房型价格，您可以点击每个酒店右侧的“房型价格”链接来浏览该酒店的所有房型。同时您也可以选择左侧的行政区或商业区来缩小您的搜索范围。&lt;/div&gt;
+    &lt;div class="hotellistintro" style="margin-top:20px;"&gt;&lt;font class="changdate"&gt;变更日期重新查询：&lt;/font&gt;&amp;nbsp;入住日期&amp;nbsp;&lt;input id="InDate2" type="text" class="datefill" value="2010-07-14" onClick="event.cancelBubble=true;showCalendar('InDate2',false,'InDate2')"/&gt;&amp;nbsp;&amp;nbsp;离店日期&amp;nbsp;&lt;input id="OutDate2" type="text" class="datefill" value="2010-07-16" onClick="event.cancelBubble=true;showCalendar('OutDate2',false,'OutDate2')"/&gt;&amp;nbsp;&amp;nbsp;&lt;a href="javascript:changeDate()"&gt;&lt;img src="/hotel/images/searchbutton.gif" align="absmiddle" border="0" /&gt;&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="#moresearch"&gt;更多查询选项&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/searchmap/%C8%FD%D1%C7.html" title="在三亚地图上查询酒店"&gt;使用地图查询&lt;/a&gt;&lt;/div&gt;
+    &lt;div class="restpage"&gt;&amp;nbsp;&lt;font class="curpage"&gt;1&lt;/font&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_2/"&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_3/"&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_4/"&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_5/"&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_6/"&gt;6&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_7/"&gt;7&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_8/"&gt;8&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_9/"&gt;9&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_10/"&gt;10&lt;/a&gt;&amp;nbsp;&lt;font color="#666666" style=" font-weight:normal;"&gt;共14页&lt;/font&gt;&amp;nbsp;&lt;/div&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/30/42201201_0_5_0_6.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;1.&lt;a href=&quot;/hotel/details/8330.htm&quot;&gt;三亚国光豪生度假酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/&quot;title=&quot;位于三亚湾的酒店列表&quot;&gt;三亚湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/30/42201201_0_5_0_6.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;1.&lt;a href="/hotel/details/8330.htm"&gt;三亚国光豪生度假酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/"title="位于三亚湾的酒店列表"&gt;三亚湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市三亚湾路188号&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;2010/3/16-2010/5/3，酒店试行24小时入住制。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥780&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/8330.htm&quot; title=&quot;浏览三亚三亚国光豪生度假酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/8330.htm&quot; title=&quot;浏览三亚三亚国光豪生度假酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/8330.htm&quot; title=&quot;三亚三亚国光豪生度假酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/8330.htm&quot; title=&quot;浏览三亚三亚国光豪生度假酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;2010/3/16-2010/5/3，酒店试行24小时入住制。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥780&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/8330.htm" title="浏览三亚三亚国光豪生度假酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/8330.htm" title="浏览三亚三亚国光豪生度假酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/8330.htm" title="三亚三亚国光豪生度假酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/8330.htm" title="浏览三亚三亚国光豪生度假酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/7/52201012_0_5_0_4.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;2.&lt;a href=&quot;/hotel/details/173.htm&quot;&gt;三亚天福源度假酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/&quot;title=&quot;位于三亚湾的酒店列表&quot;&gt;三亚湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/7/52201012_0_5_0_4.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;2.&lt;a href="/hotel/details/173.htm"&gt;三亚天福源度假酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/"title="位于三亚湾的酒店列表"&gt;三亚湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市三亚湾旅游度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;酒店位于三亚湾海坡开发区，拥有目前三亚最大的温泉泳池，可近览海天一线的美景。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥348&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/173.htm&quot; title=&quot;浏览三亚三亚天福源度假酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/173.htm&quot; title=&quot;浏览三亚三亚天福源度假酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/173.htm&quot; title=&quot;三亚三亚天福源度假酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/173.htm&quot; title=&quot;浏览三亚三亚天福源度假酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;酒店位于三亚湾海坡开发区，拥有目前三亚最大的温泉泳池，可近览海天一线的美景。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥348&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/173.htm" title="浏览三亚三亚天福源度假酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/173.htm" title="浏览三亚三亚天福源度假酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/173.htm" title="三亚三亚天福源度假酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/173.htm" title="浏览三亚三亚天福源度假酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/1/42201002_0_5_0_6.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;3.&lt;a href=&quot;/hotel/details/4583.htm&quot;&gt;三亚南中国大酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate2.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/&quot;title=&quot;位于大东海的酒店列表&quot;&gt;大东海&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/1/42201002_0_5_0_6.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;3.&lt;a href="/hotel/details/4583.htm"&gt;三亚南中国大酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate2.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/"title="位于大东海的酒店列表"&gt;大东海&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市大东海旅游度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;从酒店步行两分钟可达大东海嬉水乐园，曾多次接待国家领导及外国元首的豪华花园酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥444&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/4583.htm&quot; title=&quot;浏览三亚三亚南中国大酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/4583.htm&quot; title=&quot;浏览三亚三亚南中国大酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/4583.htm&quot; title=&quot;三亚三亚南中国大酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/4583.htm&quot; title=&quot;浏览三亚三亚南中国大酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;从酒店步行两分钟可达大东海嬉水乐园，曾多次接待国家领导及外国元首的豪华花园酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥444&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/4583.htm" title="浏览三亚三亚南中国大酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/4583.htm" title="浏览三亚三亚南中国大酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/4583.htm" title="三亚三亚南中国大酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/4583.htm" title="浏览三亚三亚南中国大酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/2/52201004_0_5_0_3.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;4.&lt;a href=&quot;/hotel/details/184.htm&quot;&gt;三亚亚龙湾天鸿度假村&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot; title=&quot;亚龙湾酒店列表&quot;&gt;亚龙湾&lt;/a&gt;，&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot;title=&quot;位于亚龙湾的酒店列表&quot;&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/2/52201004_0_5_0_3.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;4.&lt;a href="/hotel/details/184.htm"&gt;三亚亚龙湾天鸿度假村&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/" title="亚龙湾酒店列表"&gt;亚龙湾&lt;/a&gt;，&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/"title="位于亚龙湾的酒店列表"&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市亚龙湾国家旅游度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;具有热带休闲风格的别墅精品度假酒店，前瞰白沙碧海，背依湖泊青山，房间全部面海。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥738&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/184.htm&quot; title=&quot;浏览三亚三亚亚龙湾天鸿度假村的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/184.htm&quot; title=&quot;浏览三亚三亚亚龙湾天鸿度假村的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/184.htm&quot; title=&quot;三亚三亚亚龙湾天鸿度假村的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/184.htm&quot; title=&quot;浏览三亚三亚亚龙湾天鸿度假村的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;具有热带休闲风格的别墅精品度假酒店，前瞰白沙碧海，背依湖泊青山，房间全部面海。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥738&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/184.htm" title="浏览三亚三亚亚龙湾天鸿度假村的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/184.htm" title="浏览三亚三亚亚龙湾天鸿度假村的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/184.htm" title="三亚三亚亚龙湾天鸿度假村的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/184.htm" title="浏览三亚三亚亚龙湾天鸿度假村的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/11/52201018_0_2_0_6.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;5.&lt;a href=&quot;/hotel/details/176.htm&quot;&gt;三亚亚龙湾红树林度假酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot; title=&quot;亚龙湾酒店列表&quot;&gt;亚龙湾&lt;/a&gt;，&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot;title=&quot;位于亚龙湾的酒店列表&quot;&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/11/52201018_0_2_0_6.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;5.&lt;a href="/hotel/details/176.htm"&gt;三亚亚龙湾红树林度假酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/" title="亚龙湾酒店列表"&gt;亚龙湾&lt;/a&gt;，&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/"title="位于亚龙湾的酒店列表"&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市亚龙湾国家旅游度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;酒店位于亚龙湾国家旅游度假区，是中国唯一具有巴厘岛热带风情的纯度假酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥1240&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/176.htm&quot; title=&quot;浏览三亚三亚亚龙湾红树林度假酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/176.htm&quot; title=&quot;浏览三亚三亚亚龙湾红树林度假酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/176.htm&quot; title=&quot;三亚三亚亚龙湾红树林度假酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/176.htm&quot; title=&quot;浏览三亚三亚亚龙湾红树林度假酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;酒店位于亚龙湾国家旅游度假区，是中国唯一具有巴厘岛热带风情的纯度假酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥1240&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/176.htm" title="浏览三亚三亚亚龙湾红树林度假酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/176.htm" title="浏览三亚三亚亚龙湾红树林度假酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/176.htm" title="三亚三亚亚龙湾红树林度假酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/176.htm" title="浏览三亚三亚亚龙湾红树林度假酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/11/52201017_0_5_0_4.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;6.&lt;a href=&quot;/hotel/details/175.htm&quot;&gt;三亚湾假日酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/&quot;title=&quot;位于三亚湾的酒店列表&quot;&gt;三亚湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/11/52201017_0_5_0_4.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;6.&lt;a href="/hotel/details/175.htm"&gt;三亚湾假日酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C8%FD%D1%C7%CD%E5_1/"title="位于三亚湾的酒店列表"&gt;三亚湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市三亚湾旅游度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;位于海南岛海岸线最长的三亚湾海坡度假区的国际品牌酒店，与美丽的椰梦长廊相依偎。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥700&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/175.htm&quot; title=&quot;浏览三亚三亚湾假日酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/175.htm&quot; title=&quot;浏览三亚三亚湾假日酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/175.htm&quot; title=&quot;三亚三亚湾假日酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/175.htm&quot; title=&quot;浏览三亚三亚湾假日酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;位于海南岛海岸线最长的三亚湾海坡度假区的国际品牌酒店，与美丽的椰梦长廊相依偎。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥700&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/175.htm" title="浏览三亚三亚湾假日酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/175.htm" title="浏览三亚三亚湾假日酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/175.htm" title="三亚三亚湾假日酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/175.htm" title="浏览三亚三亚湾假日酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;/hotel/ImgList/nopic.gif&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;7.&lt;a href=&quot;/hotel/details/11835.htm&quot;&gt;三亚大小洞天小月湾度假酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%C4%CF%C9%BD_1/&quot;title=&quot;位于南山的酒店列表&quot;&gt;南山&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="/hotel/ImgList/nopic.gif" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;7.&lt;a href="/hotel/details/11835.htm"&gt;三亚大小洞天小月湾度假酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%C4%CF%C9%BD_1/"title="位于南山的酒店列表"&gt;南山&lt;/a&gt;&lt;br /&gt;
                   酒店地址：三亚市崖城大小洞天旅游区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;酒店位于国家5A级景区大小洞天内，面朝南海背靠南山，滨海原生态木屋别墅，一千多米原生态的海滩。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥598&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/11835.htm&quot; title=&quot;浏览三亚三亚大小洞天小月湾度假酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/11835.htm&quot; title=&quot;浏览三亚三亚大小洞天小月湾度假酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/11835.htm&quot; title=&quot;三亚三亚大小洞天小月湾度假酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/11835.htm&quot; title=&quot;浏览三亚三亚大小洞天小月湾度假酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;酒店位于国家5A级景区大小洞天内，面朝南海背靠南山，滨海原生态木屋别墅，一千多米原生态的海滩。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥598&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/11835.htm" title="浏览三亚三亚大小洞天小月湾度假酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/11835.htm" title="浏览三亚三亚大小洞天小月湾度假酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/11835.htm" title="三亚三亚大小洞天小月湾度假酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/11835.htm" title="浏览三亚三亚大小洞天小月湾度假酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;/hotel/images/nolistpic.gif&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;8.&lt;a href=&quot;/hotel/details/13929.htm&quot;&gt;三亚半山半岛洲际度假酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/&quot;title=&quot;位于大东海的酒店列表&quot;&gt;大东海&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="/hotel/images/nolistpic.gif" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;8.&lt;a href="/hotel/details/13929.htm"&gt;三亚半山半岛洲际度假酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%B4%F3%B6%AB%BA%A3_1/"title="位于大东海的酒店列表"&gt;大东海&lt;/a&gt;&lt;br /&gt;
                   酒店地址：中国海南省三亚市洲际路1号&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;半山半岛间悦享洲际天&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥1690&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/13929.htm&quot; title=&quot;浏览三亚三亚半山半岛洲际度假酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/13929.htm&quot; title=&quot;浏览三亚三亚半山半岛洲际度假酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+                  &lt;font style="font-weight:bold"&gt;半山半岛间悦享洲际天&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥1690&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/13929.htm" title="浏览三亚三亚半山半岛洲际度假酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/13929.htm" title="浏览三亚三亚半山半岛洲际度假酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
               &lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/4/52201006_0_5_0_3.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;9.&lt;a href=&quot;/hotel/details/186.htm&quot;&gt;三亚亚龙湾环球城大酒店&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot; title=&quot;亚龙湾酒店列表&quot;&gt;亚龙湾&lt;/a&gt;，&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot;title=&quot;位于亚龙湾的酒店列表&quot;&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/4/52201006_0_5_0_3.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;9.&lt;a href="/hotel/details/186.htm"&gt;三亚亚龙湾环球城大酒店&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/" title="亚龙湾酒店列表"&gt;亚龙湾&lt;/a&gt;，&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/"title="位于亚龙湾的酒店列表"&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：海南省三亚市亚龙湾国家度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;酒店背靠青山、西枕绿湖、面朝大海，是一家拥有山、湖、海“三合一”客房风景的酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥608&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/186.htm&quot; title=&quot;浏览三亚三亚亚龙湾环球城大酒店的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/186.htm&quot; title=&quot;浏览三亚三亚亚龙湾环球城大酒店的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/186.htm&quot; title=&quot;三亚三亚亚龙湾环球城大酒店的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/186.htm&quot; title=&quot;浏览三亚三亚亚龙湾环球城大酒店的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;酒店背靠青山、西枕绿湖、面朝大海，是一家拥有山、湖、海“三合一”客房风景的酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥608&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/186.htm" title="浏览三亚三亚亚龙湾环球城大酒店的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/186.htm" title="浏览三亚三亚亚龙湾环球城大酒店的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/186.htm" title="三亚三亚亚龙湾环球城大酒店的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/186.htm" title="浏览三亚三亚亚龙湾环球城大酒店的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;
-        &lt;div class=&quot;hotellist&quot;&gt;
-      &lt;div class=&quot;detailtop&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;detailmid&quot;&gt;
-        &lt;table width=&quot;727&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;
+        &lt;div class="hotellist"&gt;
+      &lt;div class="detailtop"&gt;&lt;/div&gt;
+      &lt;div class="detailmid"&gt;
+        &lt;table width="727" border="0" cellspacing="0" cellpadding="0"&gt;
           &lt;tr&gt;
-            &lt;td width=&quot;145&quot; valign=&quot;top&quot;&gt;&lt;img src=&quot;http://static.elong.com/images/hotels/hotelimages/1/32201001_0_5_0_1.jpg&quot; width=&quot;130&quot; border=&quot;0&quot; onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
-            &lt;td width=&quot;350&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelname&quot;&gt;10.&lt;a href=&quot;/hotel/details/3337.htm&quot;&gt;三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;hotelcontent&quot;&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href=&quot;/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot; title=&quot;亚龙湾酒店列表&quot;&gt;亚龙湾&lt;/a&gt;，&lt;a href=&quot;/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/&quot;title=&quot;位于亚龙湾的酒店列表&quot;&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
+            &lt;td width="145" valign="top"&gt;&lt;img src="http://static.elong.com/images/hotels/hotelimages/1/32201001_0_5_0_1.jpg" width="130" border="0" onError=javascript:{this.src='http://www.yoyv.com/hotel/ImgList/nopic.gif'}&gt;&lt;/td&gt;
+            &lt;td width="350" valign="top"&gt;&lt;div class="hotelname"&gt;10.&lt;a href="/hotel/details/3337.htm"&gt;三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）&lt;/a&gt;&lt;/div&gt;
+                &lt;div class="hotelcontent"&gt;酒店星级：&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&lt;img src='/hotel/images/rate.gif' align='absmiddle' /&gt;&amp;nbsp;&amp;nbsp;所在区域：&lt;a href="/hotel/district/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/" title="亚龙湾酒店列表"&gt;亚龙湾&lt;/a&gt;，&lt;a href="/hotel/sowntown/%C8%FD%D1%C7_%D1%C7%C1%FA%CD%E5_1/"title="位于亚龙湾的酒店列表"&gt;亚龙湾&lt;/a&gt;&lt;br /&gt;
                   酒店地址：三亚市亚龙湾国家旅游度假区&lt;br /&gt;
-                  &lt;font style=&quot;font-weight:bold&quot;&gt;位于亚龙湾的以印地安人和海南黎、苗族等土著文化为主题具有浓郁玛雅文化的度假酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
-            &lt;td width=&quot;232&quot; valign=&quot;top&quot;&gt;&lt;div class=&quot;hotelprice&quot;&gt;&lt;font class=&quot;hotelprice2&quot;&gt;￥518&lt;/font&gt;起&lt;br /&gt;
-                    &lt;a href=&quot;/hotel/room/3337.htm&quot; title=&quot;浏览三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的所有房型及价格&quot;&gt;房型价格&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/details/3337.htm&quot; title=&quot;浏览三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的详细介绍及酒店设施&quot;&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
-              &lt;a href=&quot;/hotel/traffic/3337.htm&quot; title=&quot;三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的交通、位置以及电子地图&quot;&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href=&quot;/hotel/pic/3337.htm&quot; title=&quot;浏览三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的所有图片&quot;&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+                  &lt;font style="font-weight:bold"&gt;位于亚龙湾的以印地安人和海南黎、苗族等土著文化为主题具有浓郁玛雅文化的度假酒店。&lt;/font&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;td width="232" valign="top"&gt;&lt;div class="hotelprice"&gt;&lt;font class="hotelprice2"&gt;￥518&lt;/font&gt;起&lt;br /&gt;
+                    &lt;a href="/hotel/room/3337.htm" title="浏览三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的所有房型及价格"&gt;房型价格&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/details/3337.htm" title="浏览三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的详细介绍及酒店设施"&gt;酒店设施&lt;/a&gt;&lt;br /&gt;
+              &lt;a href="/hotel/traffic/3337.htm" title="三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的交通、位置以及电子地图"&gt;交通地图&lt;/a&gt;&lt;br /&gt;&lt;a href="/hotel/pic/3337.htm" title="浏览三亚三亚凯莱仙人掌度假酒店（原三亚仙人掌度假酒店）的所有图片"&gt;酒店图片&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
           &lt;/tr&gt;
         &lt;/table&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;detailbtm&quot;&gt;&lt;/div&gt;
+      &lt;div class="detailbtm"&gt;&lt;/div&gt;
     &lt;/div&gt;        
-    &lt;div class=&quot;restpage&quot; style=&quot;margin-top:15px;&quot;&gt;&amp;nbsp;&lt;font class=&quot;curpage&quot;&gt;1&lt;/font&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_2/&quot;&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_3/&quot;&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_4/&quot;&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_5/&quot;&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_6/&quot;&gt;6&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_7/&quot;&gt;7&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_8/&quot;&gt;8&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_9/&quot;&gt;9&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_10/&quot;&gt;10&lt;/a&gt;&amp;nbsp;&lt;font color=&quot;#666666&quot; style=&quot; font-weight:normal;&quot;&gt;共14页&lt;/font&gt;&amp;nbsp;&lt;/div&gt;
+    &lt;div class="restpage" style="margin-top:15px;"&gt;&amp;nbsp;&lt;font class="curpage"&gt;1&lt;/font&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_2/"&gt;2&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_3/"&gt;3&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_4/"&gt;4&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_5/"&gt;5&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_6/"&gt;6&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_7/"&gt;7&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_8/"&gt;8&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_9/"&gt;9&lt;/a&gt;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_10/"&gt;10&lt;/a&gt;&amp;nbsp;&lt;font color="#666666" style=" font-weight:normal;"&gt;共14页&lt;/font&gt;&amp;nbsp;&lt;/div&gt;
     &lt;/div&gt;
-  &lt;div class=&quot;moreinfo&quot;&gt;
-    &lt;form name=&quot;search1&quot; action=&quot;/hotel/search.asp&quot; method=&quot;post&quot; style=&quot;margin:0px 0px 0px 0px;&quot;&gt;
-    &lt;input name=&quot;districtId&quot; type=&quot;hidden&quot; value=&quot;&quot; /&gt;
-    &lt;input name=&quot;commercialId&quot; type=&quot;hidden&quot; value=&quot;&quot; /&gt;
-    &lt;input name=&quot;city&quot; type=&quot;hidden&quot; value=&quot;三亚&quot; /&gt;
-    &lt;input name=&quot;page&quot; type=&quot;hidden&quot; value=&quot;1&quot; /&gt;
-    &lt;input name=&quot;orderByPrice&quot; type=&quot;hidden&quot; value=&quot;&quot; /&gt;
-    &lt;input name=&quot;orderByStar&quot; type=&quot;hidden&quot; value=&quot;&quot; /&gt;
-    &lt;div class=&quot;moresearch&quot;&gt;&lt;strong&gt;酒店高级查询：&lt;a name=&quot;moresearch&quot; id=&quot;moresearch&quot;&gt;&lt;/a&gt;&lt;/strong&gt;&amp;nbsp;选择城市&amp;nbsp;&lt;select name=&quot;cityId&quot; class=&quot;selectmenu2&quot;&gt;&lt;script language=&quot;JavaScript&quot; src=&quot;/hotel/scripts/hotelcityS.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;&lt;/select&gt;&amp;nbsp;&amp;nbsp;入住日期&amp;nbsp;&lt;input name=&quot;InDate&quot; type=&quot;text&quot; class=&quot;datefill&quot; value=&quot;2010-07-14&quot; onClick=&quot;event.cancelBubble=true;showCalendar('InDate',false,'InDate')&quot;/&gt;&amp;nbsp;&amp;nbsp;离店日期&amp;nbsp;&lt;input name=&quot;OutDate&quot; type=&quot;text&quot; class=&quot;datefill&quot; value=&quot;2010-07-16&quot; onClick=&quot;event.cancelBubble=true;showCalendar('OutDate',false,'OutDate')&quot;/&gt;
+  &lt;div class="moreinfo"&gt;
+    &lt;form name="search1" action="/hotel/search.asp" method="post" style="margin:0px 0px 0px 0px;"&gt;
+    &lt;input name="districtId" type="hidden" value="" /&gt;
+    &lt;input name="commercialId" type="hidden" value="" /&gt;
+    &lt;input name="city" type="hidden" value="三亚" /&gt;
+    &lt;input name="page" type="hidden" value="1" /&gt;
+    &lt;input name="orderByPrice" type="hidden" value="" /&gt;
+    &lt;input name="orderByStar" type="hidden" value="" /&gt;
+    &lt;div class="moresearch"&gt;&lt;strong&gt;酒店高级查询：&lt;a name="moresearch" id="moresearch"&gt;&lt;/a&gt;&lt;/strong&gt;&amp;nbsp;选择城市&amp;nbsp;&lt;select name="cityId" class="selectmenu2"&gt;&lt;script language="JavaScript" src="/hotel/scripts/hotelcityS.js" type="text/javascript"&gt;&lt;/script&gt;&lt;/select&gt;&amp;nbsp;&amp;nbsp;入住日期&amp;nbsp;&lt;input name="InDate" type="text" class="datefill" value="2010-07-14" onClick="event.cancelBubble=true;showCalendar('InDate',false,'InDate')"/&gt;&amp;nbsp;&amp;nbsp;离店日期&amp;nbsp;&lt;input name="OutDate" type="text" class="datefill" value="2010-07-16" onClick="event.cancelBubble=true;showCalendar('OutDate',false,'OutDate')"/&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;moresearch&quot; style=&quot;padding-top:10px; padding-left:347px;&quot;&gt;酒店星级&amp;nbsp;&lt;select name=&quot;star&quot; class=&quot;selectmenu2&quot;&gt;&lt;option value=&quot;1&quot; selected&gt;不限星级&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;二星级&lt;/option&gt;&lt;option value=&quot;3&quot;&gt;三星级&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;四星级&lt;/option&gt;&lt;option value=&quot;5&quot;&gt;五星级&lt;/option&gt;&lt;/select&gt;&amp;nbsp;&amp;nbsp;酒店价格&amp;nbsp;&lt;select name=&quot;price&quot; class=&quot;selectmenu2&quot; style=&quot;width:104px;&quot;&gt;&lt;option value='-1'  selected&gt;不限&lt;/option&gt;&lt;option value='1201'&gt;1200元以上&lt;/option&gt;&lt;option value='1200'&gt;801--1200元&lt;/option&gt;&lt;option value='800'&gt;501--800元&lt;/option&gt;&lt;option value='500'&gt;401--500元&lt;/option&gt;&lt;option value='400'&gt;301--400元&lt;/option&gt;&lt;option value='300'&gt;201--300元&lt;/option&gt;&lt;option value='200'&gt;200元以下&lt;/option&gt;&lt;/select&gt;&amp;nbsp;&amp;nbsp;酒店名称&amp;nbsp;&lt;input name=&quot;hotelName&quot; type=&quot;text&quot; class=&quot;datefill&quot; style=&quot;background-image:none;&quot;/&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;javascript:newSearch()&quot;&gt;&lt;img src=&quot;/hotel/images/searchbtn.gif&quot; border=&quot;0&quot; align=&quot;absmiddle&quot; /&gt;&lt;/a&gt;&lt;/div&gt;
-    &lt;div class=&quot;moresearch&quot;&gt;&lt;strong&gt;本地旅游资讯：&lt;/strong&gt;&amp;nbsp;&lt;a href=&quot;/totimetable/309_1/&quot;&gt;三亚航班查询&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/guide/c/%C8%FD%D1%C7/&quot;&gt;三亚旅游指南&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/guide/OutLook/%C8%FD%D1%C7/&quot;&gt;三亚旅游景点&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/search/Bus/City/C8FDD1C7.htm&quot;&gt;三亚公交&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/search/train/station/C8FDD1C7.htm&quot;&gt;三亚火车&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/guide/Food/%C8%FD%D1%C7/&quot;&gt;三亚餐馆&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/city/trip/309_1/&quot;&gt;三亚旅行计划&lt;/a&gt;&lt;/div&gt;
+    &lt;div class="moresearch" style="padding-top:10px; padding-left:347px;"&gt;酒店星级&amp;nbsp;&lt;select name="star" class="selectmenu2"&gt;&lt;option value="1" selected&gt;不限星级&lt;/option&gt;&lt;option value="2"&gt;二星级&lt;/option&gt;&lt;option value="3"&gt;三星级&lt;/option&gt;&lt;option value="4"&gt;四星级&lt;/option&gt;&lt;option value="5"&gt;五星级&lt;/option&gt;&lt;/select&gt;&amp;nbsp;&amp;nbsp;酒店价格&amp;nbsp;&lt;select name="price" class="selectmenu2" style="width:104px;"&gt;&lt;option value='-1'  selected&gt;不限&lt;/option&gt;&lt;option value='1201'&gt;1200元以上&lt;/option&gt;&lt;option value='1200'&gt;801--1200元&lt;/option&gt;&lt;option value='800'&gt;501--800元&lt;/option&gt;&lt;option value='500'&gt;401--500元&lt;/option&gt;&lt;option value='400'&gt;301--400元&lt;/option&gt;&lt;option value='300'&gt;201--300元&lt;/option&gt;&lt;option value='200'&gt;200元以下&lt;/option&gt;&lt;/select&gt;&amp;nbsp;&amp;nbsp;酒店名称&amp;nbsp;&lt;input name="hotelName" type="text" class="datefill" style="background-image:none;"/&gt;&amp;nbsp;&amp;nbsp;&lt;a href="javascript:newSearch()"&gt;&lt;img src="/hotel/images/searchbtn.gif" border="0" align="absmiddle" /&gt;&lt;/a&gt;&lt;/div&gt;
+    &lt;div class="moresearch"&gt;&lt;strong&gt;本地旅游资讯：&lt;/strong&gt;&amp;nbsp;&lt;a href="/totimetable/309_1/"&gt;三亚航班查询&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/guide/c/%C8%FD%D1%C7/"&gt;三亚旅游指南&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/guide/OutLook/%C8%FD%D1%C7/"&gt;三亚旅游景点&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/search/Bus/City/C8FDD1C7.htm"&gt;三亚公交&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/search/train/station/C8FDD1C7.htm"&gt;三亚火车&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/guide/Food/%C8%FD%D1%C7/"&gt;三亚餐馆&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/city/trip/309_1/"&gt;三亚旅行计划&lt;/a&gt;&lt;/div&gt;
   &lt;/form&gt;
     &lt;/div&gt;
 &lt;/div&gt;
-&lt;div class=&quot;yoyvbtm&quot;&gt;
-  &lt;div class=&quot;btmbg&quot;&gt;
-    &lt;div class=&quot;btmcontent&quot;&gt;
-      &lt;div class=&quot;btmitem&quot;&gt;关于游鱼www.yoyv.com◎&lt;/div&gt;
-      &lt;div class=&quot;youyuintro&quot;&gt;游鱼是一个旅游爱好者分享旅途快乐,交流旅行经验的旅游社区。&lt;br /&gt;
+&lt;div class="yoyvbtm"&gt;
+  &lt;div class="btmbg"&gt;
+    &lt;div class="btmcontent"&gt;
+      &lt;div class="btmitem"&gt;关于游鱼www.yoyv.com◎&lt;/div&gt;
+      &lt;div class="youyuintro"&gt;游鱼是一个旅游爱好者分享旅途快乐,交流旅行经验的旅游社区。&lt;br /&gt;
         游鱼是一部涵盖目的地餐饮、住宿、交通、旅游景点、购物、娱乐等实用信息的旅行指南。&lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;btmcontent2&quot; &gt;
-      &lt;div class=&quot;btmitem&quot;&gt;热门旅游目的地&lt;/div&gt;
-      &lt;div class=&quot;youyuintro&quot;&gt;
+    &lt;div class="btmcontent2" &gt;
+      &lt;div class="btmitem"&gt;热门旅游目的地&lt;/div&gt;
+      &lt;div class="youyuintro"&gt;
         &lt;ul&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%B1%B1%BE%A9/&quot; target=&quot;_blank&quot;&gt;北京旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%C9%CF%BA%A3/&quot; target=&quot;_blank&quot;&gt;上海旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%BA%BC%D6%DD/&quot; target=&quot;_blank&quot;&gt;杭州旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%C4%CF%BE%A9/&quot; target=&quot;_blank&quot;&gt;南京旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%B9%F0%C1%D6/&quot; target=&quot;_blank&quot;&gt;桂林旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%CE%F7%B0%B2/&quot; target=&quot;_blank&quot;&gt;西安旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%C8%FD%D1%C7/&quot; target=&quot;_blank&quot;&gt;三亚旅游指南&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href=&quot;/guide/c/%C0%F6%BD%AD/&quot; target=&quot;_blank&quot;&gt;丽江旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%B1%B1%BE%A9/" target="_blank"&gt;北京旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%C9%CF%BA%A3/" target="_blank"&gt;上海旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%BA%BC%D6%DD/" target="_blank"&gt;杭州旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%C4%CF%BE%A9/" target="_blank"&gt;南京旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%B9%F0%C1%D6/" target="_blank"&gt;桂林旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%CE%F7%B0%B2/" target="_blank"&gt;西安旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%C8%FD%D1%C7/" target="_blank"&gt;三亚旅游指南&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="/guide/c/%C0%F6%BD%AD/" target="_blank"&gt;丽江旅游指南&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;btmcontent2&quot; &gt;
-            &lt;div class=&quot;btmitem&quot;&gt;热门地区酒店预订&lt;/div&gt;
-            &lt;div class=&quot;youyuintro&quot;&gt;
+    &lt;div class="btmcontent2" &gt;
+            &lt;div class="btmitem"&gt;热门地区酒店预订&lt;/div&gt;
+            &lt;div class="youyuintro"&gt;
                 &lt;ul&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%B1%B1%BE%A9_1/&quot; target=&quot;_blank&quot;&gt;北京酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%B3%C9%B6%BC_1/&quot; target=&quot;_blank&quot;&gt;成都酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C9%CF%BA%A3_1/&quot; target=&quot;_blank&quot;&gt;上海酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%CE%E4%BA%BA_1/&quot; target=&quot;_blank&quot;&gt;武汉酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%B9%E3%D6%DD_1/&quot; target=&quot;_blank&quot;&gt;广州酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C4%CF%BE%A9_1/&quot; target=&quot;_blank&quot;&gt;南京酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C9%EE%DB%DA_1/&quot; target=&quot;_blank&quot;&gt;深圳酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C8%FD%D1%C7_1/&quot; target=&quot;_blank&quot;&gt;三亚酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%BA%BC%D6%DD_1/&quot; target=&quot;_blank&quot;&gt;杭州酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%CB%D5%D6%DD_1/&quot; target=&quot;_blank&quot;&gt;苏州酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CE%F7%B0%B2_1/&quot; target=&quot;_blank&quot;&gt;西安酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%C0%A5%C3%F7_1/&quot; target=&quot;_blank&quot;&gt;昆明酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%C7%E0%B5%BA_1/&quot; target=&quot;_blank&quot;&gt;青岛酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%B4%F3%C1%AC_1/&quot; target=&quot;_blank&quot;&gt;大连酒店&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/hotel/city/%CF%C3%C3%C5_1/&quot; target=&quot;_blank&quot;&gt;厦门酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/hotel/city/%D6%D8%C7%EC_1/&quot; target=&quot;_blank&quot;&gt;重庆酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%B1%B1%BE%A9_1/" target="_blank"&gt;北京酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%B3%C9%B6%BC_1/" target="_blank"&gt;成都酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C9%CF%BA%A3_1/" target="_blank"&gt;上海酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%CE%E4%BA%BA_1/" target="_blank"&gt;武汉酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%B9%E3%D6%DD_1/" target="_blank"&gt;广州酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%C4%CF%BE%A9_1/" target="_blank"&gt;南京酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C9%EE%DB%DA_1/" target="_blank"&gt;深圳酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%C8%FD%D1%C7_1/" target="_blank"&gt;三亚酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%BA%BC%D6%DD_1/" target="_blank"&gt;杭州酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%CB%D5%D6%DD_1/" target="_blank"&gt;苏州酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CE%F7%B0%B2_1/" target="_blank"&gt;西安酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%C0%A5%C3%F7_1/" target="_blank"&gt;昆明酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%C7%E0%B5%BA_1/" target="_blank"&gt;青岛酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%B4%F3%C1%AC_1/" target="_blank"&gt;大连酒店&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/hotel/city/%CF%C3%C3%C5_1/" target="_blank"&gt;厦门酒店&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/hotel/city/%D6%D8%C7%EC_1/" target="_blank"&gt;重庆酒店&lt;/a&gt;&lt;/li&gt;
                 &lt;/ul&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;btmcontent2&quot; &gt;
-            &lt;div class=&quot;btmitem&quot;&gt;热门旅游景点&lt;/div&gt;
-            &lt;div class=&quot;youyuintro&quot;&gt;
+    &lt;div class="btmcontent2" &gt;
+            &lt;div class="btmitem"&gt;热门旅游景点&lt;/div&gt;
+            &lt;div class="youyuintro"&gt;
                 &lt;ul&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/11796&quot; target=&quot;_blank&quot;&gt;故宫&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/15549&quot; target=&quot;_blank&quot;&gt;西湖&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/16521&quot; target=&quot;_blank&quot;&gt;黄山&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/22128&quot; target=&quot;_blank&quot;&gt;华山&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/17772&quot; target=&quot;_blank&quot;&gt;泰山&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/15082&quot; target=&quot;_blank&quot;&gt;周庄&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/19604&quot; target=&quot;_blank&quot;&gt;阳朔&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/16284&quot; target=&quot;_blank&quot;&gt;乌镇&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/11865&quot; target=&quot;_blank&quot;&gt;天安门&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/12465&quot; target=&quot;_blank&quot;&gt;颐和园&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/15572&quot; target=&quot;_blank&quot;&gt;千岛湖&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/20162&quot; target=&quot;_blank&quot;&gt;九寨沟&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/17942&quot; target=&quot;_blank&quot;&gt;少林寺&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/16900&quot; target=&quot;_blank&quot;&gt;鼓浪屿&lt;/a&gt;&lt;/li&gt;
-                    &lt;li&gt;&lt;a href=&quot;/s/18950&quot; target=&quot;_blank&quot;&gt;凤凰古城&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href=&quot;/s/21556&quot; target=&quot;_blank&quot;&gt;布达拉宫&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/11796" target="_blank"&gt;故宫&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/15549" target="_blank"&gt;西湖&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/16521" target="_blank"&gt;黄山&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/22128" target="_blank"&gt;华山&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/17772" target="_blank"&gt;泰山&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/15082" target="_blank"&gt;周庄&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/19604" target="_blank"&gt;阳朔&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/16284" target="_blank"&gt;乌镇&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/11865" target="_blank"&gt;天安门&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/12465" target="_blank"&gt;颐和园&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/15572" target="_blank"&gt;千岛湖&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/20162" target="_blank"&gt;九寨沟&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/17942" target="_blank"&gt;少林寺&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/16900" target="_blank"&gt;鼓浪屿&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="/s/18950" target="_blank"&gt;凤凰古城&lt;/a&gt;&amp;nbsp;&amp;nbsp;&lt;a href="/s/21556" target="_blank"&gt;布达拉宫&lt;/a&gt;&lt;/li&gt;
                 &lt;/ul&gt;
       &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;btmcontent2&quot; style=&quot; border:0px;&quot;&gt;
-      &lt;div class=&quot;btmitem&quot;&gt;关于游鱼&lt;/div&gt;
-      &lt;div class=&quot;youyuintro&quot;&gt;
+    &lt;div class="btmcontent2" style=" border:0px;"&gt;
+      &lt;div class="btmitem"&gt;关于游鱼&lt;/div&gt;
+      &lt;div class="youyuintro"&gt;
         &lt;ul&gt;
-          &lt;li&gt;&lt;a href=&quot;/Info/help.html#d&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;关于游鱼&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/Info/help.html#l&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;联系我们&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/ad/index.html&quot; target=&quot;_blank&quot;&gt;产品服务&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/Info/SiteMap.htm&quot; target=&quot;_blank&quot;&gt;站内导航&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/group/yoyv/&quot; target=&quot;_blank&quot;&gt;游鱼站务论坛&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;http://yoyvcom.yoyv.com&quot; target=&quot;_blank&quot;&gt;游鱼Blog&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/LeaveWord/index.asp&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;建议留言&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&quot;/Info/link2.asp&quot; target=&quot;_blank&quot;&gt;友情链接&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/Info/help.html#d" target="_blank" rel="nofollow"&gt;关于游鱼&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/Info/help.html#l" target="_blank" rel="nofollow"&gt;联系我们&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/ad/index.html" target="_blank"&gt;产品服务&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/Info/SiteMap.htm" target="_blank"&gt;站内导航&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/group/yoyv/" target="_blank"&gt;游鱼站务论坛&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="http://yoyvcom.yoyv.com" target="_blank"&gt;游鱼Blog&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/LeaveWord/index.asp" target="_blank" rel="nofollow"&gt;建议留言&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href="/Info/link2.asp" target="_blank"&gt;友情链接&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
-  &lt;div class=&quot;yoyvcopyright&quot;&gt;Copright ◎2006-2010 YOYV.COM All Rights reserved &lt;a href=&quot;http://www.miibeian.gov.cn/&quot; rel=&quot;nofollow&quot;&gt;陕ICP备07000041号&lt;/a&gt;&lt;/div&gt;
-    &lt;div style=&quot;display:none;&quot;&gt;&lt;script language=&quot;javascript&quot; src=&quot;http://count8.51yes.com/click.aspx?id=84597943&amp;logo=12&quot; charset=&quot;gb2312&quot;&gt;&lt;/script&gt;
+  &lt;div class="yoyvcopyright"&gt;Copright ◎2006-2010 YOYV.COM All Rights reserved &lt;a href="http://www.miibeian.gov.cn/" rel="nofollow"&gt;陕ICP备07000041号&lt;/a&gt;&lt;/div&gt;
+    &lt;div style="display:none;"&gt;&lt;script language="javascript" src="http://count8.51yes.com/click.aspx?id=84597943&amp;logo=12" charset="gb2312"&gt;&lt;/script&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 
 &lt;/body&gt;
-&lt;/html&gt;    &quot;&quot;&quot;
+&lt;/html&gt;    """
     handler = TestHandler(handle_comment=False, handle_text=False)
     parser = HtmlParser(handler)
     btime = time()
@@ -1305,204 +1301,204 @@ def test_main_2():
 
 def test_main_3():
     html = '''
-&lt;a href=&quot;http://anshan.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾰﾰ￉ﾽ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://erds.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾶ￵ﾶ￻ﾶ￠ￋﾹ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jn.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾼￃￄￏ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://nanjing.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￄￏﾾﾩ&lt;/a&gt;&lt;/td&gt;
+&lt;a href="http://anshan.soufun.com/" target="_blank"&gt;ﾰﾰ￉ﾽ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://erds.soufun.com/" target="_blank"&gt;ﾶ￵ﾶ￻ﾶ￠ￋﾹ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jn.soufun.com/" target="_blank"&gt;ﾼￃￄￏ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://nanjing.soufun.com/" target="_blank"&gt;ￄￏﾾﾩ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://tj.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￌ￬ﾽ￲&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://yt.soufun.com/&quot; target=&quot;_blank&quot;&gt;￑ￌￌﾨ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://tj.soufun.com/" target="_blank"&gt;ￌ￬ﾽ￲&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://yt.soufun.com/" target="_blank"&gt;￑ￌￌﾨ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;B&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;F&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jl.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾼﾪ￁ￖ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;B&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;F&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jl.soufun.com/" target="_blank"&gt;ﾼﾪ￁ￖ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://nc.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￄￏﾲ�&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://tz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￌﾨￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://yz.soufun.com/&quot; target=&quot;_blank&quot;&gt;￑￯ￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://nc.soufun.com/" target="_blank"&gt;ￄￏﾲ�&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://tz.soufun.com/" target="_blank"&gt;ￌﾨￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://yz.soufun.com/" target="_blank"&gt;￑￯ￖ￝&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://bj.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾱﾱﾾﾩ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://fs.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾷ￰￉ﾽ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://bj.soufun.com/" target="_blank"&gt;ﾱﾱﾾﾩ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://fs.soufun.com/" target="_blank"&gt;ﾷ￰￉ﾽ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jx.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾼￎ￐ￋ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://nn.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￄￏￄ￾&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://taiyuan.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￌﾫￔﾭ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://yc.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￒￋﾲ�&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jx.soufun.com/" target="_blank"&gt;ﾼￎ￐ￋ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://nn.soufun.com/" target="_blank"&gt;ￄￏￄ￾&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://taiyuan.soufun.com/" target="_blank"&gt;ￌﾫￔﾭ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://yc.soufun.com/" target="_blank"&gt;ￒￋﾲ�&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://bt.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾰ￼ￍﾷ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://bt.soufun.com/" target="_blank"&gt;ﾰ￼ￍﾷ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://fz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾸﾣￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jh.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾽ￰ﾻﾪ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://nt.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￄￏￍﾨ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://taizhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￌﾩￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://yinchuan.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￒ￸ﾴﾨ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://bd.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾱﾣﾶﾨ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;G&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jc.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾽ￺ﾳￇ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://nb.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￄ￾ﾲﾨ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://ts.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￌￆ￉ﾽ&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://yl.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￓ￱￁ￖ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://bh.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾱﾱﾺﾣ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://gz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾹ￣ￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jy.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾽﾭￒ￵&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;Q&lt;/strong&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://tc.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￌﾫﾲￖ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://yk.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￓﾪ﾿ￚ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://baoji.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾱﾦﾼﾦ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://gy.soufun.com&quot; target=&quot;_blank&quot;&gt;ﾹ￳￑￴&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://jm.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾽﾭￃￅ&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://qd.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￇ￠ﾵﾺ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;W&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;Z&lt;/strong&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;C&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://guilin.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾹ￰￁ￖ&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;K&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://qhd.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￇ￘ﾻￊﾵﾺ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://wuhan.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎ￤ﾺﾺ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zj.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￕ﾿ﾽﾭ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://cq.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￖ￘ￇ￬&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://ganzhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾸￓￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://km.soufun.com/&quot; target=&quot;_blank&quot;&gt;￀ﾥￃ￷&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://qz.soufun.com/&quot; target=&quot;_blank&quot;&gt;￈ﾪￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://weihai.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￍ￾ﾺﾣ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zhenjiang.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￕ￲ﾽﾭ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://fz.soufun.com/" target="_blank"&gt;ﾸﾣￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jh.soufun.com/" target="_blank"&gt;ﾽ￰ﾻﾪ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://nt.soufun.com/" target="_blank"&gt;ￄￏￍﾨ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://taizhou.soufun.com/" target="_blank"&gt;ￌﾩￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://yinchuan.soufun.com/" target="_blank"&gt;ￒ￸ﾴﾨ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
 
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://cd.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾳ￉ﾶﾼ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;H&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://ks.soufun.com/&quot; target=&quot;_blank&quot;&gt;￀ﾥ￉ﾽ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;R&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://wf.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎﾫﾷﾻ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://bd.soufun.com/" target="_blank"&gt;ﾱﾣﾶﾨ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;G&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jc.soufun.com/" target="_blank"&gt;ﾽ￺ﾳￇ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://nb.soufun.com/" target="_blank"&gt;ￄ￾ﾲﾨ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://ts.soufun.com/" target="_blank"&gt;ￌￆ￉ﾽ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￖﾣￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://yl.soufun.com/" target="_blank"&gt;ￓ￱￁ￖ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://cz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾳﾣￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://hz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺﾼￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;L&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://rz.soufun.com/&quot; target=&quot;_blank&quot;&gt;￈ￕￕￕ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://bh.soufun.com/" target="_blank"&gt;ﾱﾱﾺﾣ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://gz.soufun.com/" target="_blank"&gt;ﾹ￣ￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jy.soufun.com/" target="_blank"&gt;ﾽﾭￒ￵&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;Q&lt;/strong&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://wz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎￂￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zs.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￖ￐￉ﾽ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://tc.soufun.com/" target="_blank"&gt;ￌﾫﾲￖ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://yk.soufun.com/" target="_blank"&gt;ￓﾪ﾿ￚ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://changchun.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾳﾤﾴﾺ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://hrb.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾹ￾ﾶ￻ﾱ￵&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://lz.soufun.com/&quot; target=&quot;_blank&quot;&gt;￀ﾼￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://baoji.soufun.com/" target="_blank"&gt;ﾱﾦﾼﾦ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://gy.soufun.com" target="_blank"&gt;ﾹ￳￑￴&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://jm.soufun.com/" target="_blank"&gt;ﾽﾭￃￅ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;S&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://wuxi.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎ￞ￎ�&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zhuzhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￖ￪ￖ￞&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://qd.soufun.com/" target="_blank"&gt;ￇ￠ﾵﾺ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;W&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;Z&lt;/strong&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://cs.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾳﾤ￉ﾳ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://hn.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺﾣￄￏ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;C&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://guilin.soufun.com/" target="_blank"&gt;ﾹ￰￁ￖ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://ls.soufun.com/&quot; target=&quot;_blank&quot;&gt;￀￶ￋﾮ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://sh.soufun.com/&quot; target=&quot;_blank&quot;&gt;￉ￏﾺﾣ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://wj.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎ￢ﾽﾭ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zh.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￖ￩ﾺﾣ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;K&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://qhd.soufun.com/" target="_blank"&gt;ￇ￘ﾻￊﾵﾺ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://wuhan.soufun.com/" target="_blank"&gt;ￎ￤ﾺﾺ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zj.soufun.com/" target="_blank"&gt;ￕ﾿ﾽﾭ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://changshu.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾳﾣￊ￬&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://cq.soufun.com/" target="_blank"&gt;ￖ￘ￇ￬&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://hd.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺﾪﾵﾦ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://lyg.soufun.com/&quot; target=&quot;_blank&quot;&gt;￁ﾬￔￆﾸￛ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://sz.soufun.com/&quot; target=&quot;_blank&quot;&gt;￉￮ￛￚ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://xj.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎￚￂﾳￄﾾￆ￫&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zb.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￗￍﾲﾩ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;D&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://hf.soufun.com&quot; target=&quot;_blank&quot;&gt;ﾺￏﾷￊ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://ly.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￂ￥￑￴&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://suzhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￋￕￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://wuhu.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎ￟ﾺ￾&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zhoushan.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￖￛ￉ﾽ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://dl.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾴ￳￁ﾬ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://huizhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾻ￝ￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://liuzhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;￁￸ￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://sx.soufun.com/&quot; target=&quot;_blank&quot;&gt;￉ￜ￐ￋ&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;X&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://zjg.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￕￅﾼￒﾸￛ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://dg.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾶﾫ￝ﾸ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://nm.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺ￴ﾺￍﾺￆￌ￘&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://lf.soufun.com/&quot; target=&quot;_blank&quot;&gt;￀￈ﾷﾻ&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://sy.soufun.com/&quot; target=&quot;_blank&quot;&gt;￉￲￑￴&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://xian.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎ￷ﾰﾲ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;ￆ￤ￋ￻&lt;/strong&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://dy.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾶﾫￓﾪ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://huaian.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾻﾴﾰﾲ&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://lc.soufun.com/&quot; target=&quot;_blank&quot;&gt;￁ￄﾳￇ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://sjz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￊﾯﾼￒￗﾯ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://xn.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎ￷ￄ￾&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://www.hkproperty.com/&quot; target=&quot;_blank&quot;&gt;ￏ￣ﾸￛ&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://dz.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾵￂￖ￝&lt;/a&gt;&lt;/td&gt;
-
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://heze.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺￊￔ￳&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;strong&gt;M&lt;/strong&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://st.soufun.com/&quot; target=&quot;_blank&quot;&gt;￉ￇￍﾷ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://xm.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￏￃￃￅ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://www.twproperty.com.tw/&quot; target=&quot;_blank&quot;&gt;ￌﾨￍ￥&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://ganzhou.soufun.com/" target="_blank"&gt;ﾸￓￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://km.soufun.com/" target="_blank"&gt;￀ﾥￃ￷&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://qz.soufun.com/" target="_blank"&gt;￈ﾪￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://weihai.soufun.com/" target="_blank"&gt;ￍ￾ﾺﾣ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zhenjiang.soufun.com/" target="_blank"&gt;ￕ￲ﾽﾭ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
 
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://huzhou.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺ￾ￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://mianyang.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￃ￠￑￴&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://shunde.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￋﾳﾵￂ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://xz.soufun.com/&quot; target=&quot;_blank&quot;&gt;￐￬ￖ￝&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; height=&quot;20&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://www.sgproperty.com/&quot; target=&quot;_blank&quot;&gt;￐ￂﾼￓￆￂ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://cd.soufun.com/" target="_blank"&gt;ﾳ￉ﾶﾼ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;H&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://ks.soufun.com/" target="_blank"&gt;￀ﾥ￉ﾽ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;R&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://wf.soufun.com/" target="_blank"&gt;ￎﾫﾷﾻ&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zz.soufun.com/" target="_blank"&gt;ￖﾣￖ￝&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://cz.soufun.com/" target="_blank"&gt;ﾳﾣￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://hz.soufun.com/" target="_blank"&gt;ﾺﾼￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;L&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://rz.soufun.com/" target="_blank"&gt;￈ￕￕￕ&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://wz.soufun.com/" target="_blank"&gt;ￎￂￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zs.soufun.com/" target="_blank"&gt;ￖ￐￉ﾽ&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://changchun.soufun.com/" target="_blank"&gt;ﾳﾤﾴﾺ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://hrb.soufun.com/" target="_blank"&gt;ﾹ￾ﾶ￻ﾱ￵&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://lz.soufun.com/" target="_blank"&gt;￀ﾼￖ￝&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;S&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://wuxi.soufun.com/" target="_blank"&gt;ￎ￞ￎ�&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zhuzhou.soufun.com/" target="_blank"&gt;ￖ￪ￖ￞&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://cs.soufun.com/" target="_blank"&gt;ﾳﾤ￉ﾳ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://hn.soufun.com/" target="_blank"&gt;ﾺﾣￄￏ&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://ls.soufun.com/" target="_blank"&gt;￀￶ￋﾮ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://sh.soufun.com/" target="_blank"&gt;￉ￏﾺﾣ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://wj.soufun.com/" target="_blank"&gt;ￎ￢ﾽﾭ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zh.soufun.com/" target="_blank"&gt;ￖ￩ﾺﾣ&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://changshu.soufun.com/" target="_blank"&gt;ﾳﾣￊ￬&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://hd.soufun.com/" target="_blank"&gt;ﾺﾪﾵﾦ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://lyg.soufun.com/" target="_blank"&gt;￁ﾬￔￆﾸￛ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://sz.soufun.com/" target="_blank"&gt;￉￮ￛￚ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://xj.soufun.com/" target="_blank"&gt;ￎￚￂﾳￄﾾￆ￫&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zb.soufun.com/" target="_blank"&gt;ￗￍﾲﾩ&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;D&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://hf.soufun.com" target="_blank"&gt;ﾺￏﾷￊ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://ly.soufun.com/" target="_blank"&gt;ￂ￥￑￴&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://suzhou.soufun.com/" target="_blank"&gt;ￋￕￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://wuhu.soufun.com/" target="_blank"&gt;ￎ￟ﾺ￾&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zhoushan.soufun.com/" target="_blank"&gt;ￖￛ￉ﾽ&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://dl.soufun.com/" target="_blank"&gt;ﾴ￳￁ﾬ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://huizhou.soufun.com/" target="_blank"&gt;ﾻ￝ￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://liuzhou.soufun.com/" target="_blank"&gt;￁￸ￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://sx.soufun.com/" target="_blank"&gt;￉ￜ￐ￋ&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;X&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://zjg.soufun.com/" target="_blank"&gt;ￕￅﾼￒﾸￛ&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://dg.soufun.com/" target="_blank"&gt;ﾶﾫ￝ﾸ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://nm.soufun.com/" target="_blank"&gt;ﾺ￴ﾺￍﾺￆￌ￘&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://lf.soufun.com/" target="_blank"&gt;￀￈ﾷﾻ&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://sy.soufun.com/" target="_blank"&gt;￉￲￑￴&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://xian.soufun.com/" target="_blank"&gt;ￎ￷ﾰﾲ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;ￆ￤ￋ￻&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://dy.soufun.com/" target="_blank"&gt;ﾶﾫￓﾪ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://huaian.soufun.com/" target="_blank"&gt;ﾻﾴﾰﾲ&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://lc.soufun.com/" target="_blank"&gt;￁ￄﾳￇ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://sjz.soufun.com/" target="_blank"&gt;ￊﾯﾼￒￗﾯ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://xn.soufun.com/" target="_blank"&gt;ￎ￷ￄ￾&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://www.hkproperty.com/" target="_blank"&gt;ￏ￣ﾸￛ&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://dz.soufun.com/" target="_blank"&gt;ﾵￂￖ￝&lt;/a&gt;&lt;/td&gt;
+
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://heze.soufun.com/" target="_blank"&gt;ﾺￊￔ￳&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;strong&gt;M&lt;/strong&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://st.soufun.com/" target="_blank"&gt;￉ￇￍﾷ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://xm.soufun.com/" target="_blank"&gt;ￏￃￃￅ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://www.twproperty.com.tw/" target="_blank"&gt;ￌﾨￍ￥&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+
+      &lt;tr&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://huzhou.soufun.com/" target="_blank"&gt;ﾺ￾ￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://mianyang.soufun.com/" target="_blank"&gt;ￃ￠￑￴&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://shunde.soufun.com/" target="_blank"&gt;ￋﾳﾵￂ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://xz.soufun.com/" target="_blank"&gt;￐￬ￖ￝&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" height="20" valign="middle" width="16%"&gt;&lt;a href="http://www.sgproperty.com/" target="_blank"&gt;￐ￂﾼￓￆￂ&lt;/a&gt;&lt;/td&gt;
 
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://hs.soufun.com/&quot; target=&quot;_blank&quot;&gt;ﾺ￢ￋﾮ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; height=&quot;20&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://mas.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￂ￭ﾰﾰ￉ﾽ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://sanya.soufun.com/&quot; target=&quot;_blank&quot;&gt;￈�￑ￇ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://xt.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￏ￦ￌﾶ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://hs.soufun.com/" target="_blank"&gt;ﾺ￢ￋﾮ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" height="20" valign="middle" width="16%"&gt;&lt;a href="http://mas.soufun.com/" target="_blank"&gt;ￂ￭ﾰﾰ￉ﾽ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://sanya.soufun.com/" target="_blank"&gt;￈�￑ￇ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle" width="16%"&gt;&lt;a href="http://xt.soufun.com/" target="_blank"&gt;ￏ￦ￌﾶ&lt;/a&gt;&lt;/td&gt;
 
-        &lt;td align=&quot;left&quot; height=&quot;20&quot; valign=&quot;middle&quot; width=&quot;16%&quot;&gt;&lt;a href=&quot;http://vancouver.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￎￂﾸ￧ﾻﾪ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" height="20" valign="middle" width="16%"&gt;&lt;a href="http://vancouver.soufun.com/" target="_blank"&gt;ￎￂﾸ￧ﾻﾪ&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot;&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot;&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; height=&quot;20&quot; valign=&quot;middle&quot;&gt;&amp;nbsp;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot;&gt;&lt;a href=&quot;http://sq.soufun.com/&quot; target=&quot;_blank&quot;&gt;ￋ￞ￇﾨ&lt;/a&gt;&lt;/td&gt;
-        &lt;td align=&quot;left&quot; valign=&quot;middle&quot;&gt;&lt;a href=&quot;http://xx.soufun.com/&quot; target=&quot;_blank&quot;&gt;￐ￂￏ￧&lt;/a&gt;
+        &lt;td align="left" valign="middle"&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td align="left" valign="middle"&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td align="left" height="20" valign="middle"&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;td align="left" valign="middle"&gt;&lt;a href="http://sq.soufun.com/" target="_blank"&gt;ￋ￞ￇﾨ&lt;/a&gt;&lt;/td&gt;
+        &lt;td align="left" valign="middle"&gt;&lt;a href="http://xx.soufun.com/" target="_blank"&gt;￐ￂￏ￧&lt;/a&gt;
 '''
     handler = TestHandler(handle_comment=False, handle_text=True)
     parser = HtmlParser(handler)
@@ -1515,8 +1511,7 @@ if __name__ == '__main__':
     unittest.main()
     test_main()
     test_main_2()
-    test_main_3()
-</code></pre>
+    test_main_3()</code></pre></p>
 </div>
 </main>
 
@@ -1527,5 +1522,6 @@ if __name__ == '__main__':
 
     <!-- 你的 JavaScript 脚本在这里 -->
     
+  </div>
 </body>
 </html>

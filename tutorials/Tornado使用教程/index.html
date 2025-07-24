@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
 
-    <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
-    
+  <link rel="stylesheet" href="../../assets/styles/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+  
 </head>
 <body>
+  <div class="body-wrapper">
     <header><nav class="nav">
   <div class="nav-container">
     <a href="/">
@@ -46,7 +47,7 @@
     <br />
     <span>on</span>
     <time datetime="2011-11-05 00:00:00 +0000">
-      November 05, 2011
+      Nov 05, 2011
     </time>
   </div>
 
@@ -64,14 +65,11 @@
 </ul>
 <h2 id="_1">简单尝试</h2>
 <ul>
-<li>安装</li>
-</ul>
-<pre><code class="language-shell">sudo pip install tornado
-</code></pre>
-<ul>
-<li>第一个demo</li>
-</ul>
-<pre><code class="language-python">#coding: utf-8
+<li>安装
+<pre class="highlight"><code class="language-shell">sudo pip install tornado</code></pre></li>
+<li>
+<p>第一个demo
+<pre class="highlight"><code class="language-python">#coding: utf-8
 import tornado.ioloop
 import tornado.web
 
@@ -89,10 +87,11 @@ def start():
     tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == '__main__':
-    start()
-</code></pre>
-<ul>
-<li>启动：python webpy_test.py 0.0.0.0:4322</li>
+    start()</code></pre></p>
+</li>
+<li>
+<p>启动：python webpy_test.py 0.0.0.0:4322</p>
+</li>
 <li>GET 测试：curl http://localhost:4322</li>
 </ul>
 <blockquote>
@@ -101,9 +100,9 @@ if __name__ == '__main__':
 </blockquote>
 <p>看到了么，和Webpy长得几乎一模一样。我先简单压测一下它。如果好的话，我觉得可以考虑新系统用它来写，旧系统或者也可以往这方面上转。</p>
 <ul>
-<li>压测：ab -c 10 -n 1000 http://192.168.95.222:4322/</li>
-</ul>
-<pre><code class="language-shell">This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+<li>
+<p>压测：ab -c 10 -n 1000 http://192.168.95.222:4322/
+<pre class="highlight"><code class="language-shell">This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
@@ -156,13 +155,12 @@ Percentage of the requests served within a certain time (ms)
     95%     10
     98%     13
     99%     17
-    100%     19 (longest request)
-</code></pre>
-<p>每秒将近是1443，接近webpy的10倍。</p>
-<ul>
-<li>压测-100并发，2000请求：ab -c 100 -n 2000 http://192.168.95.222:4322/</li>
-</ul>
-<pre><code class="language-shell">This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+    100%     19 (longest request)</code></pre>
+每秒将近是1443，接近webpy的10倍。</p>
+</li>
+<li>
+<p>压测-100并发，2000请求：ab -c 100 -n 2000 http://192.168.95.222:4322/
+<pre class="highlight"><code class="language-shell">This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
 
@@ -215,166 +213,156 @@ Percentage of the requests served within a certain time (ms)
     95%     70
     98%     73
     99%     73
-    100%     77 (longest request)
-</code></pre>
-<p>每秒1800个请求，响应为53.8ms，很强大啊。</p>
+    100%     77 (longest request)</code></pre>
+每秒1800个请求，响应为53.8ms，很强大啊。</p>
+</li>
+</ul>
 <p>那就选它了。</p>
 <h2 id="_2">主要核心</h2>
 <h3 id="handler">Handler</h3>
 <p>对于<code>Tornado</code>而言，MVC中的C就是它的<code>Handler</code>。<code>Torando</code>的Handler非常好写，只要继承自<code>tornado.web.RequestHandler</code>就好了。下面我统一的把<code>Handler</code>叫做<code>Controller</code>，因为习惯了这种叫法。对于<code>Controller</code>的主要调用顺序如下：</p>
 <ul>
 <li><code>__init__</code>：构造方法，如果需要在开始做一些事情的话，不推荐在这里。而推荐使用<code>initialize</code></li>
-<li><code>initialize</code>：这里做事情，比方说给这个Controller加入一些成员变量。例如：</li>
-</ul>
-<pre><code class="language-python">class TestController(tornado.web.RequestHandler):
+<li>
+<p><code>initialize</code>：这里做事情，比方说给这个Controller加入一些成员变量。例如：
+<pre class="highlight"><code class="language-python">class TestController(tornado.web.RequestHandler):
 
     def initialize(self): 
-        self.uuid = uuid.uuid4().hex
-</code></pre>
-<ul>
-<li><code>prepare</code>：调用具体的<code>get/post/...</code>方法之前，会调用它。在这里加入加入一些权限控制。比如说，除了登陆页面外，需要登陆成功了才能进行访问。</li>
-</ul>
-<pre><code class="language-python">class TestController(tornado.web.RequestHandler):
+        self.uuid = uuid.uuid4().hex</code></pre></p>
+</li>
+<li>
+<p><code>prepare</code>：调用具体的<code>get/post/...</code>方法之前，会调用它。在这里加入加入一些权限控制。比如说，除了登陆页面外，需要登陆成功了才能进行访问。
+<pre class="highlight"><code class="language-python">class TestController(tornado.web.RequestHandler):
 
     def prepare(self):
         if not self.request.uri.startswith(self.get_login_url()) \
             and self.current_user is None:
-            self.redirect(self.get_login_url())
-</code></pre>
-<ul>
-<li><code>get/post/put/delete/...</code>：具体业务的方法</li>
-<li><code>get_error_html</code>：当有异常抛出的时候会调用它, 比方说，我们要渲染自己的错误页面</li>
-</ul>
-<pre><code class="language-python">def get_error_html(self, status_code, **kwargs):
+            self.redirect(self.get_login_url())</code></pre></p>
+</li>
+<li>
+<p><code>get/post/put/delete/...</code>：具体业务的方法</p>
+</li>
+<li>
+<p><code>get_error_html</code>：当有异常抛出的时候会调用它, 比方说，我们要渲染自己的错误页面
+<pre class="highlight"><code class="language-python">def get_error_html(self, status_code, **kwargs):
     return self.render_string(
         'my_error.html', code=code, message=message, exception=exception
-    )
-</code></pre>
-<ul>
-<li><code>finish</code>：这个是一个很<strong>重要</strong>的方法，因为tornado最后总会调用finish一次，且仅仅调用一次。这个是由于它是异步框架的原因。</li>
+    )</code></pre></p>
+</li>
+<li>
+<p><code>finish</code>：这个是一个很<strong>重要</strong>的方法，因为tornado最后总会调用finish一次，且仅仅调用一次。这个是由于它是异步框架的原因。</p>
+</li>
 </ul>
 <p>除了上面的调用顺序中的几个方法，常用的就是下面的了:</p>
 <ul>
-<li><code>get_current_user</code>：得到当前用户，这个需要自己重写。一般的做法，从cookie中找到相应的session信息，再通过查session或者查db找到具体的用户</li>
-</ul>
-<pre><code class="language-python">def get_current_user(self):
-    username = self.get_secure_cookie(&quot;user&quot;)
-    return self.db.get(&quot;select * from user where username = %s&quot;, username) if username else None
-</code></pre>
-<ul>
-<li><code>redirect</code>：302跳转到某个地址。我一般喜欢封装一下，封装为：</li>
-</ul>
-<pre><code class="language-python">def redirect_to(self, path, notice = None):
+<li>
+<p><code>get_current_user</code>：得到当前用户，这个需要自己重写。一般的做法，从cookie中找到相应的session信息，再通过查session或者查db找到具体的用户
+<pre class="highlight"><code class="language-python">def get_current_user(self):
+    username = self.get_secure_cookie("user")
+    return self.db.get("select * from user where username = %s", username) if username else None</code></pre></p>
+</li>
+<li>
+<p><code>redirect</code>：302跳转到某个地址。我一般喜欢封装一下，封装为：
+<pre class="highlight"><code class="language-python">def redirect_to(self, path, notice = None):
     self.notice(notice)
-    return self.redirect(path)
-</code></pre>
-<p>这里的notice其实类似于rails中的flash。利用cookie实现的。代码如下：</p>
-<pre><code class="language-python">def notice(self, value = None):
+    return self.redirect(path)</code></pre></p>
+</li>
+</ul>
+<p>这里的notice其实类似于rails中的flash。利用cookie实现的。代码如下：
+<pre class="highlight"><code class="language-python">def notice(self, value = None):
     if value is not None:
         _value = urllib2.quote(value.encode('utf-8'), 'true')
         self.set_cookie(self.FLASH_COOKIE_KEY, _value)
     else:
         v = self.get_cookie(self.FLASH_COOKIE_KEY, None)
         self.clear_cookie(self.FLASH_COOKIE_KEY)
-        return urllib.unquote_plus(v).decode('utf-8') if v is not None else v
-</code></pre>
+        return urllib.unquote_plus(v).decode('utf-8') if v is not None else v</code></pre></p>
 <ul>
-<li><code>render</code>：渲染某个页面，同样我也细化封装一下：</li>
-</ul>
-<pre><code class="language-python">def render_view(self, view_name, notice = None, **kwargs):
+<li><code>render</code>：渲染某个页面，同样我也细化封装一下：
+<pre class="highlight"><code class="language-python">def render_view(self, view_name, notice = None, **kwargs):
     kwargs.update(filters)
     _notice = notice or self.notice()
-    return self.render(view_name, notice = _notice, **kwargs)
-</code></pre>
-<p>这样我就可以传入更多的默认渲染的东西</p>
+    return self.render(view_name, notice = _notice, **kwargs)</code></pre>
+这样我就可以传入更多的默认渲染的东西</li>
+</ul>
 <h3 id="db">DB操作</h3>
 <p>tornado 的db操作非常简单。简单到没有。仅仅只是对 mysql提供了基本的封装。</p>
 <ul>
-<li>打开连接：</li>
-</ul>
-<pre><code class="language-python">db = database.Connection(host, database, user=None, password=None, max_idle_time=7 * 3600)
-</code></pre>
-<ul>
-<li>查询多条记录</li>
-</ul>
-<pre><code class="language-python"># 可能sql注入
-for user in db.query(&quot;SELECT * FROM user WHERE gender='f'&quot;): 
+<li>
+<p>打开连接：
+<pre class="highlight"><code class="language-python">db = database.Connection(host, database, user=None, password=None, max_idle_time=7 * 3600)</code></pre></p>
+</li>
+<li>
+<p>查询多条记录
+<pre class="highlight"><code class="language-python"># 可能sql注入
+for user in db.query("SELECT * FROM user WHERE gender='f'"): 
     print user.username, user.password
 
 # 没有sql注入
-db.query(&quot;SELECT * FROM user WHERE gender = %s&quot;, 'f'): 
-</code></pre>
-<ul>
-<li>查询单条记录：永远只是返回第1条</li>
+db.query("SELECT * FROM user WHERE gender = %s", 'f'): </code></pre></p>
+</li>
+<li>
+<p>查询单条记录：永远只是返回第1条
+<pre class="highlight"><code class="language-python">db.get('SELECT * FROM user WHERE id = 1') # 可能有sql注入    
+db.get('SELECT * FROM user WHERE id = %s', 1) # 没有sql注入</code></pre></p>
+</li>
+<li>
+<p>删除/修改/插入
+<pre class="highlight"><code class="language-python">db.execute(sql, *parameters)</code></pre></p>
+</li>
+<li>
+<p>批量 的删除/修改/插入
+<pre class="highlight"><code class="language-python">db.executemany(sql, *parameters)</code></pre>
+<strong>注意：</strong> <em>没有transaction的处理。</em></p>
+</li>
 </ul>
-<pre><code class="language-python">db.get('SELECT * FROM user WHERE id = 1') # 可能有sql注入    
-db.get('SELECT * FROM user WHERE id = %s', 1) # 没有sql注入
-</code></pre>
-<ul>
-<li>删除/修改/插入</li>
-</ul>
-<pre><code class="language-python">db.execute(sql, *parameters)
-</code></pre>
-<ul>
-<li>批量 的删除/修改/插入</li>
-</ul>
-<pre><code class="language-python">db.executemany(sql, *parameters)
-</code></pre>
-<p><strong>注意：</strong> <em>没有transaction的处理。</em></p>
 <h3 id="templates">Templates</h3>
 <p>tornado的templates，就是MVC的V，即：view。对于页面上常用的tag，基本和django一样。最大的差距就是所有的都是end结尾。不像django的endif等等。</p>
 <p><strong>常用tag</strong></p>
 <ul>
-<li><code>if</code> 比django的好，django没有<code>elif</code></li>
+<li>
+<p><code>if</code> 比django的好，django没有<code>elif</code>
+<pre class="highlight"><code class="language-python">{% if %} {% elif %} {% else %} {% end %}</code></pre></p>
+</li>
+<li>
+<p><code>block</code> 和 django不同点：不需要 endblock
+<pre class="highlight"><code class="language-python">{% block %} {% end %} </code></pre></p>
+</li>
+<li>
+<p><code>extend</code>和django的一样
+<pre class="highlight"><code class="language-python">{% extend %}</code></pre></p>
+</li>
+<li>
+<p><code>for</code>循环和django一样
+<pre class="highlight"><code class="language-python">{% for %} {% end %}</code></pre></p>
+</li>
+<li>
+<p>设置变量：</p>
+</li>
 </ul>
-<pre><code class="language-python">{% if %} {% elif %} {% else %} {% end %}
-</code></pre>
+<p>一个变量 name = 'poy', 这个对于一些navgation的高亮很有帮助。
+<pre class="highlight"><code class="language-python">{% set name='poy' %}</code></pre></p>
 <ul>
-<li><code>block</code> 和 django不同点：不需要 endblock</li>
+<li>嵌入python代码：django里面只能是filter，但是Tornado是允许在template里面直接写python的代码的：
+<pre class="highlight"><code class="language-python">{{ 'RyanPoy'.lower() }}</code></pre>
+对于python代码，可以直接封装成方法，然后，tornado可以直接在handler render 一个template的的时候把相应的function以key-value的方式传过来，这样就可以直接使用了。</li>
 </ul>
-<pre><code class="language-python">{% block %} {% end %} 
-</code></pre>
-<ul>
-<li><code>extend</code>和django的一样</li>
-</ul>
-<pre><code class="language-python">{% extend %}
-</code></pre>
-<ul>
-<li><code>for</code>循环和django一样</li>
-</ul>
-<pre><code class="language-python">{% for %} {% end %}
-</code></pre>
-<ul>
-<li>设置变量：</li>
-</ul>
-<p>一个变量 name = 'poy', 这个对于一些navgation的高亮很有帮助。</p>
-<pre><code class="language-python">{% set name='poy' %}
-</code></pre>
-<ul>
-<li>嵌入python代码：django里面只能是filter，但是Tornado是允许在template里面直接写python的代码的：</li>
-</ul>
-<pre><code class="language-python">{{ 'RyanPoy'.lower() }}
-</code></pre>
-<p>对于python代码，可以直接封装成方法，然后，tornado可以直接在handler render 一个template的的时候把相应的function以key-value的方式传过来，这样就可以直接使用了。</p>
-<pre><code class="language-python">class HelloHandler(WebHandler):
-    return self.render('test.html', hello = lambda name: 'hello, %s' % name)
-</code></pre>
-<p>然后在<code>test.html</code>里面写：</p>
-<pre><code class="language-python">{{ hello('pengyi') }}
-</code></pre>
+<p><pre class="highlight"><code class="language-python">class HelloHandler(WebHandler):
+    return self.render('test.html', hello = lambda name: 'hello, %s' % name)</code></pre>
+然后在<code>test.html</code>里面写：
+<pre class="highlight"><code class="language-python">{{ hello('pengyi') }}</code></pre></p>
 <h3 id="route">Route</h3>
-<p>tornado的url就是下面的形式：</p>
-<pre><code class="language-python">urls = [
+<p>tornado的url就是下面的形式：
+<pre class="highlight"><code class="language-python">urls = [
     (r'/user/show/', UserShow),
     (r'/user/login/', UserLogin),
     (r'/group/maillist/', GroupMaillist),
-]
-</code></pre>
-<p>这里给出一个封装，用来自动的进行route，首先要求，项目目录如下：</p>
+]</code></pre>
+这里给出一个封装，用来自动的进行route，首先要求，项目目录如下：</p>
 <p><img alt="目录" src="/static/images/tornado-1.png" /></p>
 <p>接下来，就是url的自动生成了。我写了一个route.py的文件。
-route.py</p>
-<pre><code class="language-python">#coding: utf-8
+route.py
+<pre class="highlight"><code class="language-python">#coding: utf-8
 import os
 import sys
 
@@ -461,11 +449,10 @@ if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] in ('all', 'reasoning', 'special'):
         name = sys.argv[1]
     urls = eval(name)()
-    show(urls)
-</code></pre>
+    show(urls)</code></pre></p>
 <p>对于controller的写法如下：</p>
-<p>company_controller.py</p>
-<pre><code class="language-python">#coding: utf-8
+<p>company_controller.py
+<pre class="highlight"><code class="language-python">#coding: utf-8
 
 from app.controllers.base_controller import BaseController
 
@@ -510,8 +497,7 @@ class Update(BaseController):
         pass
 
     def post(self):
-        pass
-</code></pre>
+        pass</code></pre></p>
 <h2 id="django">合体Django</h2>
 <p>之前有提过，tornado的db非常的简单，只有一个基于mysql的基础封装，而这个封装甚至连事务都没有。所以，如果我们采用tornado的db能做的事情就是写sql语句。</p>
 <p>对于小型的系统还好，对于一些中/中大/大型业务系统，sql写起来是比较费事费时的，成本很高，尤其是以后的维护成本。</p>
@@ -520,19 +506,17 @@ class Update(BaseController):
 <p>好吧，程序员总是很懒惰的，哪怕一个字母都不愿意多敲。程序员总是很贪心的，哪怕能多一片叶子，也要仅仅的攥着手中。</p>
 <p>现在的实际情况就来了，我们能不能利用DJango提供的ORM和Admin，为Tornado使用呢 ？</p>
 <p>经过一天的研究，答案是肯定的。下面，我们就来具体的讲讲。</p>
-<p><strong>生成Django项目</strong></p>
-<pre><code class="language-shell">django-admin.py startproject Tornadjango
-</code></pre>
+<p><strong>生成Django项目</strong>
+<pre class="highlight"><code class="language-shell">django-admin.py startproject Tornadjango</code></pre></p>
 <p><strong>创建一个app</strong>
-我习惯只有一个app，且命名为app</p>
-<pre><code class="language-shell">cd Tornadjango
-python manage.py startapp app
-</code></pre>
+我习惯只有一个app，且命名为app
+<pre class="highlight"><code class="language-shell">cd Tornadjango
+python manage.py startapp app</code></pre></p>
 <p><strong>修改app目录下的文件名</strong>
 这个也是我习惯了的命名规则, 创建controllers.py, 删除views.py，在工程目录下面创建application.py。此时，目录结构应该如下：</p>
 <p><img alt="目录结构" src="/assets/images/tornado-2.png" /></p>
 <h3 id="urlpy">修改 url.py</h3>
-<pre><code class="language-python">#coding: utf-8
+<pre class="highlight"><code class="language-python">#coding: utf-8
 
 from django.conf.urls.defaults import patterns, include
 from django.contrib import admin
@@ -546,10 +530,9 @@ MEDIA_ROOT = os.path.join(os.path.dirname(django.__file__), 'contrib', 'admin', 
 urlpatterns = patterns('',
     (r'^admin/media/(?P&lt;path&gt;.*)$', 'django.views.static.serve',{'document_root': MEDIA_ROOT, 'show_indexes': False}),
     (r'^admin/', include(admin.site.urls)),
-)
-</code></pre>
+)</code></pre>
 <h3 id="settingspy">修改settings.py</h3>
-<pre><code class="language-python"># Django settings for Tornadjango project.
+<pre class="highlight"><code class="language-python"># Django settings for Tornadjango project.
 import os
 
 DEBUG = True
@@ -598,32 +581,32 @@ USE_I18N = True
 USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: &quot;/home/media/media.lawrence.com/media/&quot;
+# Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = ''
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
-# Examples: &quot;http://media.lawrence.com/media/&quot;, &quot;http://example.com/media/&quot;
+# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
-# in apps' &quot;static/&quot; subdirectories and in STATICFILES_DIRS.
-# Example: &quot;/home/media/media.lawrence.com/static/&quot;
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = ''
 
 # URL prefix for static files.
-# Example: &quot;http://media.lawrence.com/static/&quot;
+# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
-# Examples: &quot;http://foo.com/static/admin/&quot;, &quot;/static/admin/&quot;.
+# Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = '/admin/media/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like &quot;/home/html/static&quot; or &quot;C:/www/django/static&quot;.
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
@@ -657,7 +640,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like &quot;/home/html/django_templates&quot; or &quot;C:/www/django/templates&quot;.
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
@@ -698,10 +681,9 @@ LOGGING = {
             'propagate': True,
         },
     }
-}
-</code></pre>
+}</code></pre>
 <h3 id="appcontrollerpy">修改app.controller.py</h3>
-<pre><code class="language-python">#coding: utf8
+<pre class="highlight"><code class="language-python">#coding: utf8
 
 import tornado.web
 
@@ -709,10 +691,9 @@ import tornado.web
 class HelloController(tornado.web.RequestHandler):
 
     def get(self):
-        self.write('Hello, world ! \n')
-</code></pre>
+        self.write('Hello, world ! \n')</code></pre>
 <h3 id="applicationpy">修改application.py</h3>
-<pre><code class="language-python">#coding: utf-8
+<pre class="highlight"><code class="language-python">#coding: utf-8
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -731,14 +712,14 @@ tornado_env = dict(
 #    template_path       = os.path.join(os.path.dirname(__file__), 'templates'),
 #    static_path         = os.path.join(os.path.dirname(__file__), 'static'),
     xsrf_cookies        = False,
-    cookie_secret       = &quot;11oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=&quot;,
+    cookie_secret       = "11oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
     autoescape          = None,
     debug               = settings.DEBUG,
     login_url           = '/',
 )
 
 
-if __name__ == &quot;__main__&quot;:
+if __name__ == "__main__":
     options.parse_command_line()
     address, admin_port, app_port = '0.0.0.0', options.options.admin_port, options.options.app_port 
 
@@ -758,46 +739,39 @@ if __name__ == &quot;__main__&quot;:
     app_listen()
     admin_listen()
 
-    tornado.ioloop.IOLoop.instance().start()
-</code></pre>
+    tornado.ioloop.IOLoop.instance().start()</code></pre>
 <h3 id="db_1">创建db</h3>
-<pre><code class="language-python">python manager.py syncdb
-</code></pre>
+<pre class="highlight"><code class="language-python">python manager.py syncdb</code></pre>
 <h3 id="_3">启动</h3>
-<pre><code class="language-python">python application.py
-</code></pre>
+<pre class="highlight"><code class="language-python">python application.py</code></pre>
 <h3 id="_4">浏览器访问</h3>
-<pre><code class="language-python">http://localhost:9901/            # tornado app
-http://localhost:9900/admin/      # django admin
-</code></pre>
+<pre class="highlight"><code class="language-python">http://localhost:9901/            # tornado app
+http://localhost:9900/admin/      # django admin</code></pre>
 <p>这样整个步骤就完成了。</p>
 <h3 id="django_1">加载Django环境</h3>
-<p>django很优秀的，只需要有一个settings.py就把django需要的环境都包含了。所以，在application.py的上面要写上：</p>
-<pre><code class="language-python">    import os
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-</code></pre>
+<p>django很优秀的，只需要有一个settings.py就把django需要的环境都包含了。所以，在application.py的上面要写上：
+<pre class="highlight"><code class="language-python">    import os
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'</code></pre></p>
 <h3 id="django_2">启动django服务</h3>
-<p>django是http基于wsgi的，所以如果你要用django的admin，就必须启动wsgi。所以，在application.py里面有这样的代码：</p>
-<pre><code class="language-python">def admin_listen():
+<p>django是http基于wsgi的，所以如果你要用django的admin，就必须启动wsgi。所以，在application.py里面有这样的代码：
+<pre class="highlight"><code class="language-python">def admin_listen():
     wsgi_app = wsgi.WSGIContainer(WSGIHandler())
     tornado_app = tornado.web.Application([
         ('/admin/(.*)', tornado.web.FallbackHandler, dict(fallback=wsgi_app)),
     ])
     tornado.httpserver.HTTPServer(tornado_app).listen(admin_port)
     print 'run admin platform on (%s:%s)' % (address, admin_port)
-
-</code></pre>
+</code></pre></p>
 <h3 id="urlspy">要修改工程的urls.py</h3>
-<p>对于纯粹的django环境，django的admin对应的url可以自动的找到。但是由于我们是通过tornado的IOLoop代理过去的，就需要自己手动配置。所以，在urls.py里面有这样的代码：</p>
-<pre><code class="language-python">admin.autodiscover()
+<p>对于纯粹的django环境，django的admin对应的url可以自动的找到。但是由于我们是通过tornado的IOLoop代理过去的，就需要自己手动配置。所以，在urls.py里面有这样的代码：
+<pre class="highlight"><code class="language-python">admin.autodiscover()
 
 MEDIA_ROOT = os.path.join(os.path.dirname(django.__file__), 'contrib', 'admin', 'media')
 
 urlpatterns = patterns('',
     (r'^admin/media/(?P&lt;path&gt;.*)$', 'django.views.static.serve',{'document_root': MEDIA_ROOT, 'show_indexes': False}),
     (r'^admin/', include(admin.site.urls)),
-)
-</code></pre>
+)</code></pre></p>
 <h3 id="settingspyadmin_media_prefix">要修改settings.py里面的ADMIN_MEDIA_PREFIX</h3>
 <p>ADMIN_MEDIA_PREFIX 需要配置成为urls.py里面的urlpatterns对应的地址，否则会找不到静态资源</p>
 <h2 id="djangoorm">使用Django的orm</h2>
@@ -809,42 +783,41 @@ urlpatterns = patterns('',
 <h3 id="commit_on_success">对于commit_on_success的方式</h3>
 <p>一定要注意一下：要自动提交，需要django的middleware。但是django的middelware又只有在django的http环境中才生效，那么对于tornado的http环境，如何生效呢？</p>
 <p>大家都知道django的middelware是在进入request之后，和response之前。所以，我们完全可以考虑直接把middelware的方法拿来用。下面是django的traction middelware的源代码。</p>
-<p>django.middleware.transaction.py</p>
-<pre><code class="language-python">class TransactionMiddleware(object):
-    &quot;&quot;&quot;
+<p>django.middleware.transaction.py
+<pre class="highlight"><code class="language-python">class TransactionMiddleware(object):
+    """
     Transaction middleware. If this is enabled, each view function will be run
     with commit_on_response activated - that way a save() doesn't do a direct
     commit, the commit is done when a successful response is created. If an
     exception happens, the database is rolled back.
-    &quot;&quot;&quot;
+    """
     def process_request(self, request):
-        &quot;&quot;&quot;Enters transaction management&quot;&quot;&quot;
+        """Enters transaction management"""
         transaction.enter_transaction_management()
         transaction.managed(True)
 
     def process_exception(self, request, exception):
-        &quot;&quot;&quot;Rolls back the database and leaves transaction management&quot;&quot;&quot;
+        """Rolls back the database and leaves transaction management"""
         if transaction.is_dirty():
             transaction.rollback()
         transaction.leave_transaction_management()
 
     def process_response(self, request, response):
-        &quot;&quot;&quot;Commits and leaves transaction management.&quot;&quot;&quot;
+        """Commits and leaves transaction management."""
         if transaction.is_managed():
             if transaction.is_dirty():
                 transaction.commit()
             transaction.leave_transaction_management()
-        return response
-</code></pre>
-<p>所以，我们完全可以写这样一个BaseController，用来解决这个问题</p>
-<p>base_controller.py</p>
-<pre><code class="language-python">class BaseController(tornado.web.RequestHandler):
+        return response</code></pre>
+所以，我们完全可以写这样一个BaseController，用来解决这个问题</p>
+<p>base_controller.py
+<pre class="highlight"><code class="language-python">class BaseController(tornado.web.RequestHandler):
 
     def initialize(self, application, request, **kwargs):
         self.has_except = False
 
     def prepare(self):
-        &quot;&quot;&quot;Enters transaction management&quot;&quot;&quot;
+        """Enters transaction management"""
         transaction.enter_transaction_management()
         transaction.managed(True)
 
@@ -868,13 +841,12 @@ urlpatterns = patterns('',
                     transaction.commit()
                 transaction.leave_transaction_management()
             django.db.reset_queries()
-            django.db.close_connection()
-</code></pre>
-<p>这样就达到了自动提交或者回滚transaction的目的。</p>
+            django.db.close_connection()</code></pre>
+这样就达到了自动提交或者回滚transaction的目的。</p>
 <h2 id="_6">异步调用</h2>
 <p>Tornado是一个异步框架，在单独的实例跑的时候，要注意。对于一些响应很长的操作，需要进行异步处理。</p>
-<p>比方说，有一个第3方的api调用，一般都修改为异步处理。这样能保证你的服务正常被响应，而不会出现阻塞。</p>
-<pre><code class="language-python">class Download(BaseController):
+<p>比方说，有一个第3方的api调用，一般都修改为异步处理。这样能保证你的服务正常被响应，而不会出现阻塞。
+<pre class="highlight"><code class="language-python">class Download(BaseController):
 
     @tornado.web.asynchronous
     def get(self):
@@ -883,32 +855,29 @@ urlpatterns = patterns('',
             self.finish(response.body)
 
         url = self.get_argument('download_url', '', True)
-        httpclient.AsyncHTTPClient().fetch(url, _)
-</code></pre>
-<p>上面是这种写法比较麻烦，后来在tornado中加入了一个新的写方，叫做gen，看起来好像写同步代码一样。</p>
-<pre><code class="language-python">class Download(BaseController):
+        httpclient.AsyncHTTPClient().fetch(url, _)</code></pre>
+上面是这种写法比较麻烦，后来在tornado中加入了一个新的写方，叫做gen，看起来好像写同步代码一样。
+<pre class="highlight"><code class="language-python">class Download(BaseController):
 
     @tornado.web.asynchronous
     @gen.engine
     def get(self):
         url = self.get_argument('download_url', '', True)
         response = yield gen.Task(client.fetch, url)
-        self.finish(response.body)
-</code></pre>
-<p><strong>注意 @tornado.web.asynchronous 要在 @gen.engine 之前。</strong>
+        self.finish(response.body)</code></pre>
+<strong>注意 @tornado.web.asynchronous 要在 @gen.engine 之前。</strong>
 是不是简洁了很多？但原理是什么？</p>
 <h2 id="_7">基础知识</h2>
 <h3 id="yieldgenerator">yield和generator</h3>
 <p>对于python中的yield, 大家应该都知道。</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+<pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 
 def foo(n):
     for i in range(n):
         yield i
 
 for x in foo(2):
-    print x
-</code></pre>
+    print x</code></pre>
 <p>上面的代码输出的就是1，2。注意上面的代码，可以看到foo(1)其实返回的就是一个generator。
 可以理解为一旦遇到yield的语句，就会返回一个generator。看看官方的解释：</p>
 <blockquote>
@@ -916,7 +885,7 @@ for x in foo(2):
 </blockquote>
 <p>从上面的基本代码来看，我们可以简单的理解为：遇到yield i, 就返回i，并且产生函数的临时中断，控制权交给外面的代码。等外面的代码消耗了这个返回值后，控制权在交回给函数，从之前的临时中断处再接着执行。</p>
 <p>当然，上述的理解并不完全正确。我们再来看看下面的代码。</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+<pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 def foo(n):
     for i in range(n):
         yield i
@@ -924,23 +893,21 @@ def foo(n):
 g = foo(2)      # 1
 print g.next()  # 2
 print g.next()  # 3
-print g.next()  # 4
-</code></pre>
-<p>上面的代码输出的是：</p>
-<pre><code class="language-python">0
+print g.next()  # 4</code></pre>
+<p>上面的代码输出的是：
+<pre class="highlight"><code class="language-python">0
 1
 Traceback (most recent call last):
-    File &quot;/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py&quot;, line 10, in &lt;module&gt;
+    File "/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py", line 10, in &lt;module&gt;
     print g.next()
-StopIteration
-</code></pre>
+StopIteration</code></pre></p>
 <p>现在明白了么？因为foo方法里面有yield，所以调用它总是会返回一个generator。所以</p>
 <p>1 得到一个generator，且在1的时候，foo函数不会有任何的执行。在解释器分析代码的时候，发现foo里面有yield，就已经把它当成一个generator了。</p>
 <p>2 得到generator的第一个值 0</p>
 <p>3 得到generator的第二个值 1</p>
 <p>4 由于generator已经完毕，所以，抛出StopIteration异常</p>
-<p>再来看下面的代码：</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+<p>再来看下面的代码：
+<pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 
 def foo(n):
     for i in range(n):
@@ -950,21 +917,19 @@ def foo(n):
 g = foo(2)       # 1
 print g.next()   # 2
 print g.next()   # 3
-print g.next()   # 4
-</code></pre>
-<p>这个时候，结果是：</p>
-<pre><code class="language-python">0
+print g.next()   # 4</code></pre></p>
+<p>这个时候，结果是：
+<pre class="highlight"><code class="language-python">0
 v_0 = None
 1
 v_1 = None
 Traceback (most recent call last):
-    File &quot;/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py&quot;, line 11, in &lt;module&gt;
+    File "/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py", line 11, in &lt;module&gt;
     print g.next()
-StopIteration
-</code></pre>
-<p>发现了么？ v的值是None哦。如果你是一个初学者，你肯定会认为 v 的值应该等于i。但是其实不是的。那么v为什么等于None呢 ？</p>
-<p>再看下面的代码：</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+StopIteration</code></pre>
+发现了么？ v的值是None哦。如果你是一个初学者，你肯定会认为 v 的值应该等于i。但是其实不是的。那么v为什么等于None呢 ？</p>
+<p>再看下面的代码：
+<pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 def foo(n):
     for i in range(n):
         v = yield i
@@ -972,16 +937,14 @@ def foo(n):
 
 g = foo(2)
 print g.next()
-print g.send('a')
-</code></pre>
-<p>结果如下：</p>
-<pre><code class="language-python">0
+print g.send('a')</code></pre>
+结果如下：
+<pre class="highlight"><code class="language-python">0
 v_0 = a
-1
-</code></pre>
-<p>可以看出。g.send('a')的时候，把'a'的值付给了v。</p>
-<p>那我们这样写呢？</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+1</code></pre>
+可以看出。g.send('a')的时候，把'a'的值付给了v。</p>
+<p>那我们这样写呢？
+<pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 
 def foo(n):
     for i in range(n):
@@ -989,15 +952,13 @@ def foo(n):
         print 'v_%s = %s' % (i, v)
 
 g = foo(2)
-print g.send('a')
-</code></pre>
-<p>出现了如下的错误：</p>
-<pre><code class="language-python">    Traceback (most recent call last):
-      File &quot;/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py&quot;, line 9, in &lt;module&gt;
+print g.send('a')</code></pre>
+出现了如下的错误：
+<pre class="highlight"><code class="language-python">    Traceback (most recent call last):
+      File "/Users/ryan/Workspace/myself/Tornadjango/app/tmp.py", line 9, in &lt;module&gt;
         print g.send('a')
-    TypeError: can't send non-None value to a just-started generator
-</code></pre>
-<p>所以得出如下的结论：</p>
+    TypeError: can't send non-None value to a just-started generator</code></pre>
+所以得出如下的结论：</p>
 <ul>
 <li>
 <p><strong>generator.next() 等价于 generator.send(None)</strong></p>
@@ -1010,8 +971,8 @@ print g.send('a')
 </li>
 </ul>
 <p>前面，我们说过tornado的web异步调用。下面我们来分析一下。</p>
-<p>先看下面的代码。</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+<p>先看下面的代码。
+<pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 from tornado import ioloop, httpclient
 
 def deal(response):
@@ -1024,15 +985,13 @@ def download(url):
     http_client.fetch(url, deal)
 
 
-download(&quot;http://www.baidu.com/&quot;)    
-ioloop.IOLoop.instance().start()
-</code></pre>
-<p>结果如下：</p>
-<pre><code class="language-python">response.length = 10233
-</code></pre>
+download("http://www.baidu.com/")    
+ioloop.IOLoop.instance().start()</code></pre>
+结果如下：
+<pre class="highlight"><code class="language-python">response.length = 10233</code></pre></p>
 <p>很明显的可以看出。http_client的fetch只是一个异步调用。需要传递一个deal方法，作为callback来去处理fetch后的response。</p>
-<p>如果我们用tornado的gen.engine方式可以这样写：</p>
-<pre><code class="language-python">from tornado import ioloop, httpclient, gen
+<p>如果我们用tornado的gen.engine方式可以这样写：
+<pre class="highlight"><code class="language-python">from tornado import ioloop, httpclient, gen
 from tornado.gen import Task
 
 @gen.engine
@@ -1042,12 +1001,11 @@ def download(url):
     print 'response.length =', len(response.body) 
     ioloop.IOLoop.instance().stop()
 
-download(&quot;http://www.baidu.com/&quot;)
+download("http://www.baidu.com/")
 
-ioloop.IOLoop.instance().start()
-</code></pre>
-<p>这样就好像你在写同步代码一样。而不需要想之前那样处理回调了。如果要你实现一个gen.engine 和 Task 你会怎么实现呢？根据我们之前谈的<a href="#yield和generator">yield 和 generator</a>，我们可以这样写代码：</p>
-<pre><code class="language-python"># -*- coding:utf-8 -*-
+ioloop.IOLoop.instance().start()</code></pre>
+这样就好像你在写同步代码一样。而不需要想之前那样处理回调了。如果要你实现一个gen.engine 和 Task 你会怎么实现呢？根据我们之前谈的<a href="#yield和generator">yield 和 generator</a>，我们可以这样写代码：</p>
+<p><pre class="highlight"><code class="language-python"># -*- coding:utf-8 -*-
 from tornado import ioloop, httpclient
 import functools
 
@@ -1087,14 +1045,13 @@ def download(url):
     ioloop.IOLoop.instance().stop()
 
 
-download(&quot;http://www.baidu.com/&quot;)
+download("http://www.baidu.com/")
 ioloop.IOLoop.instance().start()
 
 这个时候，结果是：
 ```python
-response.length = 10233
-</code></pre>
-<p>这样，属于我们自己的engine和task就出来了。</p>
+response.length = 10233</code></pre>
+这样，属于我们自己的engine和task就出来了。</p>
 </div>
 </main>
 
@@ -1105,5 +1062,6 @@ response.length = 10233
 
     <!-- 你的 JavaScript 脚本在这里 -->
     
+  </div>
 </body>
 </html>

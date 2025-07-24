@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
 
-    <link rel="stylesheet" href="/assets/styles/main.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
-    
+  <link rel="stylesheet" href="../../assets/styles/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+  
 </head>
 <body>
+  <div class="body-wrapper">
     <header><nav class="nav">
   <div class="nav-container">
     <a href="/">
@@ -46,7 +47,7 @@
     <br />
     <span>on</span>
     <time datetime="2008-07-24 00:00:00 +0000">
-      July 24, 2008
+      Jul 24, 2008
     </time>
   </div>
 
@@ -64,7 +65,7 @@
 <p><img alt="Imgurl" src="/assets/images/hibernate-2.gif" /></p>
 <h3 id="pojo">Pojo</h3>
 <p>根据实体，创建类User，代码如下：</p>
-<pre><code class="language-java">@SuppressWarnings(&quot;serial&quot;)
+<pre class="highlight"><code class="language-java">@SuppressWarnings("serial")
 public class User implements java.io.Serializable {
     private String id;
     private String name;
@@ -73,57 +74,53 @@ public class User implements java.io.Serializable {
     public void setId(String id) { this.id = id; }  
     public String getName() { return this.name; }
     public void setName(String name) {this.name = name;}
-}
-</code></pre>
+}</code></pre>
 <h3 id="db">DB</h3>
 <p>根据实体，创建数据表。sql如下：</p>
-<pre><code class="language-sql">use HibernateQuickUse;
+<pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists User;
 create table user (
     id varchar(32) primary key,
     name varchar(32)
-);
-</code></pre>
+);</code></pre>
 <p>这里的id，我没有采用Integer auto_increment, 原因是为了数据库的数据能方便的导入到另外一种数据库里面，比方说：oracle。当然，这个是以牺牲部分效率为前提的。因为id是integer的，能更加快速查询。不过，从数据库会自动为 primary key 建立 index来看，效率也不会相差太多。</p>
 <h3 id="hibernatecfgxml">hibernate.cfg.xml</h3>
 <p>要想通过hibernate访问数据库。首先要建立描述数据库的文件：hibernate.cfg.xml。放到src下面。内容如下：</p>
-<pre><code class="language-xml">&lt;!DOCTYPE hibernate-configuration PUBLIC  
-            &quot;-//Hibernate/Hibernate Configuration DTD 3.0//EN&quot;  
-            &quot;http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd&quot;&gt;  
+<pre class="highlight"><code class="language-xml">&lt;!DOCTYPE hibernate-configuration PUBLIC  
+            "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+            "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"&gt;  
 &lt;hibernate-configuration&gt;  
     &lt;session-factory&gt; 
         &lt;!-- dialect, 这个对应着hibernate生成哪种数据库的sql。--&gt;
-        &lt;property name=&quot;dialect&quot;&gt;org.hibernate.dialect.MySQLDialect&lt;/property&gt;  
-        &lt;property name=&quot;connection.url&quot;&gt;jdbc:mysql://localhost:3306/hibernatequickUse&lt;/property&gt;  
-        &lt;property name=&quot;connection.username&quot;&gt;root&lt;/property&gt;  
-        &lt;property name=&quot;connection.password&quot;&gt;root&lt;/property&gt;  
-        &lt;property name=&quot;connection.driver_class&quot;&gt;com.mysql.jdbc.Driver&lt;/property&gt;  
+        &lt;property name="dialect"&gt;org.hibernate.dialect.MySQLDialect&lt;/property&gt;  
+        &lt;property name="connection.url"&gt;jdbc:mysql://localhost:3306/hibernatequickUse&lt;/property&gt;  
+        &lt;property name="connection.username"&gt;root&lt;/property&gt;  
+        &lt;property name="connection.password"&gt;root&lt;/property&gt;  
+        &lt;property name="connection.driver_class"&gt;com.mysql.jdbc.Driver&lt;/property&gt;  
         &lt;!-- show_sql, 这个是为了调试时候输出sql语句到屏幕用 --&gt;
-        &lt;property name=&quot;show_sql&quot;&gt;true&lt;/property&gt;  
-        &lt;mapping resource=&quot;org/py/hib/quickstart/User.hbm.xml&quot; /&gt;  
+        &lt;property name="show_sql"&gt;true&lt;/property&gt;  
+        &lt;mapping resource="org/py/hib/quickstart/User.hbm.xml" /&gt;  
     &lt;/session-factory&gt;  
-&lt;/hibernate-configuration&gt;
-</code></pre>
+&lt;/hibernate-configuration&gt;</code></pre>
 <h3 id="userhbmxml">User.hbm.xml</h3>
 <p>实体-数据库映射文件 -- 主要是告诉hibernate，这个User类，对应着哪个table，User类里面的那个属性对应着table里面的哪个字段。</p>
-<p>我们可以建立 实体-数据库 的xml映射文件，也可以采用Annotations映射，但是目前只说xml映射方式。如下：</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>我们可以建立 实体-数据库 的xml映射文件，也可以采用Annotations映射，但是目前只说xml映射方式。如下：
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.quickstart.User&quot; table=&quot;user&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;id&quot; length=&quot;32&quot;&gt;  
+    &lt;class name="org.py.hib.quickstart.User" table="user"&gt;  
+        &lt;id name="id" type="java.lang.String" column="id" length="32"&gt;  
             &lt;!-- id的生成策略采用 uuid，也可以是 native等 --&gt;
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;
-        &lt;property name=&quot;name&quot;  type=&quot;java.lang.String&quot; column=&quot;name&quot; length=&quot;32&quot; /&gt;  
+        &lt;property name="name"  type="java.lang.String" column="name" length="32" /&gt;  
     &lt;/class&gt;
-&lt;/hibernate-mapping&gt;
-</code></pre>
+&lt;/hibernate-mapping&gt;</code></pre></p>
 <h3 id="testing">Testing</h3>
 <p>有了上面的准备，那么我们开始来用junit测试.
-我把测试用力放到了test/org.py.hib.quickstart下面。代码如下：</p>
-<pre><code class="language-java">import junit.framework.Assert;
+我把测试用力放到了test/org.py.hib.quickstart下面。代码如下：
+<pre class="highlight"><code class="language-java">import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -134,8 +131,8 @@ import org.junit.Before;
 
 public class QuickStartTest extends TestCase {
     SessionFactory factory;
-    String m_name = &quot;ryanpoy&quot;;
-    String m_name2 = &quot;ryanpoy2&quot;;
+    String m_name = "ryanpoy";
+    String m_name2 = "ryanpoy2";
 
     @Before
     public void setUp() throws Exception {
@@ -144,7 +141,7 @@ public class QuickStartTest extends TestCase {
     }
 
     public void testSave() throws Exception {
-        System.out.println(&quot;\n=== test save ===&quot;);
+        System.out.println("\n=== test save ===");
         User u = new User();
         u.setName(m_name); // 设置用户名 = m_name
 
@@ -175,11 +172,11 @@ public class QuickStartTest extends TestCase {
     }
 
     public void testFind() throws Exception {
-        System.out.println(&quot;=== test find ===&quot;);
+        System.out.println("=== test find ===");
         Session session = null;
         try {
             session = factory.openSession();
-            User u = (User) session.createQuery(&quot; from User&quot;).list().get(0);
+            User u = (User) session.createQuery(" from User").list().get(0);
 
             Assert.assertEquals(true, u.getId() != null);
             Assert.assertEquals(m_name, u.getName());
@@ -200,13 +197,13 @@ public class QuickStartTest extends TestCase {
     }
 
     public void testModify() throws Exception {
-        System.out.println(&quot;\n=== test modify ===&quot;);
+        System.out.println("\n=== test modify ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
-            User u = (User) session.createQuery(&quot; from User&quot;).list().get(0);
+            User u = (User) session.createQuery(" from User").list().get(0);
             u.setName(m_name2);  // 修改用户名 = m_name2.（原来用户名= m_name）
             tran.commit();
 
@@ -228,10 +225,10 @@ public class QuickStartTest extends TestCase {
         /*
          * 修改后再查询
          */
-        System.out.println(&quot;\n=== test find after modify ===&quot;);
+        System.out.println("\n=== test find after modify ===");
         try {
             session = factory.openSession();
-            User u = (User) session.createQuery(&quot; from User&quot;).list().get(0);
+            User u = (User) session.createQuery(" from User").list().get(0);
 
             Assert.assertEquals(true, u.getId() != null);
             Assert.assertEquals(m_name2, u.getName());
@@ -252,14 +249,14 @@ public class QuickStartTest extends TestCase {
     }
 
     public void testDelete() throws Exception {
-        System.out.println(&quot;\n=== test delete ===&quot;);
+        System.out.println("\n=== test delete ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            User u = (User) session.createQuery(&quot; from User&quot;).list().get(0);
+            User u = (User) session.createQuery(" from User").list().get(0);
             session.delete(u);
             tran.commit();
 
@@ -281,10 +278,10 @@ public class QuickStartTest extends TestCase {
         /*
          * 删除后再查询
          */
-        System.out.println(&quot;\n=== test find after delete ===&quot;);
+        System.out.println("\n=== test find after delete ===");
         try {
             session = factory.openSession();
-            Integer num = (Integer) session.createQuery(&quot; from User&quot;).list().size();
+            Integer num = (Integer) session.createQuery(" from User").list().size();
 
             Assert.assertEquals(0, num.intValue());
         } catch (Exception ex) {
@@ -307,11 +304,10 @@ public class QuickStartTest extends TestCase {
     public void tearDown() throws Exception {
         factory.close();
     }
-}
-</code></pre>
-<p>运行后，我们很欣慰的看到一路绿灯，全部通过了。那么测试没有问题。呵呵(这里的测试可能还不完善。请大家指出。前面说过，我对测试这块也不熟)。</p>
-<p>看控制台，会输出如下信息：</p>
-<pre><code class="language-sql">=== test save ===
+}</code></pre>
+运行后，我们很欣慰的看到一路绿灯，全部通过了。那么测试没有问题。呵呵(这里的测试可能还不完善。请大家指出。前面说过，我对测试这块也不熟)。</p>
+<p>看控制台，会输出如下信息：
+<pre class="highlight"><code class="language-sql">=== test save ===
 Hibernate: insert into hibernatequickuse.user (name, id) values (?, ?)
 
 === test find ===
@@ -329,16 +325,15 @@ Hibernate: select user0_.id as id6_, user0_.name as name6_ from hibernatequickus
 Hibernate: delete from hibernatequickuse.user where id=?
 
 === test find after delete ===
-Hibernate: select user0_.id as id6_, user0_.name as name6_ from hibernatequickuse.user user0_
-</code></pre>
-<p>这些，就是hibernte自动生成的。仔细看看，其实就是标准sql。呵呵。懂jdbc的都能看懂。</p>
+Hibernate: select user0_.id as id6_, user0_.name as name6_ from hibernatequickuse.user user0_</code></pre>
+这些，就是hibernte自动生成的。仔细看看，其实就是标准sql。呵呵。懂jdbc的都能看懂。</p>
 <h2 id="xml-11">xml关系映射 1:1</h2>
 <p>1对1的关系在现实中很常见。比方说：人和身份证。1个身份证对应着一个身份证，一个身份证对应着一个人。那么，我们就以此为原型。进行代码编写。</p>
 <p>实体模型</p>
 <p><img alt="1对1实体模型" src="/assets/images/hibernate-3.gif" /></p>
 <h3 id="db_1">DB</h3>
-<p>根据模型，创建数据库：</p>
-<pre><code class="language-sql">use HibernateQuickUse;
+<p>根据模型，创建数据库：
+<pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists Person;
 drop table if exists Card;
 
@@ -352,13 +347,12 @@ create table Person (
     name varchar(32) not null,
     card_id varchar(32) not null,
     foreign key(card_id) references Card(id)
-);
-</code></pre>
+);</code></pre></p>
 <h3 id="pojo_1">Pojo</h3>
 <p>java代码如下：</p>
 <p>Person类</p>
-<pre><code class="language-java">
-@SuppressWarnings(&quot;serial&quot;)
+<pre class="highlight"><code class="language-java">
+@SuppressWarnings("serial")
 public class Person implements java.io.Serializable {
     private String id;
     private String name;
@@ -374,10 +368,9 @@ public class Person implements java.io.Serializable {
 
     public String getName() { return this.name; }
     public void setName(String name) { this.name = name; }
-}
-</code></pre>
-<p>Card类：</p>
-<pre><code class="language-java">@SuppressWarnings(&quot;serial&quot;)
+}</code></pre>
+<p>Card类：
+<pre class="highlight"><code class="language-java">@SuppressWarnings("serial")
 public class Card implements java.io.Serializable
 {
     private String id;
@@ -391,52 +384,49 @@ public class Card implements java.io.Serializable
 
     public String getCardDesc() { return cardDesc; }
     public void setCardDesc(String cardDesc) { this.cardDesc = cardDesc; }
-}
-</code></pre>
+}</code></pre></p>
 <h3 id="mapping-xml">Mapping Xml</h3>
 <p>xml映射文件如下：</p>
-<p>Person.hbm.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>Person.hbm.xml
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.one2one.Person&quot; table=&quot;person&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;id&quot; length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.one2one.Person" table="person"&gt;  
+        &lt;id name="id" type="java.lang.String" column="id" length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot;&gt;  
-            &lt;column name=&quot;name&quot; length=&quot;32&quot; /&gt;  
+        &lt;property name="name" type="java.lang.String"&gt;  
+            &lt;column name="name" length="32" /&gt;  
         &lt;/property&gt;  
 
-        &lt;many-to-one name=&quot;card&quot; class=&quot;org.py.hib.relation.one2one.Card&quot; unique=&quot;true&quot;  
-            cascade=&quot;all&quot; column=&quot;card_id&quot; /&gt;  
+        &lt;many-to-one name="card" class="org.py.hib.relation.one2one.Card" unique="true"  
+            cascade="all" column="card_id" /&gt;  
 
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt;
-</code></pre>
+&lt;/hibernate-mapping&gt;</code></pre></p>
 <p>今天讲的是one-to-one配置。但是，此处用的是many-to-one，这个是什么原因呢？其实，one-to-one就是特殊的many-to-one。</p>
-<p>Card.hbm.xml：</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>Card.hbm.xml：
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.one2one.Card&quot; table=&quot;card&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;id&quot; length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.one2one.Card" table="card"&gt;  
+        &lt;id name="id" type="java.lang.String" column="id" length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;cardDesc&quot; type=&quot;java.lang.String&quot; column=&quot;cardDesc&quot; length=&quot;128&quot; not-null=&quot;true&quot;/&gt;  
+        &lt;property name="cardDesc" type="java.lang.String" column="cardDesc" length="128" not-null="true"/&gt;  
 
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt; 
-</code></pre>
+&lt;/hibernate-mapping&gt; </code></pre></p>
 <h3 id="testing_1">Testing</h3>
 <p>测试代码如下：</p>
 <p>One2OneTest.java</p>
-<pre><code class="language-java">import junit.framework.Assert;
+<pre class="highlight"><code class="language-java">import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -447,10 +437,10 @@ import org.junit.Before;
 
 public class One2OneTest extends TestCase {
     private SessionFactory factory;
-    private String m_name = &quot;ryanpoy&quot;;
-    private String m_name2 = &quot;ryanpoy2&quot;;
-    private String m_cardDesc1 = &quot;desc_1&quot;;
-    private String m_cardDesc2 = &quot;desc_2&quot;;
+    private String m_name = "ryanpoy";
+    private String m_name2 = "ryanpoy2";
+    private String m_cardDesc1 = "desc_1";
+    private String m_cardDesc2 = "desc_2";
 
     @Before
     public void setUp() throws Exception {
@@ -459,7 +449,7 @@ public class One2OneTest extends TestCase {
     }
 
     public void testSave() throws Exception {
-        System.out.println(&quot;\n=== test save ===&quot;);
+        System.out.println("\n=== test save ===");
 
         Card card = new Card();
         card.setCardDesc(m_cardDesc1);
@@ -497,11 +487,11 @@ public class One2OneTest extends TestCase {
     }
 
     public void testFind() throws Exception {
-        System.out.println(&quot;\n=== test find ===&quot;);
+        System.out.println("\n=== test find ===");
         Session session = null;
         try {
             session = factory.openSession();
-            Person person = (Person) session.createQuery(&quot;from Person&quot;).list().get(0);
+            Person person = (Person) session.createQuery("from Person").list().get(0);
 
             Assert.assertEquals(true, person.getId() != null);
             Assert.assertEquals(m_name, person.getName());
@@ -526,14 +516,14 @@ public class One2OneTest extends TestCase {
     }
 
     public void testModify() throws Exception {
-        System.out.println(&quot;\n=== test modify ===&quot;);
+        System.out.println("\n=== test modify ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            Person person = (Person) session.createQuery(&quot;from Person&quot;).list().get(0);
+            Person person = (Person) session.createQuery("from Person").list().get(0);
             person.setName(m_name2); // 修改用户名 = m_name2.（原来用户名= m_name）
             person.getCard().setCardDesc(m_cardDesc2); // 修改cardDesc 为 m_cardDesc2 (原来是：m_cardDesc1)
             tran.commit();
@@ -553,10 +543,10 @@ public class One2OneTest extends TestCase {
             }
         }
 
-        System.out.println(&quot;\n=== test find after modify ===&quot;);
+        System.out.println("\n=== test find after modify ===");
         try {
             session = factory.openSession();
-            Person person = (Person) session.createQuery(&quot;from Person&quot;).list().get(0);
+            Person person = (Person) session.createQuery("from Person").list().get(0);
 
             Assert.assertEquals(true, person.getId() != null);
             Assert.assertEquals(m_name2, person.getName());
@@ -582,14 +572,14 @@ public class One2OneTest extends TestCase {
 
 
     public void testDelete() throws Exception {
-        System.out.println(&quot;\n=== test delete ===&quot;);
+        System.out.println("\n=== test delete ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            Person person = (Person) session.createQuery(&quot;from Person&quot;).list().get(0);
+            Person person = (Person) session.createQuery("from Person").list().get(0);
             session.delete(person);
             tran.commit();
         } catch (Exception ex) {
@@ -610,14 +600,14 @@ public class One2OneTest extends TestCase {
         /*
          * 删除后再查询
          */
-        System.out.println(&quot;\n=== test find after delete ===&quot;);
+        System.out.println("\n=== test find after delete ===");
         try {
             session = factory.openSession();
 
-            Integer num = (Integer) session.createQuery(&quot;from Person&quot;).list().size();
+            Integer num = (Integer) session.createQuery("from Person").list().size();
             Assert.assertEquals(0, num.intValue());
 
-            num = (Integer) session.createQuery(&quot;from Card&quot;).list().size();
+            num = (Integer) session.createQuery("from Card").list().size();
             Assert.assertEquals(0, num.intValue());
 
         } catch (Exception ex) {
@@ -641,8 +631,7 @@ public class One2OneTest extends TestCase {
         factory.close();
     }
 
-}
-</code></pre>
+}</code></pre>
 <p>运行test，一路飚绿。呵呵。陶醉一番。不过，这也就是一个拿不出手的测试和一个拿不出手的例子。没有任何实际意义的例子。仅此一个demo而已。</p>
 <p>在1：1中，其实还有一种方式，即：唯一主见关联。但是，我一直倾向于上面的这种形式，所以，唯一主见关联的就不再介绍了。</p>
 <h2 id="xml-1n">xml关系映射 1:n</h2>
@@ -651,8 +640,8 @@ public class One2OneTest extends TestCase {
 <p>建立实体模型如下：</p>
 <p><img alt="One2Many" src="/assets/images/hibernate-4.gif" /></p>
 <h3 id="db_2">DB</h3>
-<p>根据模型创建数据库。sql脚本如下：</p>
-<pre><code class="language-sql">use HibernateQuickUse;
+<p>根据模型创建数据库。sql脚本如下：
+<pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists Child;
 drop table if exists Father;
 
@@ -666,15 +655,14 @@ create table Child (
     name varchar(128) not null,
     father_id varchar(32) not null,
     foreign key(father_id) references Father(id)
-);
-</code></pre>
+);</code></pre></p>
 <h3 id="pojo_2">Pojo</h3>
 <p>根据模型创建java对象。</p>
-<p>Father.java：</p>
-<pre><code class="language-java">import java.util.HashSet;
+<p>Father.java：
+<pre class="highlight"><code class="language-java">import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings(&quot;serial&quot;)
+@SuppressWarnings("serial")
 public class Father implements java.io.Serializable
 {
     private String id;
@@ -689,11 +677,10 @@ public class Father implements java.io.Serializable
 
     public Set getChildren() { return children; }
     public void setChildren(Set children) { this.children = children; }
-}
-</code></pre>
-<p>Child.java：</p>
-<pre><code class="language-java">
-@SuppressWarnings(&quot;serial&quot;)
+}</code></pre></p>
+<p>Child.java：
+<pre class="highlight"><code class="language-java">
+@SuppressWarnings("serial")
 public class Child implements java.io.Serializable
 {
     private String id;
@@ -708,30 +695,28 @@ public class Child implements java.io.Serializable
 
     public String getName() { return this.name; }
     public void setName(String name) { this.name = name;}
-}
-</code></pre>
+}</code></pre></p>
 <h3 id="mapping-xml_1">Mapping Xml</h3>
 <p>映射文件如下：</p>
-<p>Father.hbm.xml：</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>Father.hbm.xml：
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.one2many.Father&quot; table=&quot;father&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;id&quot; length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.one2many.Father" table="father"&gt;  
+        &lt;id name="id" type="java.lang.String" column="id" length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot; length=&quot;32&quot; not-null=&quot;true&quot;/&gt;  
+        &lt;property name="name" type="java.lang.String" column="name" length="32" not-null="true"/&gt;  
 
-        &lt;set name=&quot;children&quot; table=&quot;child&quot; cascade=&quot;all&quot; inverse=&quot;true&quot;&gt;  
-            &lt;key column=&quot;father_id&quot; /&gt;  
-            &lt;one-to-many class=&quot;org.py.hib.relation.one2many.Child&quot; /&gt;  
+        &lt;set name="children" table="child" cascade="all" inverse="true"&gt;  
+            &lt;key column="father_id" /&gt;  
+            &lt;one-to-many class="org.py.hib.relation.one2many.Child" /&gt;  
         &lt;/set&gt;  
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt; 
-</code></pre>
+&lt;/hibernate-mapping&gt; </code></pre></p>
 <p>这里要说说 "set" 这个标签里面的内容。</p>
 <ol>
 <li>"name"是Father里面的属性的名字。</li>
@@ -747,26 +732,25 @@ public class Child implements java.io.Serializable
 <p>"key" 中的 "column" 表示在table(这里的table是child)中, 跟Father关联的字段名称。这里是"father_id"。可以看看开始的sql脚本。</p>
 <p>one-to-many 表示father和children的关系。class则表示是同哪个类是这种关系。</p>
 <p>Child.hbm.xml：</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p><pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.one2many.Child&quot; table=&quot;child&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;id&quot; length=&quot;32&quot; &gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.one2many.Child" table="child"&gt;  
+        &lt;id name="id" type="java.lang.String" column="id" length="32" &gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot; length=&quot;128&quot; not-null=&quot;true&quot;/&gt;  
+        &lt;property name="name" type="java.lang.String" column="name" length="128" not-null="true"/&gt;  
 
-        &lt;many-to-one name=&quot;father&quot; class=&quot;org.py.hib.relation.one2many.Father&quot; column=&quot;father_id&quot; /&gt;  
+        &lt;many-to-one name="father" class="org.py.hib.relation.one2many.Father" column="father_id" /&gt;  
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt; 
-</code></pre>
-<p>这个里面主要就是多了一个many-to-one，表示child 和 father 的关系是"many-to-one"</p>
+&lt;/hibernate-mapping&gt; </code></pre>
+这个里面主要就是多了一个many-to-one，表示child 和 father 的关系是"many-to-one"</p>
 <h3 id="testing_2">Testing</h3>
 <p>测试代码如下：</p>
-<p>One2ManyTest.java</p>
-<pre><code class="language-java">import java.util.Set;
+<p>One2ManyTest.java
+<pre class="highlight"><code class="language-java">import java.util.Set;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -780,8 +764,8 @@ import org.junit.Before;
 
 public class One2ManyTest extends TestCase {
     private SessionFactory factory;
-    private static final String[] childname = new String[]{&quot;child_1&quot;, &quot;child_2&quot;, &quot;child_3&quot;};
-    private static final String[] newchildname = new String[]{&quot;new_child_1&quot;, &quot;new_child_2&quot;, &quot;new_child_3&quot;};
+    private static final String[] childname = new String[]{"child_1", "child_2", "child_3"};
+    private static final String[] newchildname = new String[]{"new_child_1", "new_child_2", "new_child_3"};
 
     @Before
     public void setUp() throws Exception {
@@ -791,10 +775,10 @@ public class One2ManyTest extends TestCase {
 
 
     public void testSave() throws Exception {
-        System.out.println(&quot;\n=== test save ===&quot;);
+        System.out.println("\n=== test save ===");
 
         Father father = new Father();
-        father.setName(&quot;Father_1&quot;);
+        father.setName("Father_1");
 
         Child child1 = new Child();
         child1.setName(childname[0]);
@@ -864,14 +848,14 @@ public class One2ManyTest extends TestCase {
     }
 
     public void testFind() throws Exception {
-        System.out.println(&quot;\n=== test find ===&quot;);
+        System.out.println("\n=== test find ===");
         Session session = null;
         try {
             session = factory.openSession();
-            Father father = (Father) session.createQuery(&quot;from Father&quot;).list().get(0);
+            Father father = (Father) session.createQuery("from Father").list().get(0);
 
             Assert.assertNotNull(father.getId());
-            Assert.assertEquals(&quot;Father_1&quot;, father.getName());
+            Assert.assertEquals("Father_1", father.getName());
 
             Set children = father.getChildren();
             for (Child child : children) {
@@ -898,15 +882,15 @@ public class One2ManyTest extends TestCase {
     }
 
     public void testModify() throws Exception {
-        System.out.println(&quot;\n=== test modify ===&quot;);
+        System.out.println("\n=== test modify ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            Father father = (Father) session.createQuery(&quot;from Father&quot;).list().get(0);
-            father.setName(&quot;Father_2&quot;); // 修改用户名 = m_name2.（原来用户名= m_name）
+            Father father = (Father) session.createQuery("from Father").list().get(0);
+            father.setName("Father_2"); // 修改用户名 = m_name2.（原来用户名= m_name）
 
             Set children = father.getChildren();
             int i = 0;
@@ -934,13 +918,13 @@ public class One2ManyTest extends TestCase {
         /*
          * 修改后再查询
          */
-        System.out.println(&quot;\n=== test find after modify ===&quot;);
+        System.out.println("\n=== test find after modify ===");
         try {
             session = factory.openSession();
-            Father father = (Father) session.createQuery(&quot;from Father&quot;).list().get(0);
+            Father father = (Father) session.createQuery("from Father").list().get(0);
 
             Assert.assertNotNull(father.getId());
-            Assert.assertEquals(&quot;Father_2&quot;, father.getName());
+            Assert.assertEquals("Father_2", father.getName());
 
             Set children = father.getChildren();
 
@@ -969,14 +953,14 @@ public class One2ManyTest extends TestCase {
     }
 
     public void testDelete() throws Exception {
-        System.out.println(&quot;\n=== test delete ===&quot;);
+        System.out.println("\n=== test delete ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            Father father = (Father) session.createQuery(&quot;from Father&quot;).list().get(0);
+            Father father = (Father) session.createQuery("from Father").list().get(0);
             session.delete(father);
             tran.commit();
 
@@ -998,14 +982,14 @@ public class One2ManyTest extends TestCase {
         /*
          * 删除后再查询
          */
-        System.out.println(&quot;\n=== test find after delete ===&quot;);
+        System.out.println("\n=== test find after delete ===");
         try {
             session = factory.openSession();
 
-            Integer num = (Integer) session.createQuery(&quot;from Father&quot;).list().size();
+            Integer num = (Integer) session.createQuery("from Father").list().size();
             Assert.assertEquals(0, num.intValue());
 
-            num = (Integer) session.createQuery(&quot;from Child&quot;).list().size();
+            num = (Integer) session.createQuery("from Child").list().size();
             Assert.assertEquals(0, num.intValue());
 
         } catch (Exception ex) {
@@ -1028,11 +1012,10 @@ public class One2ManyTest extends TestCase {
     public void tearDown() throws Exception {
         factory.close();
     }
-}
-</code></pre>
+}</code></pre></p>
 <p>这里不得不再重申以下 one-to-many 中 inverse 关系的维护问题。 在one-to-many中，把inverse放到many中来维护是一个好的习惯。大家可以把上面的inverse改成false，看看会发生什么情况。</p>
-<p>在inverse=true的时候，输出结果如下：</p>
-<pre><code class="language-sql">=== test save ===
+<p>在inverse=true的时候，输出结果如下：
+<pre class="highlight"><code class="language-sql">=== test save ===
 Hibernate: insert into father (name, id) values (?, ?)
 Hibernate: insert into child (name, father_id, id) values (?, ?, ?)
 Hibernate: insert into child (name, father_id, id) values (?, ?, ?)
@@ -1064,10 +1047,9 @@ Hibernate: delete from father where id=?
 
 === test find after delete ===
 Hibernate: select father0_.id as id33_, father0_.name as name33_ from father father0_
-Hibernate: select child0_.id as id34_, child0_.name as name34_, child0_.father_id as father3_34_ from child child0_
-</code></pre>
+Hibernate: select child0_.id as id34_, child0_.name as name34_, child0_.father_id as father3_34_ from child child0_</code></pre></p>
 <p>而改成<strong>inverse=false</strong>后，testDelete()是没法通过的。输出如下：</p>
-<pre><code class="language-sql">log4j:WARN No appenders could be found for logger (org.hibernate.cfg.Environment).
+<pre class="highlight"><code class="language-sql">log4j:WARN No appenders could be found for logger (org.hibernate.cfg.Environment).
 log4j:WARN Please initialize the log4j system properly.
 
 === test save ===
@@ -1098,17 +1080,14 @@ Hibernate: select children0_.father_id as father3_1_, children0_.id as id1_, chi
 === test delete ===
 Hibernate: select father0_.id as id33_, father0_.name as name33_ from father father0_
 Hibernate: select children0_.father_id as father3_1_, children0_.id as id1_, children0_.id as id34_0_, children0_.name as name34_0_, children0_.father_id as father3_34_0_ from child children0_ where children0_.father_id=?
-Hibernate: update child set father_id=null where father_id=?
-</code></pre>
+Hibernate: update child set father_id=null where father_id=?</code></pre>
 <p>产生了错误，原因是：违反了非空约束。</p>
-<p>得修改sql脚本，把Child的建表脚本中的：</p>
-<pre><code class="language-sql">father_id varchar(32) not null, 
-</code></pre>
-<p>修改成为：</p>
-<pre><code>father_id varchar(32),
-</code></pre>
-<p>才能通过。这个时候输出的结果是：</p>
-<pre><code class="language-sql">log4j:WARN No appenders could be found for logger (org.hibernate.cfg.Environment).
+<p>得修改sql脚本，把Child的建表脚本中的：
+<pre class="highlight"><code class="language-sql">father_id varchar(32) not null, </code></pre></p>
+<p>修改成为：
+<pre class="highlight"><code>father_id varchar(32),</code></pre>
+才能通过。这个时候输出的结果是：
+<pre class="highlight"><code class="language-sql">log4j:WARN No appenders could be found for logger (org.hibernate.cfg.Environment).
 log4j:WARN Please initialize the log4j system properly.
 
 === test save ===
@@ -1147,8 +1126,7 @@ Hibernate: delete from father where id=?
 
 === test find after delete ===
 Hibernate: select father0_.id as id33_, father0_.name as name33_ from father father0_
-Hibernate: select child0_.id as id34_, child0_.name as name34_, child0_.father_id as father3_34_ from child child0_
-</code></pre>
+Hibernate: select child0_.id as id34_, child0_.name as name34_, child0_.father_id as father3_34_ from child child0_</code></pre></p>
 <p>所以，<strong>inverse的设置是很重要的一个事情。</strong></p>
 <h2 id="xml-nn">xml关系映射 n:n</h2>
 <p>我们以老师和学生为例，一个老师可以交很多学生，同样一个学生可以拥有多个老师，所以，他们之间的关系就是n：n的。</p>
@@ -1156,8 +1134,8 @@ Hibernate: select child0_.id as id34_, child0_.name as name34_, child0_.father_i
 <img alt="many2many" src="/assets/images/hibernate-5.gif" /></p>
 <p>从实体模型来看。有2个对象，但是为了在数据库中表示出2者的n:n的关系，我们还得引入一张表。</p>
 <h3 id="db_3">DB</h3>
-<p>sql脚本如下：</p>
-<pre><code class="language-sql">use HibernateQuickUse;
+<p>sql脚本如下：
+<pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists teacher_student_relation;
 drop table if exists Teacher;
 drop table if exists Student;
@@ -1178,15 +1156,14 @@ create table teacher_student_relation (
     student_id varchar(32) not null,
     foreign key(teacher_id) references Teacher(tid),
     foreign key(student_id) references Student(sid)
-);
-</code></pre>
+);</code></pre></p>
 <h3 id="pojo_3">Pojo</h3>
 <p>通过模型，创建java类如下：</p>
-<p>Student.java</p>
-<pre><code class="language-java">import java.util.HashSet;
+<p>Student.java
+<pre class="highlight"><code class="language-java">import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings(&quot;serial&quot;)
+@SuppressWarnings("serial")
 public class Student implements java.io.Serializable {
     private String id;
     private String name;
@@ -1202,13 +1179,12 @@ public class Student implements java.io.Serializable {
 
     public Set getTeachers() {return teachers;}
     public void setTeachers(Set teachers) {this.teachers = teachers;}
-}
-</code></pre>
+}</code></pre></p>
 <p>Teacher.java:</p>
-<pre><code class="language-java">import java.util.HashSet;
+<pre class="highlight"><code class="language-java">import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings(&quot;serial&quot;)
+@SuppressWarnings("serial")
 public class Teacher implements java.io.Serializable {
     private String id;
     private String name;
@@ -1224,69 +1200,66 @@ public class Teacher implements java.io.Serializable {
 
     public Set getStudents() { return students;}
     public void setStudents(Set students) { this.students = students;}
-}
-</code></pre>
+}</code></pre>
 <h3 id="mapping-xml_2">Mapping Xml</h3>
 <p>xml映射文件如下</p>
-<p>Student.hbm.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>Student.hbm.xml
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.many2many.Student&quot;  
-        table=&quot;student&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;sid&quot; length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.many2many.Student"  
+        table="student"&gt;  
+        &lt;id name="id" type="java.lang.String" column="sid" length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot;  
-            length=&quot;128&quot; not-null=&quot;true&quot; /&gt;  
+        &lt;property name="name" type="java.lang.String" column="name"  
+            length="128" not-null="true" /&gt;  
 
-        &lt;set name=&quot;teachers&quot; table=&quot;teacher_student_relation&quot; cascade=&quot;save-update&quot; inverse=&quot;false&quot;&gt;  
-            &lt;key column=&quot;student_id&quot; not-null=&quot;true&quot; /&gt;  
+        &lt;set name="teachers" table="teacher_student_relation" cascade="save-update" inverse="false"&gt;  
+            &lt;key column="student_id" not-null="true" /&gt;  
 
-            &lt;many-to-many column=&quot;teacher_id&quot;  
-                class=&quot;org.py.hib.relation.many2many.Teacher&quot;   
+            &lt;many-to-many column="teacher_id"  
+                class="org.py.hib.relation.many2many.Teacher"   
                 /&gt;  
         &lt;/set&gt;  
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt;
-</code></pre>
-<p><strong>注意</strong>
+&lt;/hibernate-mapping&gt;</code></pre>
+<strong>注意</strong>
 1. set中的 table 指向的是数据库中的关联表。
 1. cascade 用的是save-update , 且inverse用的是false，这样的话，当进行修改和保存和删除时，关联表中的记录也会删掉.
 1. 如果cascade 用的是 all 那么连同student表中的记录也会被删除掉。
 1. key中的column指的是： 关联表中与Student发生关系的字段。
 1. 而many-to-many中的column指的是：关联表中，与class(这里是：org.py.hib.relation.many2many.Teacher)发生关系的字段。</p>
-<p>Teacher.hbm.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>Teacher.hbm.xml
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.many2many.Teacher&quot;  
-        table=&quot;teacher&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;tid&quot;  
-            length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.many2many.Teacher"  
+        table="teacher"&gt;  
+        &lt;id name="id" type="java.lang.String" column="tid"  
+            length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot;  
-            length=&quot;32&quot; not-null=&quot;true&quot; /&gt;  
+        &lt;property name="name" type="java.lang.String" column="name"  
+            length="32" not-null="true" /&gt;  
 
-        &lt;set name=&quot;students&quot; table=&quot;teacher_student_relation&quot; cascade=&quot;save-update&quot;  
-            inverse=&quot;false&quot;&gt;  
-            &lt;key column=&quot;teacher_id&quot; not-null=&quot;true&quot; /&gt;  
-            &lt;many-to-many class=&quot;org.py.hib.relation.many2many.Student&quot;  
-                column=&quot;student_id&quot; /&gt;  
+        &lt;set name="students" table="teacher_student_relation" cascade="save-update"  
+            inverse="false"&gt;  
+            &lt;key column="teacher_id" not-null="true" /&gt;  
+            &lt;many-to-many class="org.py.hib.relation.many2many.Student"  
+                column="student_id" /&gt;  
         &lt;/set&gt;  
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt;
-</code></pre>
-<p><strong>注意：</strong> 这里的inverse也采用了false，这样子的话，Teacher和Student都维护关系表中的关系。</p>
-<p>测试类，Many2ManyTest.java</p>
-<pre><code class="language-java">import java.util.Iterator;
+&lt;/hibernate-mapping&gt;</code></pre>
+<strong>注意：</strong> 这里的inverse也采用了false，这样子的话，Teacher和Student都维护关系表中的关系。</p>
+<p>测试类，Many2ManyTest.java
+<pre class="highlight"><code class="language-java">import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -1310,19 +1283,19 @@ public class Many2ManyTest extends TestCase {
     }
 
     public void testSave() throws Exception {
-        System.out.println(&quot;\n=== test save ===&quot;);
+        System.out.println("\n=== test save ===");
 
         Teacher teacher1 = new Teacher();
-        teacher1.setName(&quot;teacher_1&quot;);
+        teacher1.setName("teacher_1");
 
         Teacher teacher2 = new Teacher();
-        teacher2.setName(&quot;teacher_2&quot;);
+        teacher2.setName("teacher_2");
 
         Student stu1 = new Student();
-        stu1.setName(&quot;student_1&quot;);
+        stu1.setName("student_1");
 
         Student stu2 = new Student();
-        stu2.setName(&quot;student_2&quot;);
+        stu2.setName("student_2");
 
         stu1.getTeachers().add(teacher1);
         stu1.getTeachers().add(teacher2);
@@ -1363,36 +1336,36 @@ public class Many2ManyTest extends TestCase {
         }
     }
 
-    @SuppressWarnings(&quot;unchecked&quot;)
+    @SuppressWarnings("unchecked")
     public void testFindFromTeacher() throws Exception {
-        System.out.println(&quot;\n=== test find from Teacher ===&quot;);
+        System.out.println("\n=== test find from Teacher ===");
         Session session = null;
         try {
             session = factory.openSession();
-            Iterator iter = session.createQuery(&quot;from Teacher&quot;).iterate();
+            Iterator iter = session.createQuery("from Teacher").iterate();
             while (iter.hasNext()) {
                 Teacher teacher = iter.next();
                 Assert.assertNotNull(teacher.getId());
                 String teacherName = teacher.getName();
-                if (&quot;teacher_1&quot;.equals(teacherName)) {
+                if ("teacher_1".equals(teacherName)) {
                     Set stus = teacher.getStudents();
                     Assert.assertEquals(stus.size(), 2);
                     for (Student stu : stus) {
                         String stuName = stu.getName();
                         Assert.assertNotNull(stu.getId());
-                        Assert.assertTrue(stuName.equals(&quot;student_1&quot;) || stuName.equals(&quot;student_2&quot;));
+                        Assert.assertTrue(stuName.equals("student_1") || stuName.equals("student_2"));
                     }
-                } else if (&quot;teacher_2&quot;.equals(teacherName)) {
+                } else if ("teacher_2".equals(teacherName)) {
                     Set stus = teacher.getStudents();
                     Assert.assertEquals(stus.size(), 2);
 
                     for (Student stu : stus) {
                         String stuName = stu.getName();
                         Assert.assertNotNull(stu.getId());
-                        Assert.assertTrue(stuName.equals(&quot;student_1&quot;) || stuName.equals(&quot;student_2&quot;));
+                        Assert.assertTrue(stuName.equals("student_1") || stuName.equals("student_2"));
                     }
                 } else {
-                    throw new Exception(&quot;teacher name error exception.&quot;);
+                    throw new Exception("teacher name error exception.");
                 }
             }
         } catch (Exception ex) {
@@ -1411,35 +1384,35 @@ public class Many2ManyTest extends TestCase {
         }
     }
 
-    @SuppressWarnings(&quot;unchecked&quot;)
+    @SuppressWarnings("unchecked")
     public void testFindFromStudent() throws Exception {
-        System.out.println(&quot;\n=== test find from Student ===&quot;);
+        System.out.println("\n=== test find from Student ===");
         Session session = null;
         try {
             session = factory.openSession();
-            Iterator iter = session.createQuery(&quot;from Student&quot;).iterate();
+            Iterator iter = session.createQuery("from Student").iterate();
             while (iter.hasNext()) {
                 Student stu = iter.next();
                 Assert.assertNotNull(stu.getId());
                 String stuName = stu.getName();
-                if (&quot;student_1&quot;.equals(stuName)) {
+                if ("student_1".equals(stuName)) {
                     Set teachers = stu.getTeachers();
                     Assert.assertEquals(teachers.size(), 2);
                     for (Teacher teacher : teachers) {
                         String tName = teacher.getName();
                         Assert.assertNotNull(teacher.getId());
-                        Assert.assertTrue(tName.equals(&quot;teacher_1&quot;) || tName.equals(&quot;teacher_2&quot;));
+                        Assert.assertTrue(tName.equals("teacher_1") || tName.equals("teacher_2"));
                     }
-                } else if (&quot;student_2&quot;.equals(stuName)) {
+                } else if ("student_2".equals(stuName)) {
                     Set teachers = stu.getTeachers();
                     Assert.assertEquals(teachers.size(), 2);
                     for (Teacher teacher : teachers) {
                         String tName = teacher.getName();
                         Assert.assertNotNull(teacher.getId());
-                        Assert.assertTrue(tName.equals(&quot;teacher_1&quot;) || tName.equals(&quot;teacher_2&quot;));
+                        Assert.assertTrue(tName.equals("teacher_1") || tName.equals("teacher_2"));
                     }
                 } else {
-                    throw new Exception(&quot;student name error exception.&quot;);
+                    throw new Exception("student name error exception.");
                 }
             }
         } catch (Exception ex) {
@@ -1459,19 +1432,19 @@ public class Many2ManyTest extends TestCase {
     }
 
     public void testModify() throws Exception {
-        System.out.println(&quot;\n=== test modify ===&quot;);
+        System.out.println("\n=== test modify ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            Teacher t1 = (Teacher) session.createQuery(&quot;from Teacher t where t.name='teacher_1'&quot;).list().get(0);
-            t1.setName(&quot;new_teacher_1&quot;); // 修改用户名 = m_name2.（原来用户名= m_name）
+            Teacher t1 = (Teacher) session.createQuery("from Teacher t where t.name='teacher_1'").list().get(0);
+            t1.setName("new_teacher_1"); // 修改用户名 = m_name2.（原来用户名= m_name）
 
             Set stus = t1.getStudents();
             for (Student stu : stus) {
-                if (stu.getName().equals(&quot;student_1&quot;)) {
+                if (stu.getName().equals("student_1")) {
                     stus.remove(stu);
                     break;
                 }
@@ -1497,33 +1470,33 @@ public class Many2ManyTest extends TestCase {
         /*
          * 修改后再查询
          */
-        System.out.println(&quot;\n=== test find from Teacher after modify===&quot;);
+        System.out.println("\n=== test find from Teacher after modify===");
         try {
             session = factory.openSession();
-            Iterator iter = session.createQuery(&quot;from Teacher&quot;).iterate();
+            Iterator iter = session.createQuery("from Teacher").iterate();
             while (iter.hasNext()) {
                 Teacher teacher = iter.next();
                 Assert.assertNotNull(teacher.getId());
                 String teacherName = teacher.getName();
-                if (&quot;new_teacher_1&quot;.equals(teacherName)) {
+                if ("new_teacher_1".equals(teacherName)) {
                     Set stus = teacher.getStudents();
                     Assert.assertEquals(stus.size(), 1);
                     for (Student stu : stus) {
                         String stuName = stu.getName();
                         Assert.assertNotNull(stu.getId());
-                        Assert.assertTrue(stuName.equals(&quot;student_2&quot;));
+                        Assert.assertTrue(stuName.equals("student_2"));
                     }
-                } else if (&quot;teacher_2&quot;.equals(teacherName)) {
+                } else if ("teacher_2".equals(teacherName)) {
                     Set stus = teacher.getStudents();
                     Assert.assertEquals(stus.size(), 2);
 
                     for (Student stu : stus) {
                         String stuName = stu.getName();
                         Assert.assertNotNull(stu.getId());
-                        Assert.assertTrue(stuName.equals(&quot;student_1&quot;) || stuName.equals(&quot;student_2&quot;));
+                        Assert.assertTrue(stuName.equals("student_1") || stuName.equals("student_2"));
                     }
                 } else {
-                    throw new Exception(&quot;teacher name error exception.&quot;);
+                    throw new Exception("teacher name error exception.");
                 }
             }
         } catch (Exception ex) {
@@ -1543,20 +1516,20 @@ public class Many2ManyTest extends TestCase {
     }
 
     public void testDelete() throws Exception {
-        System.out.println(&quot;\n=== test delete ===&quot;);
+        System.out.println("\n=== test delete ===");
         Session session = null;
         Transaction tran = null;
         try {
             session = factory.openSession();
             tran = session.beginTransaction();
 
-            Iterator iter = session.createQuery(&quot;from Teacher&quot;).iterate();
+            Iterator iter = session.createQuery("from Teacher").iterate();
             while (iter.hasNext())
                 session.delete(iter.next());
 
             tran.commit();
 
-            Integer count = (Integer) session.createQuery(&quot;select count(*) from Teacher&quot;).list().get(0);
+            Integer count = (Integer) session.createQuery("select count(*) from Teacher").list().get(0);
             Assert.assertEquals(0, count.intValue());
 
         } catch (Exception ex) {
@@ -1577,14 +1550,14 @@ public class Many2ManyTest extends TestCase {
         /*
          * 删除后再查询
          */
-        System.out.println(&quot;\n=== test find after delete ===&quot;);
+        System.out.println("\n=== test find after delete ===");
         try {
             session = factory.openSession();
 
-            Integer num = (Integer) session.createQuery(&quot;from Teacher&quot;).list().size();
+            Integer num = (Integer) session.createQuery("from Teacher").list().size();
             Assert.assertEquals(0, num.intValue());
 
-            num = (Integer) session.createQuery(&quot;from Student&quot;).list().size();
+            num = (Integer) session.createQuery("from Student").list().size();
             Assert.assertEquals(0, num.intValue());
 
         } catch (Exception ex) {
@@ -1608,15 +1581,14 @@ public class Many2ManyTest extends TestCase {
         factory.close();
     }
 
-}
-</code></pre>
-<p>从这个例子中可以看出，many-to-many中，需要引入第3张表来表示关系。</p>
+}</code></pre>
+从这个例子中可以看出，many-to-many中，需要引入第3张表来表示关系。</p>
 <h2 id="xml-case">xml关系映射 - 复杂的case</h2>
 <p>需求：丈夫有1个妻子，这样是1夫1妻。但是，丈夫花心，同时有多个情妇。</p>
 <p>例子归例子，大家不要做这样的丈夫。只是为了更加深入记忆。</p>
 <h3 id="db_4">DB</h3>
 <p>先看sql：</p>
-<pre><code class="language-sql">use HibernateQuickUse;
+<pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 
 drop table if exists Paramour;
 drop table if exists Husband;
@@ -1640,15 +1612,14 @@ create table Paramour (
     name varchar(128) not null,
     husband_id varchar(32) not null,
     foreign key(husband_id) references Husband(hid)
-);
-</code></pre>
+);</code></pre>
 <h3 id="pojo_4">Pojo</h3>
 <p>然后看java文件。</p>
-<p>Husband.java</p>
-<pre><code class="language-java">import java.util.HashSet;
+<p>Husband.java
+<pre class="highlight"><code class="language-java">import java.util.HashSet;
 import java.util.Set;
 
-@SuppressWarnings(&quot;serial&quot;)
+@SuppressWarnings("serial")
 public class Husband implements java.io.Serializable {
     private String id;
     private String name;
@@ -1668,10 +1639,9 @@ public class Husband implements java.io.Serializable {
 
     public Set getParamours() { return paramours;}
     public void setParamours(Set paramours) { this.paramours = paramours;}
-}
-</code></pre>
+}</code></pre></p>
 <p>Wife.java</p>
-<pre><code class="language-java">@SuppressWarnings(&quot;serial&quot;)
+<pre class="highlight"><code class="language-java">@SuppressWarnings("serial")
 public class Wife implements java.io.Serializable {
     private String id;
     private String name;
@@ -1683,10 +1653,9 @@ public class Wife implements java.io.Serializable {
 
     public String getName() { return this.name; }
     public void setName(String name) { this.name = name; }
-}
-</code></pre>
-<p>Paramour.java</p>
-<pre><code class="language-java">@SuppressWarnings(&quot;serial&quot;)
+}</code></pre>
+<p>Paramour.java
+<pre class="highlight"><code class="language-java">@SuppressWarnings("serial")
 public class Paramour implements java.io.Serializable {
     private String id;
     private String name;
@@ -1702,72 +1671,68 @@ public class Paramour implements java.io.Serializable {
 
     public String getName() { return this.name; }
     public void setName(String name) { this.name = name; }
-}
-</code></pre>
+}</code></pre></p>
 <h3 id="mapping-xml_3">Mapping Xml</h3>
 <p>接下来再看xml映射文件。</p>
-<p>Husband.hbm.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+<p>Husband.hbm.xml
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.complex.Husband&quot; table=&quot;husband&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;hid&quot;  
-            length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.complex.Husband" table="husband"&gt;  
+        &lt;id name="id" type="java.lang.String" column="hid"  
+            length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot;  
-            length=&quot;32&quot; not-null=&quot;true&quot; /&gt;  
+        &lt;property name="name" type="java.lang.String" column="name"  
+            length="32" not-null="true" /&gt;  
 
-        &lt;many-to-one name=&quot;wife&quot; class=&quot;org.py.hib.relation.complex.Wife&quot; cascade=&quot;all&quot; column=&quot;wife_id&quot; /&gt;  
+        &lt;many-to-one name="wife" class="org.py.hib.relation.complex.Wife" cascade="all" column="wife_id" /&gt;  
 
-        &lt;set name=&quot;paramours&quot; cascade=&quot;all&quot; inverse=&quot;true&quot; &gt;  
-            &lt;key column=&quot;husband_id&quot; /&gt;  
-            &lt;one-to-many class=&quot;org.py.hib.relation.complex.Paramour&quot; /&gt;  
+        &lt;set name="paramours" cascade="all" inverse="true" &gt;  
+            &lt;key column="husband_id" /&gt;  
+            &lt;one-to-many class="org.py.hib.relation.complex.Paramour" /&gt;  
         &lt;/set&gt;  
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt; 
-</code></pre>
-<p>Wife.hbm.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;  
+&lt;/hibernate-mapping&gt; </code></pre></p>
+<p>Wife.hbm.xml
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;  
 
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.complex.Wife&quot; table=&quot;wife&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;wid&quot; length=&quot;32&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.complex.Wife" table="wife"&gt;  
+        &lt;id name="id" type="java.lang.String" column="wid" length="32"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot;  length=&quot;128&quot; not-null=&quot;true&quot; /&gt;  
+        &lt;property name="name" type="java.lang.String" column="name"  length="128" not-null="true" /&gt;  
 
     &lt;/class&gt;  
-&lt;/hibernate-mapping&gt; 
-</code></pre>
-<p>Paramour.hbm.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;  
-&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;  
-    &quot;http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd&quot;&gt;   
+&lt;/hibernate-mapping&gt; </code></pre></p>
+<p>Paramour.hbm.xml
+<pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"  
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;   
 &lt;hibernate-mapping&gt;  
-    &lt;class name=&quot;org.py.hib.relation.complex.Paramour&quot; table=&quot;paramour&quot;&gt;  
-        &lt;id name=&quot;id&quot; type=&quot;java.lang.String&quot; column=&quot;pid&quot;&gt;  
-            &lt;generator class=&quot;uuid&quot; /&gt;  
+    &lt;class name="org.py.hib.relation.complex.Paramour" table="paramour"&gt;  
+        &lt;id name="id" type="java.lang.String" column="pid"&gt;  
+            &lt;generator class="uuid" /&gt;  
         &lt;/id&gt;  
 
-        &lt;property name=&quot;name&quot; type=&quot;java.lang.String&quot; column=&quot;name&quot; not-null=&quot;true&quot; /&gt;  
+        &lt;property name="name" type="java.lang.String" column="name" not-null="true" /&gt;  
 
-        &lt;many-to-one name=&quot;husband&quot; class=&quot;org.py.hib.relation.complex.Husband&quot; column=&quot;husband_id&quot; /&gt;  
+        &lt;many-to-one name="husband" class="org.py.hib.relation.complex.Husband" column="husband_id" /&gt;  
 
     &lt;/class&gt;  
 
-&lt;/hibernate-mapping&gt; 
-</code></pre>
+&lt;/hibernate-mapping&gt; </code></pre></p>
 <h3 id="testing_3">Testing</h3>
 <p>这里只测试了save。其他的测试大家感兴趣的可以补充。
-ComplexTest.java</p>
-<pre><code class="language-java">import junit.framework.Assert;
+ComplexTest.java
+<pre class="highlight"><code class="language-java">import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.hibernate.Session;
@@ -1794,19 +1759,19 @@ public class ComplexTest extends TestCase {
         Transaction tran = session.beginTransaction();
 
         Husband hus = new Husband();
-        hus.setName(&quot;husband&quot;);
+        hus.setName("husband");
 
         Wife wife = new Wife();
-        wife.setName(&quot;wife&quot;);
+        wife.setName("wife");
 
         Paramour p1 = new Paramour();
-        p1.setName(&quot;paramour_1&quot;);
+        p1.setName("paramour_1");
 
         Paramour p2 = new Paramour();
-        p2.setName(&quot;paramour_2&quot;);
+        p2.setName("paramour_2");
 
         Paramour p3 = new Paramour();
-        p3.setName(&quot;paramour_3&quot;);
+        p3.setName("paramour_3");
 
         hus.setWife(wife);
 
@@ -1836,16 +1801,15 @@ public class ComplexTest extends TestCase {
     public void tearDown() {
         factory.close();
     }
-}
-</code></pre>
+}</code></pre></p>
 <h2 id="annotation-11">annotation关系映射 1:1</h2>
 <p>讲完了xml的关系映射，下面讲一下annatation的关系映射
 这讲OneToOne的用法。而且是基于主外键的关联。因为这个是实际开发中最最常见的。</p>
 <p>这里先说明一下，我的java类的命名都以Test开头。而对应的对象名却没有用test开头。这里是为了更好的说明注视中的value到底是类名还是对象名。</p>
 <h3 id="pojo_5">Pojo</h3>
 <p>先看java代码：</p>
-<p>TestUser.java</p>
-<pre><code class="language-java">import javax.persistence.Entity;
+<p>TestUser.java
+<pre class="highlight"><code class="language-java">import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -1866,10 +1830,9 @@ public class TestUser
     @OneToOne
     public TestCard getCard() {return card; }
     public void setCard(TestCard card) {this.card = card; }
-}
-</code></pre>
-<p>TestCard：</p>
-<pre><code class="language-java">import javax.persistence.Entity;
+}</code></pre></p>
+<p>TestCard：
+<pre class="highlight"><code class="language-java">import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
@@ -1884,12 +1847,11 @@ public class TestCard
 
     public String getCardNumber() { return cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
-}
-</code></pre>
-<p>这样子就是OneToOne了。这个是单向的关系，即：由TestCard控制TestUser。看sql语句就知道了。</p>
+}</code></pre>
+这样子就是OneToOne了。这个是单向的关系，即：由TestCard控制TestUser。看sql语句就知道了。</p>
 <h3 id="db_5">DB</h3>
-<p>hibernate自动生成的sql为：</p>
-<pre><code class="language-sql">drop table test_card cascade constraints;
+<p>hibernate自动生成的sql为：
+<pre class="highlight"><code class="language-sql">drop table test_card cascade constraints;
 
 drop table test_user cascade constraints;
 
@@ -1906,17 +1868,16 @@ create table test_user (
     primary key (id)
 );
 
-alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) references test_card;
-</code></pre>
-<p>个人认为，应该这样子理解OneToOne。</p>
+alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) references test_card;</code></pre>
+个人认为，应该这样子理解OneToOne。</p>
 <ol>
 <li>首先，他是用来声明在方法上的。（这句好似废话）</li>
 <li>然后，他其实是用来annation这个方法的返回值的。即：描述TestCard的。
     &gt; 也就是说：TestCard 为控制方。TestUser为被控方。那么对应的表中，test_user表有一个外键字段对应着test_card表中的一个主键。</li>
 </ol>
 <p>这样，就好理解了。</p>
-<p>上面的为单向关联。那么，双向关联呢？修改TestCard如下：</p>
-<pre><code class="language-java">import javax.persistence.Entity;
+<p>上面的为单向关联。那么，双向关联呢？修改TestCard如下：
+<pre class="highlight"><code class="language-java">import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -1937,10 +1898,9 @@ public class TestCard {
 
     public String getCardNumber() { return cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
-}
-</code></pre>
-<p>这样，产生的sql为：</p>
-<pre><code class="language-sql">drop table test_card cascade constraints;
+}</code></pre></p>
+<p>这样，产生的sql为：
+<pre class="highlight"><code class="language-sql">drop table test_card cascade constraints;
 drop table test_user cascade constraints;
 
 create table test_card (
@@ -1959,12 +1919,11 @@ create table test_user (
 
 alter table test_card add constraint FKB9A0FA9D7876DA66 foreign key (user_id) references test_user;
 
-alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) references test_card;
-</code></pre>
+alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) references test_card;</code></pre></p>
 <p>可以看到，当我双方都声明了OneToOne时候，也就达到了双向的One2One效果。但是很遗憾。Hibernate不知道你由哪边控制哪边，或者说由哪边来维护关系。所以，他生成的sql语句中可以看到，都有test_card和test_user是相互关联的，即：都有FK关联上堆放的PK。很明显，这个不是我们要的效果。</p>
 <p>我们需要的是，pojo中能双向one2one，但是db中不需要。所以，我们需要修改一下。</p>
-<p>修改TestCard.java代码：</p>
-<pre><code class="language-java">import javax.persistence.Entity;
+<p>修改TestCard.java代码：
+<pre class="highlight"><code class="language-java">import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -1978,16 +1937,15 @@ public class TestCard {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    @OneToOne(mappedBy=&quot;card&quot;)
+    @OneToOne(mappedBy="card")
     public TestUser getUser() { return user; }
     public void setUser(TestUser user) { this.user = user; }
 
     public String getCardNumber() { return cardNumber; }
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
-}
-</code></pre>
-<p><strong>注意：</strong> OneToOne中的mappedBy就指出了此处返回的TestUser对应的test_user表中有一个指向TestUser的属性"card"的外键。可以看sql。</p>
-<pre><code class="language-sql">drop table test_card cascade constraints;
+}</code></pre>
+<strong>注意：</strong> OneToOne中的mappedBy就指出了此处返回的TestUser对应的test_user表中有一个指向TestUser的属性"card"的外键。可以看sql。
+<pre class="highlight"><code class="language-sql">drop table test_card cascade constraints;
 
 drop table test_user cascade constraints;
 
@@ -2004,9 +1962,8 @@ create table test_user (
     primary key (id)
 );
 
-alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) references test_card;
-</code></pre>
-<p>而这得"mappedBy=card"中的card是TestUser中的TestCard类型的成员变量名。这也就是为什么我要用Test修饰类名，而对象名却不用的理由。</p>
+alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) references test_card;</code></pre>
+而这得"mappedBy=card"中的card是TestUser中的TestCard类型的成员变量名。这也就是为什么我要用Test修饰类名，而对象名却不用的理由。</p>
 <p>或者，还可以这样子来理解OneToOne。</p>
 <p>1.单向OneToOne中。声明了OneToOne这个Annotation的方法，他的返回值即：维护方。(主键方)
 1.双向OneToOne中。在OneToOne中声明了mappedBy="xx"的，他的返回值即：被维护方。(外键方)</p>
@@ -2015,8 +1972,8 @@ alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) re
 <p>我们的场景是 1个父亲n多个孩子</p>
 <h3 id="pojo_6">Pojo</h3>
 <p>先来看看这中做法：</p>
-<p>TestFather.java</p>
-<pre><code class="language-java">import java.util.ArrayList;
+<p>TestFather.java
+<pre class="highlight"><code class="language-java">import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -2038,10 +1995,9 @@ public class TestFather{
     @OneToMany
     public List getChildren() { return children; }
     public void setChildren(List children) { this.children = children; }
-}
-</code></pre>
-<p>TestChild.java</p>
-<pre><code class="language-Java">import javax.persistence.Entity;
+}</code></pre></p>
+<p>TestChild.java
+<pre class="highlight"><code class="language-Java">import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
@@ -2055,11 +2011,10 @@ public class TestChild {
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-}
-</code></pre>
+}</code></pre></p>
 <h3 id="db_6">DB</h3>
 <p>这样子，好像就可以了。那么是的么？我们来看看hib产生的sql</p>
-<pre><code class="language-sql">drop table test_child cascade constraints;
+<p><pre class="highlight"><code class="language-sql">drop table test_child cascade constraints;
 drop table test_father cascade constraints;
 drop table test_father_children cascade constraints;
 
@@ -2094,16 +2049,15 @@ alter table test_father_children
 alter table test_user 
     add constraint FKB9A96B58A237D846 
     foreign key (card_id) 
-    references test_card;
-</code></pre>
-<p>oh！ My God ！它居然又帮我们多创建了一个table。作为关联。太笨了。</p>
+    references test_card;</code></pre>
+oh！ My God ！它居然又帮我们多创建了一个table。作为关联。太笨了。</p>
 <p>很明显，这不是我们所需要的。</p>
 <p>那我们该如何呢？这就需要ManyToMany了。</p>
 <h2 id="annotation-nn">annotation的关系映射 n:n</h2>
 <p>场景：Product和Customer。</p>
 <h3 id="pojo_7">Pojo</h3>
-<p>先看TestProduct.java</p>
-<pre><code class="language-java">import java.util.ArrayList;
+<p>先看TestProduct.java
+<pre class="highlight"><code class="language-java">import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -2132,11 +2086,10 @@ public class TestProduct
     public List getCustomers() { return customers; }
     public void setCustomers(List customers) { this.customers = customers; }
 
-}
-</code></pre>
+}</code></pre></p>
 <p>注意这里的ManyToMany什么都没有写。</p>
-<p>再看TestCustomer.java</p>
-<pre><code class="language-java">import java.util.ArrayList;
+<p>再看TestCustomer.java
+<pre class="highlight"><code class="language-java">import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -2156,15 +2109,14 @@ public class TestCustomer {
     public String getTel() { return tel; }
     public void setTel(String tel) { this.tel = tel; }
 
-    @ManyToMany(mappedBy = &quot;customers&quot;)
+    @ManyToMany(mappedBy = "customers")
     public List getProducts() { return products; }
     public void setProducts(List products) { this.products = products; }
-}
-</code></pre>
-<p><strong>注意：</strong>这里的ManyToMany我写了mappedBy这个attribute。</p>
+}</code></pre>
+<strong>注意：</strong>这里的ManyToMany我写了mappedBy这个attribute。</p>
 <h3 id="db_7">DB</h3>
-<p>然后看hib产生的sql:</p>
-<pre><code class="language-sql">drop table test_customer cascade constraints;
+<p>然后看hib产生的sql:
+<pre class="highlight"><code class="language-sql">drop table test_customer cascade constraints;
 drop table test_product cascade constraints;
 drop table test_product_customers cascade constraints;
 
@@ -2184,8 +2136,7 @@ create table test_product (
 create table test_product_customers (
     products_id varchar2(255 char) not null,
     customers_id varchar2(255 char) not null
-);
-</code></pre>
+);</code></pre></p>
 <p>ok! 非常好。hib终于在ManyToMany上没有犯白痴了。</p>
 <p>上面强调了mappedBy这个属性。其实，之前有提到mappedBy这个东西。只是，我没有说到底是什么意思。其实很简单：这个东西就相当于xml配置中的inverse。写了mappedBy就代表这个方法的返回值是被维护方。</p>
 </div>
@@ -2198,5 +2149,6 @@ create table test_product_customers (
 
     <!-- 你的 JavaScript 脚本在这里 -->
     
+  </div>
 </body>
 </html>
