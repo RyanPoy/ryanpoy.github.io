@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>
+  无共享架构
+</title>
 
   <link rel="stylesheet" href="../../assets/styles/main.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
@@ -74,6 +76,23 @@
 <li>后面有一个共享的cache或者cache集群，用来存放用户的session信息，这个解决了db的压力，能够用于实际，额外引入了第3方的东西，属于中策</li>
 <li>利用cookie，把session信息进行加密，且设置过期时间。这个解决了db的压力，不需要引入第3方lib，编码的工作很小。所以，属于上策</li>
 </ol>
+  <div style="margin-top: 4rem;">
+    <script src="https://giscus.app/client.js"
+          data-repo="YOUR REPO"
+          data-repo-id="YOUR REPO ID"
+          data-category="Comments"
+          data-category-id="YOUR CATEGORY ID"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="light"
+          data-lang="en"
+          crossorigin="anonymous"
+          async>
+    </script>
+  </div>
 </div>
 </main>
 
