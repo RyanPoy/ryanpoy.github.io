@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,13 +55,16 @@
   </div>
 
   <h1 class="post-title">Python Socket Programming</h1>
+
   <div class="post-line"></div>
 
-  <p>Python 的 socket 编程是进行网络通信的基础方式之一，它可以用来实现 TCP/UDP 服务端与客户端程序。下面我会用通俗的语言和代码例子，带你快速理解 socket 编程的基本用法和常见场景。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>Python 的 socket 编程是进行网络通信的基础方式之一，它可以用来实现 TCP/UDP 服务端与客户端程序。下面我会用通俗的语言和代码例子，带你快速理解 socket 编程的基本用法和常见场景。</p>
 <!---->
 
-<h2 id="synchronization">synchronization</h2>
-<h3 id="tcp">TCP</h3>
+<h2 id="synchronization">synchronization<a class="headerlink" href="#synchronization" title="Permanent link">&para;</a></h2>
+<h3 id="tcp">TCP<a class="headerlink" href="#tcp" title="Permanent link">&para;</a></h3>
 <p>server:
 <pre class="highlight"><code class="language-python">server = socket(AF_INET, SOCK_STREAM)
 server.bind((ip, port))
@@ -75,7 +79,7 @@ client.connect(ip, port)
 client.send(...)
 client.recv(...)
 client.close()</code></pre></p>
-<h3 id="udp">UDP</h3>
+<h3 id="udp">UDP<a class="headerlink" href="#udp" title="Permanent link">&para;</a></h3>
 <p>server:
 <pre class="highlight"><code class="language-python">server = socket(AF_INET, SOCK_DGRAM)
 server.bind((ip, port))
@@ -85,7 +89,7 @@ server.sendto(data, address)</code></pre></p>
 <pre class="highlight"><code class="language-python">client = socket(AF_INET, SOCK_DGRAM)
 client.recvfrom()
 client.sendto(data, address)</code></pre></p>
-<h2 id="asynchronization">asynchronization</h2>
+<h2 id="asynchronization">asynchronization<a class="headerlink" href="#asynchronization" title="Permanent link">&para;</a></h2>
 <p>server:
 <pre class="highlight"><code class="language-python">class Server(asyncore.dispatcher):
 
@@ -142,8 +146,9 @@ class ServerHandler(asyncore.dispatcher):
 
     def handle_close(self):
         pass</code></pre></p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -157,7 +162,45 @@ class ServerHandler(asyncore.dispatcher):
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#synchronization">synchronization</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#tcp">TCP</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#udp">UDP</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#asynchronization">asynchronization</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

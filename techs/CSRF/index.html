@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,14 +55,17 @@
   </div>
 
   <h1 class="post-title">谈CSRF</h1>
+
   <div class="post-line"></div>
 
-  <p>csrf 简单的说就是以跨域的方式，利用你正常的cookie，修改你在website上的数据。举一个例子：
+  <div class="post-container">
+    <div class="post-content">
+      <p>csrf 简单的说就是以跨域的方式，利用你正常的cookie，修改你在website上的数据。举一个例子：
 1. 当你正常登陆www.xxx.com。xxx.com会记录一个cookie到你的client端。表示，你现在已经正常登陆过了。
 2. 然后你访问一个恶意网站，www.evil.com, evil.com有一个链接，会提交一个post请求到xxx.com，修改你在xxx.com上的密码</p>
 <!--more-->
 
-<h2 id="csrf">如果防止csrf攻击</h2>
+<h2 id="csrf">如果防止csrf攻击<a class="headerlink" href="#csrf" title="Permanent link">&para;</a></h2>
 <ol>
 <li>验证HTTP Referer</li>
 </ol>
@@ -77,10 +81,11 @@
 <p>在HTTP的HEADER里面加入一个校验的token。但是由于在HEADER中，所以得采用AJAX。也比较安全，但是代码变化非常大</p>
 </li>
 </ol>
-<h2 id="_1">结论</h2>
+<h2 id="_1">结论<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>综上考虑，正常采用第2中方式最靠谱。不过，注意后端都需要写一个filter，用来校验这个token</p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -94,7 +99,29 @@
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#csrf">如果防止csrf攻击</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_1">结论</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

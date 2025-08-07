@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,13 +55,16 @@
   </div>
 
   <h1 class="post-title">pypy环境的gevent开发</h1>
+
   <div class="post-line"></div>
 
-  <p>在 PyPy 环境中使用 Gevent 开发 是一种常见的组合方式，尤其适合对 性能要求较高、又希望保持 Python 协程语义 的网络服务。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>在 PyPy 环境中使用 Gevent 开发 是一种常见的组合方式，尤其适合对 性能要求较高、又希望保持 Python 协程语义 的网络服务。</p>
 <p>下面我会从 环境搭建 → 基础用法 → 注意事项 → 适用场景 全面介绍你该怎么在 PyPy 下使用 Gevent 进行开发。</p>
 <!---->
 
-<h2 id="install-pypy">install pypy</h2>
+<h2 id="install-pypy">install pypy<a class="headerlink" href="#install-pypy" title="Permanent link">&para;</a></h2>
 <ul>
 <li>wget https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-2.3.1-linux_x86_64-portable.tar.bz2</li>
 <li>bunzip2 pypy-2.3.1-linux_x86_64-portable.tar.bz2</li>
@@ -68,7 +72,7 @@
 <li>mv pypy3-2.3.1-linux_x86_64-portable pypy-2.3.1</li>
 <li>ln -s pypy-2.3.1/bin/pypy /usr/bin/pypy</li>
 </ul>
-<h2 id="install-system-enviaronment">install system enviaronment</h2>
+<h2 id="install-system-enviaronment">install system enviaronment<a class="headerlink" href="#install-system-enviaronment" title="Permanent link">&para;</a></h2>
 <ul>
 <li>yum install --enablerepo=epel libev.x86_64</li>
 <li>yum install --enablerepo=epel libev-devel.x86_64</li>
@@ -77,7 +81,7 @@
 <p>must add --enablerepo=epel when install libev on amazon ec2，because there is not libev source in ec2's yum. </p>
 </blockquote>
 <p>if the libev can not install. you can make it by yourself.</p>
-<h2 id="install-system-enviaronment-by-yourself">install system enviaronment by yourself</h2>
+<h2 id="install-system-enviaronment-by-yourself">install system enviaronment by yourself<a class="headerlink" href="#install-system-enviaronment-by-yourself" title="Permanent link">&para;</a></h2>
 <ul>
 <li>wget http://dist.schmorp.de/libev/libev-4.15.tar.gz</li>
 <li>tar -xvf libev-4.15.tar.gz</li>
@@ -86,7 +90,7 @@
 <li>make</li>
 <li>make install</li>
 </ul>
-<h2 id="creat-the-pypy-virtual-enviaronment-for-development">creat the pypy virtual enviaronment for development</h2>
+<h2 id="creat-the-pypy-virtual-enviaronment-for-development">creat the pypy virtual enviaronment for development<a class="headerlink" href="#creat-the-pypy-virtual-enviaronment-for-development" title="Permanent link">&para;</a></h2>
 <ul>
 <li>cd pypy-2.3.1</li>
 <li>bin/virtualenv-pypy ~/PypyEnv</li>
@@ -101,7 +105,7 @@
 <blockquote>
 <p>If setup.py complains it can not locate ev.h it's possible the library search path isn't complete.  In that case add the directory containing ev.h to the include_dirs variable in pypycore.py (line 215). </p>
 </blockquote>
-<h2 id="some-anontations">some anontations</h2>
+<h2 id="some-anontations">some anontations<a class="headerlink" href="#some-anontations" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
 <p>write the gevent code, must write the code in first line.
@@ -126,8 +130,9 @@ if "__pypy__" in sys.builtin_module_names:
 <pre class="highlight"><code class="language-python">export GEVENT_LOOP=pypycore.loop</code></pre></p>
 </li>
 </ol>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -141,7 +146,44 @@ if "__pypy__" in sys.builtin_module_names:
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#install-pypy">install pypy</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#install-system-enviaronment">install system enviaronment</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#install-system-enviaronment-by-yourself">install system enviaronment by yourself</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#creat-the-pypy-virtual-enviaronment-for-development">creat the pypy virtual enviaronment for development</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#some-anontations">some anontations</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

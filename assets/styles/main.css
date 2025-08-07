@@ -84,7 +84,13 @@ code {
 }
 
 pre {
-    margin: 0 0 1rem
+    margin: 0 0 1rem;
+    white-space: pre-wrap;         /* 换行 */
+    word-wrap: break-word;         /* 老写法 */
+    overflow-wrap: break-word;     /* 新写法 */
+    word-break: break-word;        /* 兼容部分浏览器 */
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 pre code {
@@ -434,11 +440,59 @@ pre code {
     width: 80%
 }
 
-main,footer,.nav-container,.post {
+main,footer,.nav-container{
     display: block;
     margin: 0 auto;
     max-width: 1200px;
-    width: 70%
+}
+
+.post-container {
+    display: flex;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 84%;
+    gap: 2rem;
+}
+
+.post-content {
+    flex: 1 1 80%;
+    box-sizing: border-box;
+    /* 可选正文内边距 */
+    padding-left: 1rem;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+aside.toc {
+    flex: 0 0 20%;
+    position: sticky;
+    top: 1rem;
+    height: max-content;
+    padding-left: 0;
+    border-left: 1px solid #aaa;
+    font-size: 12px;
+}
+aside.toc ul {
+    padding-left: 1rem;
+}
+aside.toc ul, aside.toc li {
+    list-style: none;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+/* 移动端变成块布局，去掉flex */
+@media (max-width: 768px) {
+  .post-container {
+    display: block;
+  }
+  
+  .post-content {
+    width: 100%;
+  }
+  aside.toc {
+    display: none;
+  }
 }
 
 header {
@@ -575,7 +629,7 @@ footer span {
     /* border-bottom: 1px solid #e5e5e5; */
     color: #555;
     display: block;
-    padding: 2rem 0
+    padding: 2rem 15%; /* 15% 是因为 main的整体是70%width */
 }
 
 .catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line {

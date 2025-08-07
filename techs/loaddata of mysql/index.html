@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,9 +55,12 @@
   </div>
 
   <h1 class="post-title">mysql的loaddata加载数据的方式</h1>
+
   <div class="post-line"></div>
 
-  <p>LOAD DATA 是 MySQL 中用于 高效批量导入数据 的命令，适合把 CSV 或 TSV 文件中的数据直接加载到表中，速度远远高于逐条插入（INSERT）。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>LOAD DATA 是 MySQL 中用于 高效批量导入数据 的命令，适合把 CSV 或 TSV 文件中的数据直接加载到表中，速度远远高于逐条插入（INSERT）。</p>
 <!---->
 
 <p>进入数据库，敲入：
@@ -66,8 +70,9 @@
 <li>','： 表示字段之间按照','分割。</li>
 <li>'\n'：表示记录之间以'\n'分割。即：1行1条记录</li>
 </ul>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -81,7 +86,11 @@
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
   </div>
 </div>
 </main>

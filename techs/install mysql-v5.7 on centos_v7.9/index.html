@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,25 +55,30 @@
   </div>
 
   <h1 class="post-title">centos7.9安装mysql5.7</h1>
+
   <div class="post-line"></div>
 
-  <p>最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>最近在一台centos7.9的服务器上装mysql，整体并不顺利，比较折腾。所以，特点记录下来，方便以后查找。</p>
 <!--more-->
 
-<h2 id="yummysql">yum更新mysql源</h2>
+<h2 id="yummysql">yum更新mysql源<a class="headerlink" href="#yummysql" title="Permanent link">&para;</a></h2>
 <p>因为yum默认是mariadb，所以，需要更新yum的mysql源
-具体如下：
-- <code>wget https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</code>
-- <code>yum install -y mysql57-community-release-el7-10.noarch.rpm</code></p>
-<h2 id="yum-mysql">yum 安装并启动mysql</h2>
+具体如下：</p>
+<ul>
+<li><code>wget https://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</code></li>
+<li><code>yum install -y mysql57-community-release-el7-10.noarch.rpm</code></li>
+</ul>
+<h2 id="yum-mysql">yum 安装并启动mysql<a class="headerlink" href="#yum-mysql" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>yum install mysql</code></li>
 <li><code>systemctl start mysqld</code></li>
 </ul>
-<h2 id="mysqlroot">更新mysql的root密码</h2>
+<h2 id="mysqlroot">更新mysql的root密码<a class="headerlink" href="#mysqlroot" title="Permanent link">&para;</a></h2>
 <p>mysql安装完毕后，会给一个随机密码，具体可以通过执行 <code>grep 'password' /var/log/mysqld.log</code> 可以看到。</p>
 <p>通过mysql -uroot -p 登录成功后，执行 <code>alter user root@'localhost' identified by 'new-password';</code> 就修改新的root密码了</p>
-<h2 id="mysql">重新指定mysql的数据库位置</h2>
+<h2 id="mysql">重新指定mysql的数据库位置<a class="headerlink" href="#mysql" title="Permanent link">&para;</a></h2>
 <p>下面我们需要重新制定mysql数据库的位置。因为默认mysql数据库是在 /var/lib/mysql 目录下面 。而服务器的/var/lib/mysql一般没有多大空间。所以，我们把数据库位置放到 /data/lib/mysql上来。</p>
 <ul>
 <li>关闭mysql：<code>systemctl stop mysqld</code></li>
@@ -80,7 +86,7 @@
 <li>把mysql目录转移到目标目录：<code>mv /var/lib/mysql /data/lib</code></li>
 <li>修改mysql配置：<code>vim /etc/my.cnf</code>，把里面的/var/lib/mysql 修改为 /data/lib/mysql</li>
 </ul>
-<h2 id="_1">进一步排查错误</h2>
+<h2 id="_1">进一步排查错误<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>按道理说该修改的都完成了，但是当我们重新启动mysql时候，系统报错： 
 <pre class="highlight"><code class="language-shell">&gt;&gt;&gt; systemctl start mysqld
 &gt;&gt;&gt; 
@@ -93,8 +99,9 @@
 - 修改 /etc/selinux/config。修改：selinux=disabled，重新启动系统。
 - 重启mysql：<code>systemctl start mysqld</code></p>
 <p>这时候mysql启动成功。</p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -108,7 +115,44 @@
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#yummysql">yum更新mysql源</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#yum-mysql">yum 安装并启动mysql</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#mysqlroot">更新mysql的root密码</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#mysql">重新指定mysql的数据库位置</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_1">进一步排查错误</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

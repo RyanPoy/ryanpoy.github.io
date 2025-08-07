@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,9 +55,12 @@
   </div>
 
   <h1 class="post-title">网页解析</h1>
+
   <div class="post-line"></div>
 
-  <p>对于crawler, parse html 是一个必不可少的工作。现阶段有很多的开源库，python中也有自己的标准库。都是为了方便的解析html的。但是，由于我们的需求可能会变得很奇怪，比方说：对于script的东西也许也要解析。对于comment的东西可能也要分析。或者，还有其它的需求。为此，我重新造个轮子。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>对于crawler, parse html 是一个必不可少的工作。现阶段有很多的开源库，python中也有自己的标准库。都是为了方便的解析html的。但是，由于我们的需求可能会变得很奇怪，比方说：对于script的东西也许也要解析。对于comment的东西可能也要分析。或者，还有其它的需求。为此，我重新造个轮子。</p>
 <!--more-->
 
 <p>核心要求：
@@ -1514,8 +1518,9 @@ if __name__ == '__main__':
     test_main()
     test_main_2()
     test_main_3()</code></pre></p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -1529,7 +1534,11 @@ if __name__ == '__main__':
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
   </div>
 </div>
 </main>

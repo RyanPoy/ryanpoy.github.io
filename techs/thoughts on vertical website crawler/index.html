@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,12 +55,15 @@
   </div>
 
   <h1 class="post-title">关于垂直网站爬虫的思考</h1>
+
   <div class="post-line"></div>
 
-  <p>我的思考，聚焦于<strong>技术实现</strong>与<strong>指标体系</strong>两个方面：在技术层面，涵盖了调度策略、页面解析、异步并发、反反爬机制、结构化提取与数据清洗等关键模块的设计与协同；在指标维度，则需要从抓取成功率、字段完整率、数据准确性、系统吞吐量、资源利用率等角度出发，构建可量化的质量与性能评价体系，以支撑爬虫系统的高效、稳定与可维护性。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>我的思考，聚焦于<strong>技术实现</strong>与<strong>指标体系</strong>两个方面：在技术层面，涵盖了调度策略、页面解析、异步并发、反反爬机制、结构化提取与数据清洗等关键模块的设计与协同；在指标维度，则需要从抓取成功率、字段完整率、数据准确性、系统吞吐量、资源利用率等角度出发，构建可量化的质量与性能评价体系，以支撑爬虫系统的高效、稳定与可维护性。</p>
 <!---->
 
-<h2 id="_1">基本指标和难点</h2>
+<h2 id="_1">基本指标和难点<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ol>
 <li>实时性</li>
 <li>新的内容，需要很快的抓到</li>
@@ -82,7 +86,7 @@
 <li>多IP对外抓取</li>
 <li>通过Proxy</li>
 </ol>
-<h2 id="_2">子系统简单分析</h2>
+<h2 id="_2">子系统简单分析<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ol>
 <li>crawler，专门负责抓取的服务，输入是一个url，输入是一个url对应的页面</li>
 <li>scheduler，专门负责crawler的调度，能够控制crawler的各方面参数，可能需要多进程共享</li>
@@ -90,7 +94,7 @@
 <li>repository, 用来存取content的，非常简单，只有增删改查，注意大数据</li>
 <li>analyzer, 分析repository的内容，进行去重复，为索引服务</li>
 </ol>
-<h2 id="_3">抓取模型</h2>
+<h2 id="_3">抓取模型<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ol>
 <li>多线程</li>
 <li>实现简单，python的多线程无法重复利用多核</li>
@@ -100,8 +104,9 @@
 <li>实现复杂，重复利用多核</li>
 <li>性能高</li>
 </ol>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -115,7 +120,34 @@
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#_1">基本指标和难点</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_2">子系统简单分析</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_3">抓取模型</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

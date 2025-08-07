@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,9 +55,12 @@
   </div>
 
   <h1 class="post-title">python validation</h1>
+
   <div class="post-line"></div>
 
-  <p>在<code>Ruby on Rails</code>中，<code>Active Validation</code>是模型层中处理“数据校验”的核心机制。它提供了统一的校验逻辑。但是在Python中缺没有类似的工具。所以，模仿了 Active Validation，写了Python版本的。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>在<code>Ruby on Rails</code>中，<code>Active Validation</code>是模型层中处理“数据校验”的核心机制。它提供了统一的校验逻辑。但是在Python中缺没有类似的工具。所以，模仿了 Active Validation，写了Python版本的。</p>
 <!---->
 
 <pre class="highlight"><code class="language-python">#coding: utf-8
@@ -241,8 +245,9 @@ class ExclusionValidator(Validator):
             return allow_blank
 
         return value not in exclusion_values</code></pre>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -256,7 +261,11 @@ class ExclusionValidator(Validator):
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
   </div>
 </div>
 </main>

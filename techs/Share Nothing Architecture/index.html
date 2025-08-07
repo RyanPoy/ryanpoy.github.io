@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,12 +55,15 @@
   </div>
 
   <h1 class="post-title">无共享架构</h1>
+
   <div class="post-line"></div>
 
-  <p>"无共享架构"这个词是网上早就有了的。而我是在处理实际的问题时候，想到了一些解决方案，然后再通过解决方案去找就发现了它。就直接拿来用了。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>"无共享架构"这个词是网上早就有了的。而我是在处理实际的问题时候，想到了一些解决方案，然后再通过解决方案去找就发现了它。就直接拿来用了。</p>
 <!--more-->
 
-<h2 id="question">question</h2>
+<h2 id="question">question<a class="headerlink" href="#question" title="Permanent link">&para;</a></h2>
 <p>问题是这样的：</p>
 <ol>
 <li>
@@ -70,14 +74,15 @@
 </li>
 </ol>
 <p>所以，我们就需要解决这个问题</p>
-<h2 id="solutions">solutions</h2>
+<h2 id="solutions">solutions<a class="headerlink" href="#solutions" title="Permanent link">&para;</a></h2>
 <ol>
 <li>所有的session存放到db中，逻辑上解决了session的共享问题。但是，db的压力会突然间增大，不适合采用，属于下策</li>
 <li>后面有一个共享的cache或者cache集群，用来存放用户的session信息，这个解决了db的压力，能够用于实际，额外引入了第3方的东西，属于中策</li>
 <li>利用cookie，把session信息进行加密，且设置过期时间。这个解决了db的压力，不需要引入第3方lib，编码的工作很小。所以，属于上策</li>
 </ol>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -91,7 +96,29 @@
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#question">question</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#solutions">solutions</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

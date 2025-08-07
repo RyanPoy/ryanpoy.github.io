@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,14 +55,17 @@
   </div>
 
   <h1 class="post-title">也谈AB测试</h1>
+
   <div class="post-line"></div>
 
-  <p>前一阵子，团队做了一套AB测试的通用解决方案。在这里，不想聊具体怎么实现的。反而想聊一下怎样才是正确AB测试。因为在内部推广的时候，发现大家对AB测还是不明白。
+  <div class="post-container">
+    <div class="post-content">
+      <p>前一阵子，团队做了一套AB测试的通用解决方案。在这里，不想聊具体怎么实现的。反而想聊一下怎样才是正确AB测试。因为在内部推广的时候，发现大家对AB测还是不明白。
 - 不明白为什么要AB测试
 - 不明白如何做AB测试</p>
 <!--more-->
 
-<h2 id="_1">聊聊现实</h2>
+<h2 id="_1">聊聊现实<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>现实中，不做AB测试，而是<code>想当然</code>的例子很多。例如：
 1. 感冒了，吃了感冒药，第2天感冒好了，所以感冒是感冒药治好的
 2. 暑假期间，播放产品进行了改版，运营也上了新的播放内容，DAU涨了。但原因说不清楚了。
@@ -80,7 +84,7 @@
 - 暑假期间从理论上讲会使得自然流量上涨。嗯，是的！貌似只有这个能站住脚，但是这个也只是经验之谈。</p>
 <p>上面的例子，本质上是自认为得到了一个因果结论。但是请注意：每当我们得出一个因果结论的时候，一定要加倍小心，一定要再三的反问自己，这个因果是真正的因果么？我们是不是把一个经验结论当成了一个因果结论？</p>
 <p>其实因果关系，需要用一套行之有效的科学方法和科学标准来检验。只有这样，才能确定它是否真正反映了事物的因果关系。而这种科学方法和标准就是<code>对照实验</code></p>
-<h2 id="_2">对照实验</h2>
+<h2 id="_2">对照实验<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>什么是对照实验呢？通俗来说，对照实验就是将实验对象随机分成两个组，一个实验组 (treatment group)，一个对照组 (control group)。对实验组人为地修改某一个控制变量，来实施实验，而对照组仅是用来做对比。通过实验组和对照组的比较，从而退出控制变量和结果之间是否有因果关系。</p>
 <p><strong>来看一个<code>正确的</code>对照实验的例子：</strong>
 『坏血病』在历史上曾是严重威胁人类健康的一种疾病，尤其在远洋航行的水手中更为严重。在18世纪，一位英国船长发现，在一些地中海国家的海军舰艇上服役的船员没有坏血病。他注意到，这些船员的食物配给中含有柑橘类(citrus)水果。于是，为了弄清真正的原因，这位船长将他的船员们<code>随机</code>分为两组：其中一组在日常饮食中加入酸橙(limes)，而另外一组维持原来的食谱不变。结果通过对比发现，定期食用酸橙的一组船员，真的防止了坏血病的发生。后来，定期食用柑橘类水果就变成了英国水手必须遵循的一种规定。</p>
@@ -97,7 +101,7 @@
 </blockquote>
 <p>这个例子也犯了相同的的错误：就是在一开始挑选用户的时候，不随机，一部分占比10/256，一部分占比246。这样也得出了错误的因果关系。</p>
 <p>由上可见，我们设计实验来探索或验证因果律的时候，需要加倍小心。因为实验本身就可能存在陷阱和选择性偏差。</p>
-<h2 id="_3">结论</h2>
+<h2 id="_3">结论<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>通篇说了这么多，也就是为了来解答本文开始的这两个问题。最后做个总结吧。</p>
 <ol>
 <li>不明白为什么要AB测试</li>
@@ -112,8 +116,9 @@
 <li>要把实验对象分成两组：<code>实验组</code> 和 <code>对照组</code></li>
 <li>实验过程中，只能改变一个因素，从而得出一个因素带来的结果。因为如果改变了多个因素，结果是多个因素的叠加，不具备唯一变量。</li>
 </ol>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -127,7 +132,34 @@
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#_1">聊聊现实</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_2">对照实验</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_3">结论</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

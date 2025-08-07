@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,13 +55,16 @@
   </div>
 
   <h1 class="post-title">Webpy使用教程</h1>
+
   <div class="post-line"></div>
 
-  <p>Web.py 是一个轻量级的 Python Web 框架，它以简单、直接而闻名，旨在让 Web 应用开发变得快速而容易。Web.py的核心代码库非常小巧，只提供构建 Web 应用所需的基本功能，如 URL 路由、请求/响应处理、模板渲染等。这让它非常容易学习和上手。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>Web.py 是一个轻量级的 Python Web 框架，它以简单、直接而闻名，旨在让 Web 应用开发变得快速而容易。Web.py的核心代码库非常小巧，只提供构建 Web 应用所需的基本功能，如 URL 路由、请求/响应处理、模板渲染等。这让它非常容易学习和上手。</p>
 <!--more-->
 
 <p>来<a href="https://sohu.com">搜狐</a>后，这里做的系统几乎都是 webpy + twsited 写的。所以，有必要好好学习一下这两个东西了。从今天开始介绍Web.py。</p>
-<h2 id="server">Server</h2>
+<h2 id="server">Server<a class="headerlink" href="#server" title="Permanent link">&para;</a></h2>
 <p><strong>安装</strong>
 <pre class="highlight"><code class="language-shell">sudo pip install web.py</code></pre></p>
 <p><strong>第一个demo</strong>
@@ -98,7 +102,7 @@ if __name__ == '__main__':
 <p><strong>总结</strong>
 1. url 简单的就是字符串，和django很类似
 2. 对于Controller而言，get请求执行GET方法，post请求执行POST方法，估计PUT和DELETE等也是一样的</p>
-<h2 id="template">Template</h2>
+<h2 id="template">Template<a class="headerlink" href="#template" title="Permanent link">&para;</a></h2>
 <p>公司直接用的jinja。jinja和django template的太相似了。说说如果在webpy中使用jinja。</p>
 <p><strong>webpy_jinja.py</strong>
 <pre class="highlight"><code class="language-python">#coding: utf-8
@@ -134,7 +138,7 @@ if __name__ == "__main__":
 <p><strong>跳转</strong>
 - Hello 的 GET 请求就是直接的服务器渲染页面，发送给客户端(一般是browser)
 - Hello 的 POST 就是服务器端返回给客户端http code，然后客户端直接进行跳转，再次跳转到Hello的GET上</p>
-<h2 id="_1">数据库操作</h2>
+<h2 id="_1">数据库操作<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p><strong>得到连接</strong>
 <pre class="highlight"><code class="language-python">db = web.database(dbn='postgres', db='mydata', user='dbuser', pw='')</code></pre></p>
 <p><strong>简单查询</strong>
@@ -169,7 +173,7 @@ db.update('table_name', where="id = 10", username = "pengyi") </code></pre></p>
     db.insert('table_name', name='py')
     db.insert('table_name', name='pengyi')</code></pre>
 部署就不用说太多。直接fastcgi</p>
-<h3 id="cgi">cgi配置</h3>
+<h3 id="cgi">cgi配置<a class="headerlink" href="#cgi" title="Permanent link">&para;</a></h3>
 <p><strong>安装flug</strong>
 <pre class="highlight"><code class="language-shell">sudo pip install flup</code></pre></p>
 <p><strong>webpy启动代码中写</strong>
@@ -180,7 +184,7 @@ def start_fcgi():
     app = web.application(urls, globals())
     web.wsgi.runwsgi = lambda func, addr = None: flups.WSGIServer(func, multiplexed=False, bindAddress=addr).run()
     app.run()</code></pre></p>
-<h3 id="_2">性能测试</h3>
+<h3 id="_2">性能测试<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
 <p>webpy的性能真的是不敢恭维啊</p>
 <p>代码如下：
 <pre class="highlight"><code class="language-python">#coding: utf-8    
@@ -315,8 +319,9 @@ if __name__ == '__main__':
 &gt;&gt;&gt;   99%   7674
 &gt;&gt;&gt;  100%   7802 (longest request)</code></pre>
 每秒：131个请求，响应时间是：757ms左右。无法忍受了。</p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -330,7 +335,50 @@ if __name__ == '__main__':
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#server">Server</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#template">Template</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_1">数据库操作</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#cgi">cgi配置</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#_2">性能测试</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

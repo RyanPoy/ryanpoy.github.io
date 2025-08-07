@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,12 +55,15 @@
   </div>
 
   <h1 class="post-title">python奇技淫巧</h1>
+
   <div class="post-line"></div>
 
-  <p>在Python中，有一些常见不常用又很有用的<strong>奇技淫巧</strong></p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>在Python中，有一些常见不常用又很有用的<strong>奇技淫巧</strong></p>
 <!--more-->
 
-<h2 id="getattribute"><strong>getattribute</strong></h2>
+<h2 id="getattribute"><strong>getattribute</strong><a class="headerlink" href="#getattribute" title="Permanent link">&para;</a></h2>
 <p>先上代码
 <pre class="highlight"><code class="language-python">class Foo(object):
 
@@ -82,7 +86,7 @@ print f.value</code></pre></p>
 &gt;&gt;&gt; hello</code></pre></p>
 <p>可见 当调用一个Instance.attr 或者 Instance.method的时候，实际上是调用了<code>__getattribute__</code>
 注意不要在__getattribute__的方法里面写Intance.xx，否则会进入死递归，直到溢出</p>
-<h2 id="getattr"><strong>getattr</strong></h2>
+<h2 id="getattr"><strong>getattr</strong><a class="headerlink" href="#getattr" title="Permanent link">&para;</a></h2>
 <p>上代码：
 <pre class="highlight"><code class="language-python">#coding: utf-8
 
@@ -117,7 +121,7 @@ print f.value1</code></pre></p>
 可见 当调用一个Instance.attr 或者 Instance.method的时候，实际上先调用了<code>__getattribute__</code>，当没有找到的时候，</p>
 <p>再调用<code>__getattr__</code>方法。</p>
 <p>利用上面的方法，其实类似于rails里面的missing_method在Python中也可以实现</p>
-<h2 id="setattr"><strong>setattr</strong></h2>
+<h2 id="setattr"><strong>setattr</strong><a class="headerlink" href="#setattr" title="Permanent link">&para;</a></h2>
 <p>上代码：
 <pre class="highlight"><code class="language-python">#coding: utf-8
 
@@ -148,7 +152,7 @@ print f.hello()</code></pre></p>
 <pre class="highlight"><code class="language-python">Instance.attr = value
 Instance.method = xxx</code></pre>
 都是调用的<code>__setattr__</code>方法，注意不要在<code>__setattr__</code>里面再调用Instance.xx = yy或者 setattr的方法，否则会进行死递归，直到溢出</p>
-<h2 id="with-as">with ... as ...</h2>
+<h2 id="with-as">with ... as ...<a class="headerlink" href="#with-as" title="Permanent link">&para;</a></h2>
 <p>python2.6中有一个特殊的用法：<code>with...as...</code>  ；  在2.5中需要<code>import __feature__</code>;</p>
 <p>先来说说他的用法，先看看一般我们如何打开并且读取一个文件的：
 <pre class="highlight"><code class="language-python">f = None
@@ -217,7 +221,7 @@ class User(object):
 
 with User.transaction():
     # do sth.</code></pre></p>
-<h2 id="_1">巧用异常得到代码片段的信息</h2>
+<h2 id="_1">巧用异常得到代码片段的信息<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>python 有<code>__file__</code>, 但没有<code>__funcname__</code>, <code>__line__</code> 这样的东西，来描述目前执行到什么方法，哪一行。怎么办？巧用异常，可以得到相应的信息。
 <pre class="highlight"><code class="language-python">#utf-8
 import sys
@@ -235,7 +239,7 @@ def test():
 
 if __name__ == '__main__':
     test()</code></pre></p>
-<h2 id="_2">基本数学</h2>
+<h2 id="_2">基本数学<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p><strong>一个方法得到整数和余数</strong>
 <pre class="highlight"><code class="language-python">print divmod(5, 3)</code></pre></p>
 <p><strong>利用两个*号，求幂</strong>
@@ -291,8 +295,9 @@ l.sort(key = str.lower)</code></pre></li>
 对于字典来说，key是hash算法。那么，无法保证插入顺序。但是python的标准库里面提供了一个SortedDict，用法和dict一样。
 <pre class="highlight"><code class="language-python">for k, v in SortedDict(a=1, b=2, c=3, aa=4, bb=5).iteritems():
     print k, v</code></pre></p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -306,7 +311,49 @@ l.sort(key = str.lower)</code></pre></li>
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#getattribute">getattribute</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#getattr">getattr</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#setattr">setattr</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#with-as">with ... as ...</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_1">巧用异常得到代码片段的信息</a>
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#_2">基本数学</a>
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

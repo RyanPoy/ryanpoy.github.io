@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,25 +55,28 @@
   </div>
 
   <h1 class="post-title">Homebrew修改国内源</h1>
+
   <div class="post-line"></div>
 
-  <p>因为众所周知的原因，正常访问homebrew是很难的。所以，我们需要修改它的源，让其指向国内。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>因为众所周知的原因，正常访问homebrew是很难的。所以，我们需要修改它的源，让其指向国内。</p>
 <!--more-->
 
-<h1 id="homebrew4">对于 homebrew，需要替换的是4个模块的镜像：</h1>
+<h1 id="homebrew4">对于 homebrew，需要替换的是4个模块的镜像：<a class="headerlink" href="#homebrew4" title="Permanent link">&para;</a></h1>
 <ul>
 <li>Homebrew</li>
 <li>Homebrew Core</li>
 <li>Homebrew-bottles</li>
 <li>Homebrew Cask</li>
 </ul>
-<h3 id="homebrew">替换 Homebrew</h3>
+<h3 id="homebrew">替换 Homebrew<a class="headerlink" href="#homebrew" title="Permanent link">&para;</a></h3>
 <p>git -C "$(brew --repo)" remote set-url origin https://mirrors.ustc.edu.cn/brew.git</p>
-<h3 id="homebrew-core">替换 Homebrew Core</h3>
+<h3 id="homebrew-core">替换 Homebrew Core<a class="headerlink" href="#homebrew-core" title="Permanent link">&para;</a></h3>
 <p>git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git</p>
-<h3 id="homebrew-cask">替换 Homebrew Cask</h3>
+<h3 id="homebrew-cask">替换 Homebrew Cask<a class="headerlink" href="#homebrew-cask" title="Permanent link">&para;</a></h3>
 <p>git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git</p>
-<h3 id="homebrew-bottles">替换 Homebrew-bottles</h3>
+<h3 id="homebrew-bottles">替换 Homebrew-bottles<a class="headerlink" href="#homebrew-bottles" title="Permanent link">&para;</a></h3>
 <ul>
 <li>对于 bash 用户：</li>
 </ul>
@@ -83,8 +87,9 @@ source ~/.bash_profile</p>
 </ul>
 <p>echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' &gt;&gt; ~/.zshrc
 source ~/.zshrc</p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -98,7 +103,50 @@ source ~/.zshrc</p>
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-1">
+    <a href="#homebrew4">对于 homebrew，需要替换的是4个模块的镜像：</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#homebrew">替换 Homebrew</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#homebrew-core">替换 Homebrew Core</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#homebrew-cask">替换 Homebrew Cask</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#homebrew-bottles">替换 Homebrew-bottles</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>

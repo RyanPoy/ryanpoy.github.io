@@ -42,6 +42,7 @@
 
     <!-- 这是 MkDocs 注入页面内容的地方 -->
     <main>
+
 <div class="post">
   <div class="post-info">
     <span>Written by</span>
@@ -54,18 +55,21 @@
   </div>
 
   <h1 class="post-title">Hibernate入门使用</h1>
+
   <div class="post-line"></div>
 
-  <p>Hibernate入门使用文章, 主要讲快速使用，不会介绍太多的深层次的东西。方便自己，方便大家。因本人懒惰，记不住hibernate的配置选项，所以，此文实例都是使用myeclipse进行快速开发，数据库都是mysql。</p>
+  <div class="post-container">
+    <div class="post-content">
+      <p>Hibernate入门使用文章, 主要讲快速使用，不会介绍太多的深层次的东西。方便自己，方便大家。因本人懒惰，记不住hibernate的配置选项，所以，此文实例都是使用myeclipse进行快速开发，数据库都是mysql。</p>
 <!--more-->
 
-<h2 id="_1">初次使用</h2>
+<h2 id="_1">初次使用<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>直接上需求：实现对用户的增、删、改、查。</p>
 <p>为了方便，用户就2个属性 用户ID和用户名。实体模型如下：</p>
 <p><img alt="Imgurl" src="/assets/images/hibernate-1.gif" /></p>
 <p>建立工程:HibernateQuickUse，并且建立包。如下：</p>
 <p><img alt="Imgurl" src="/assets/images/hibernate-2.gif" /></p>
-<h3 id="pojo">Pojo</h3>
+<h3 id="pojo">Pojo<a class="headerlink" href="#pojo" title="Permanent link">&para;</a></h3>
 <p>根据实体，创建类User，代码如下：</p>
 <pre class="highlight"><code class="language-java">@SuppressWarnings("serial")
 public class User implements java.io.Serializable {
@@ -77,7 +81,7 @@ public class User implements java.io.Serializable {
     public String getName() { return this.name; }
     public void setName(String name) {this.name = name;}
 }</code></pre>
-<h3 id="db">DB</h3>
+<h3 id="db">DB<a class="headerlink" href="#db" title="Permanent link">&para;</a></h3>
 <p>根据实体，创建数据表。sql如下：</p>
 <pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists User;
@@ -86,7 +90,7 @@ create table user (
     name varchar(32)
 );</code></pre>
 <p>这里的id，我没有采用Integer auto_increment, 原因是为了数据库的数据能方便的导入到另外一种数据库里面，比方说：oracle。当然，这个是以牺牲部分效率为前提的。因为id是integer的，能更加快速查询。不过，从数据库会自动为 primary key 建立 index来看，效率也不会相差太多。</p>
-<h3 id="hibernatecfgxml">hibernate.cfg.xml</h3>
+<h3 id="hibernatecfgxml">hibernate.cfg.xml<a class="headerlink" href="#hibernatecfgxml" title="Permanent link">&para;</a></h3>
 <p>要想通过hibernate访问数据库。首先要建立描述数据库的文件：hibernate.cfg.xml。放到src下面。内容如下：</p>
 <pre class="highlight"><code class="language-xml">&lt;!DOCTYPE hibernate-configuration PUBLIC  
             "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
@@ -104,7 +108,7 @@ create table user (
         &lt;mapping resource="org/py/hib/quickstart/User.hbm.xml" /&gt;  
     &lt;/session-factory&gt;  
 &lt;/hibernate-configuration&gt;</code></pre>
-<h3 id="userhbmxml">User.hbm.xml</h3>
+<h3 id="userhbmxml">User.hbm.xml<a class="headerlink" href="#userhbmxml" title="Permanent link">&para;</a></h3>
 <p>实体-数据库映射文件 -- 主要是告诉hibernate，这个User类，对应着哪个table，User类里面的那个属性对应着table里面的哪个字段。</p>
 <p>我们可以建立 实体-数据库 的xml映射文件，也可以采用Annotations映射，但是目前只说xml映射方式。如下：
 <pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
@@ -119,7 +123,7 @@ create table user (
         &lt;property name="name"  type="java.lang.String" column="name" length="32" /&gt;  
     &lt;/class&gt;
 &lt;/hibernate-mapping&gt;</code></pre></p>
-<h3 id="testing">Testing</h3>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
 <p>有了上面的准备，那么我们开始来用junit测试.
 我把测试用力放到了test/org.py.hib.quickstart下面。代码如下：
 <pre class="highlight"><code class="language-java">import junit.framework.Assert;
@@ -329,11 +333,11 @@ Hibernate: delete from hibernatequickuse.user where id=?
 === test find after delete ===
 Hibernate: select user0_.id as id6_, user0_.name as name6_ from hibernatequickuse.user user0_</code></pre>
 这些，就是hibernte自动生成的。仔细看看，其实就是标准sql。呵呵。懂jdbc的都能看懂。</p>
-<h2 id="xml-11">xml关系映射 1:1</h2>
+<h2 id="xml-11">xml关系映射 1:1<a class="headerlink" href="#xml-11" title="Permanent link">&para;</a></h2>
 <p>1对1的关系在现实中很常见。比方说：人和身份证。1个身份证对应着一个身份证，一个身份证对应着一个人。那么，我们就以此为原型。进行代码编写。</p>
 <p>实体模型</p>
 <p><img alt="1对1实体模型" src="/assets/images/hibernate-3.gif" /></p>
-<h3 id="db_1">DB</h3>
+<h3 id="db_1">DB<a class="headerlink" href="#db_1" title="Permanent link">&para;</a></h3>
 <p>根据模型，创建数据库：
 <pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists Person;
@@ -350,7 +354,7 @@ create table Person (
     card_id varchar(32) not null,
     foreign key(card_id) references Card(id)
 );</code></pre></p>
-<h3 id="pojo_1">Pojo</h3>
+<h3 id="pojo_1">Pojo<a class="headerlink" href="#pojo_1" title="Permanent link">&para;</a></h3>
 <p>java代码如下：</p>
 <p>Person类</p>
 <pre class="highlight"><code class="language-java">
@@ -387,7 +391,7 @@ public class Card implements java.io.Serializable
     public String getCardDesc() { return cardDesc; }
     public void setCardDesc(String cardDesc) { this.cardDesc = cardDesc; }
 }</code></pre></p>
-<h3 id="mapping-xml">Mapping Xml</h3>
+<h3 id="mapping-xml">Mapping Xml<a class="headerlink" href="#mapping-xml" title="Permanent link">&para;</a></h3>
 <p>xml映射文件如下：</p>
 <p>Person.hbm.xml
 <pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
@@ -425,7 +429,7 @@ public class Card implements java.io.Serializable
 
     &lt;/class&gt;  
 &lt;/hibernate-mapping&gt; </code></pre></p>
-<h3 id="testing_1">Testing</h3>
+<h3 id="testing_1">Testing<a class="headerlink" href="#testing_1" title="Permanent link">&para;</a></h3>
 <p>测试代码如下：</p>
 <p>One2OneTest.java</p>
 <pre class="highlight"><code class="language-java">import junit.framework.Assert;
@@ -636,12 +640,12 @@ public class One2OneTest extends TestCase {
 }</code></pre>
 <p>运行test，一路飚绿。呵呵。陶醉一番。不过，这也就是一个拿不出手的测试和一个拿不出手的例子。没有任何实际意义的例子。仅此一个demo而已。</p>
 <p>在1：1中，其实还有一种方式，即：唯一主见关联。但是，我一直倾向于上面的这种形式，所以，唯一主见关联的就不再介绍了。</p>
-<h2 id="xml-1n">xml关系映射 1:n</h2>
+<h2 id="xml-1n">xml关系映射 1:n<a class="headerlink" href="#xml-1n" title="Permanent link">&para;</a></h2>
 <p>因为n:1就是1:1，两者是一样的，所以不单独说了。下面主要讲主要讲1:n：</p>
 <p>这次用到的例子是Father和child之间的关系。一个father可以有n个child，但是1个child只有一个father。这里只说生父。至于其他的继父、养父、干爹等等，不再范围之内。</p>
 <p>建立实体模型如下：</p>
 <p><img alt="One2Many" src="/assets/images/hibernate-4.gif" /></p>
-<h3 id="db_2">DB</h3>
+<h3 id="db_2">DB<a class="headerlink" href="#db_2" title="Permanent link">&para;</a></h3>
 <p>根据模型创建数据库。sql脚本如下：
 <pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists Child;
@@ -658,7 +662,7 @@ create table Child (
     father_id varchar(32) not null,
     foreign key(father_id) references Father(id)
 );</code></pre></p>
-<h3 id="pojo_2">Pojo</h3>
+<h3 id="pojo_2">Pojo<a class="headerlink" href="#pojo_2" title="Permanent link">&para;</a></h3>
 <p>根据模型创建java对象。</p>
 <p>Father.java：
 <pre class="highlight"><code class="language-java">import java.util.HashSet;
@@ -698,7 +702,7 @@ public class Child implements java.io.Serializable
     public String getName() { return this.name; }
     public void setName(String name) { this.name = name;}
 }</code></pre></p>
-<h3 id="mapping-xml_1">Mapping Xml</h3>
+<h3 id="mapping-xml_1">Mapping Xml<a class="headerlink" href="#mapping-xml_1" title="Permanent link">&para;</a></h3>
 <p>映射文件如下：</p>
 <p>Father.hbm.xml：
 <pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
@@ -749,7 +753,7 @@ public class Child implements java.io.Serializable
     &lt;/class&gt;  
 &lt;/hibernate-mapping&gt; </code></pre>
 这个里面主要就是多了一个many-to-one，表示child 和 father 的关系是"many-to-one"</p>
-<h3 id="testing_2">Testing</h3>
+<h3 id="testing_2">Testing<a class="headerlink" href="#testing_2" title="Permanent link">&para;</a></h3>
 <p>测试代码如下：</p>
 <p>One2ManyTest.java
 <pre class="highlight"><code class="language-java">import java.util.Set;
@@ -1130,12 +1134,12 @@ Hibernate: delete from father where id=?
 Hibernate: select father0_.id as id33_, father0_.name as name33_ from father father0_
 Hibernate: select child0_.id as id34_, child0_.name as name34_, child0_.father_id as father3_34_ from child child0_</code></pre></p>
 <p>所以，<strong>inverse的设置是很重要的一个事情。</strong></p>
-<h2 id="xml-nn">xml关系映射 n:n</h2>
+<h2 id="xml-nn">xml关系映射 n:n<a class="headerlink" href="#xml-nn" title="Permanent link">&para;</a></h2>
 <p>我们以老师和学生为例，一个老师可以交很多学生，同样一个学生可以拥有多个老师，所以，他们之间的关系就是n：n的。</p>
 <p>实体模型：
 <img alt="many2many" src="/assets/images/hibernate-5.gif" /></p>
 <p>从实体模型来看。有2个对象，但是为了在数据库中表示出2者的n:n的关系，我们还得引入一张表。</p>
-<h3 id="db_3">DB</h3>
+<h3 id="db_3">DB<a class="headerlink" href="#db_3" title="Permanent link">&para;</a></h3>
 <p>sql脚本如下：
 <pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 drop table if exists teacher_student_relation;
@@ -1159,7 +1163,7 @@ create table teacher_student_relation (
     foreign key(teacher_id) references Teacher(tid),
     foreign key(student_id) references Student(sid)
 );</code></pre></p>
-<h3 id="pojo_3">Pojo</h3>
+<h3 id="pojo_3">Pojo<a class="headerlink" href="#pojo_3" title="Permanent link">&para;</a></h3>
 <p>通过模型，创建java类如下：</p>
 <p>Student.java
 <pre class="highlight"><code class="language-java">import java.util.HashSet;
@@ -1203,7 +1207,7 @@ public class Teacher implements java.io.Serializable {
     public Set getStudents() { return students;}
     public void setStudents(Set students) { this.students = students;}
 }</code></pre>
-<h3 id="mapping-xml_2">Mapping Xml</h3>
+<h3 id="mapping-xml_2">Mapping Xml<a class="headerlink" href="#mapping-xml_2" title="Permanent link">&para;</a></h3>
 <p>xml映射文件如下</p>
 <p>Student.hbm.xml
 <pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
@@ -1585,10 +1589,10 @@ public class Many2ManyTest extends TestCase {
 
 }</code></pre>
 从这个例子中可以看出，many-to-many中，需要引入第3张表来表示关系。</p>
-<h2 id="xml-case">xml关系映射 - 复杂的case</h2>
+<h2 id="xml-case">xml关系映射 - 复杂的case<a class="headerlink" href="#xml-case" title="Permanent link">&para;</a></h2>
 <p>需求：丈夫有1个妻子，这样是1夫1妻。但是，丈夫花心，同时有多个情妇。</p>
 <p>例子归例子，大家不要做这样的丈夫。只是为了更加深入记忆。</p>
-<h3 id="db_4">DB</h3>
+<h3 id="db_4">DB<a class="headerlink" href="#db_4" title="Permanent link">&para;</a></h3>
 <p>先看sql：</p>
 <pre class="highlight"><code class="language-sql">use HibernateQuickUse;
 
@@ -1615,7 +1619,7 @@ create table Paramour (
     husband_id varchar(32) not null,
     foreign key(husband_id) references Husband(hid)
 );</code></pre>
-<h3 id="pojo_4">Pojo</h3>
+<h3 id="pojo_4">Pojo<a class="headerlink" href="#pojo_4" title="Permanent link">&para;</a></h3>
 <p>然后看java文件。</p>
 <p>Husband.java
 <pre class="highlight"><code class="language-java">import java.util.HashSet;
@@ -1674,7 +1678,7 @@ public class Paramour implements java.io.Serializable {
     public String getName() { return this.name; }
     public void setName(String name) { this.name = name; }
 }</code></pre></p>
-<h3 id="mapping-xml_3">Mapping Xml</h3>
+<h3 id="mapping-xml_3">Mapping Xml<a class="headerlink" href="#mapping-xml_3" title="Permanent link">&para;</a></h3>
 <p>接下来再看xml映射文件。</p>
 <p>Husband.hbm.xml
 <pre class="highlight"><code class="language-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;  
@@ -1731,7 +1735,7 @@ public class Paramour implements java.io.Serializable {
     &lt;/class&gt;  
 
 &lt;/hibernate-mapping&gt; </code></pre></p>
-<h3 id="testing_3">Testing</h3>
+<h3 id="testing_3">Testing<a class="headerlink" href="#testing_3" title="Permanent link">&para;</a></h3>
 <p>这里只测试了save。其他的测试大家感兴趣的可以补充。
 ComplexTest.java
 <pre class="highlight"><code class="language-java">import junit.framework.Assert;
@@ -1804,11 +1808,11 @@ public class ComplexTest extends TestCase {
         factory.close();
     }
 }</code></pre></p>
-<h2 id="annotation-11">annotation关系映射 1:1</h2>
+<h2 id="annotation-11">annotation关系映射 1:1<a class="headerlink" href="#annotation-11" title="Permanent link">&para;</a></h2>
 <p>讲完了xml的关系映射，下面讲一下annatation的关系映射
 这讲OneToOne的用法。而且是基于主外键的关联。因为这个是实际开发中最最常见的。</p>
 <p>这里先说明一下，我的java类的命名都以Test开头。而对应的对象名却没有用test开头。这里是为了更好的说明注视中的value到底是类名还是对象名。</p>
-<h3 id="pojo_5">Pojo</h3>
+<h3 id="pojo_5">Pojo<a class="headerlink" href="#pojo_5" title="Permanent link">&para;</a></h3>
 <p>先看java代码：</p>
 <p>TestUser.java
 <pre class="highlight"><code class="language-java">import javax.persistence.Entity;
@@ -1851,7 +1855,7 @@ public class TestCard
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
 }</code></pre>
 这样子就是OneToOne了。这个是单向的关系，即：由TestCard控制TestUser。看sql语句就知道了。</p>
-<h3 id="db_5">DB</h3>
+<h3 id="db_5">DB<a class="headerlink" href="#db_5" title="Permanent link">&para;</a></h3>
 <p>hibernate自动生成的sql为：
 <pre class="highlight"><code class="language-sql">drop table test_card cascade constraints;
 
@@ -1969,10 +1973,10 @@ alter table test_user add constraint FKB9A96B58A237D846 foreign key (card_id) re
 <p>或者，还可以这样子来理解OneToOne。</p>
 <p>1.单向OneToOne中。声明了OneToOne这个Annotation的方法，他的返回值即：维护方。(主键方)
 1.双向OneToOne中。在OneToOne中声明了mappedBy="xx"的，他的返回值即：被维护方。(外键方)</p>
-<h2 id="annotation-1n">annotation的关系映射 1:n</h2>
+<h2 id="annotation-1n">annotation的关系映射 1:n<a class="headerlink" href="#annotation-1n" title="Permanent link">&para;</a></h2>
 <p>这次说说OneToMany和ManyToOne</p>
 <p>我们的场景是 1个父亲n多个孩子</p>
-<h3 id="pojo_6">Pojo</h3>
+<h3 id="pojo_6">Pojo<a class="headerlink" href="#pojo_6" title="Permanent link">&para;</a></h3>
 <p>先来看看这中做法：</p>
 <p>TestFather.java
 <pre class="highlight"><code class="language-java">import java.util.ArrayList;
@@ -2014,7 +2018,7 @@ public class TestChild {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 }</code></pre></p>
-<h3 id="db_6">DB</h3>
+<h3 id="db_6">DB<a class="headerlink" href="#db_6" title="Permanent link">&para;</a></h3>
 <p>这样子，好像就可以了。那么是的么？我们来看看hib产生的sql</p>
 <p><pre class="highlight"><code class="language-sql">drop table test_child cascade constraints;
 drop table test_father cascade constraints;
@@ -2055,9 +2059,9 @@ alter table test_user
 oh！ My God ！它居然又帮我们多创建了一个table。作为关联。太笨了。</p>
 <p>很明显，这不是我们所需要的。</p>
 <p>那我们该如何呢？这就需要ManyToMany了。</p>
-<h2 id="annotation-nn">annotation的关系映射 n:n</h2>
+<h2 id="annotation-nn">annotation的关系映射 n:n<a class="headerlink" href="#annotation-nn" title="Permanent link">&para;</a></h2>
 <p>场景：Product和Customer。</p>
-<h3 id="pojo_7">Pojo</h3>
+<h3 id="pojo_7">Pojo<a class="headerlink" href="#pojo_7" title="Permanent link">&para;</a></h3>
 <p>先看TestProduct.java
 <pre class="highlight"><code class="language-java">import java.util.ArrayList;
 import java.util.List;
@@ -2116,7 +2120,7 @@ public class TestCustomer {
     public void setProducts(List products) { this.products = products; }
 }</code></pre>
 <strong>注意：</strong>这里的ManyToMany我写了mappedBy这个attribute。</p>
-<h3 id="db_7">DB</h3>
+<h3 id="db_7">DB<a class="headerlink" href="#db_7" title="Permanent link">&para;</a></h3>
 <p>然后看hib产生的sql:
 <pre class="highlight"><code class="language-sql">drop table test_customer cascade constraints;
 drop table test_product cascade constraints;
@@ -2141,8 +2145,9 @@ create table test_product_customers (
 );</code></pre></p>
 <p>ok! 非常好。hib终于在ManyToMany上没有犯白痴了。</p>
 <p>上面强调了mappedBy这个属性。其实，之前有提到mappedBy这个东西。只是，我没有说到底是什么意思。其实很简单：这个东西就相当于xml配置中的inverse。写了mappedBy就代表这个方法的返回值是被维护方。</p>
-  <div style="margin-top: 4rem;">
-    <script src="https://giscus.app/client.js"
+    
+      <div style="margin-top: 4rem;">
+        <script src="https://giscus.app/client.js"
           data-repo="RyanPoy/ryanpoy.github.io"
           data-repo-id="R_kgDOPHuVGg"
           data-category="Comments"
@@ -2156,7 +2161,237 @@ create table test_product_customers (
           data-lang="en"
           crossorigin="anonymous"
           async>
-    </script>
+        </script>
+      </div>
+    </div>
+    
+    
+    <aside class="toc">
+      
+<ul>
+  
+  <li class="toc-level-2">
+    <a href="#_1">初次使用</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#pojo">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#db">DB</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#hibernatecfgxml">hibernate.cfg.xml</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#userhbmxml">User.hbm.xml</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#testing">Testing</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#xml-11">xml关系映射 1:1</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#db_1">DB</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_1">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#mapping-xml">Mapping Xml</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#testing_1">Testing</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#xml-1n">xml关系映射 1:n</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#db_2">DB</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_2">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#mapping-xml_1">Mapping Xml</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#testing_2">Testing</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#xml-nn">xml关系映射 n:n</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#db_3">DB</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_3">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#mapping-xml_2">Mapping Xml</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#xml-case">xml关系映射 - 复杂的case</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#db_4">DB</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_4">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#mapping-xml_3">Mapping Xml</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#testing_3">Testing</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#annotation-11">annotation关系映射 1:1</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_5">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#db_5">DB</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#annotation-1n">annotation的关系映射 1:n</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_6">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#db_6">DB</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+  <li class="toc-level-2">
+    <a href="#annotation-nn">annotation的关系映射 n:n</a>
+    
+      
+<ul>
+  
+  <li class="toc-level-3">
+    <a href="#pojo_7">Pojo</a>
+    
+  </li>
+  
+  <li class="toc-level-3">
+    <a href="#db_7">DB</a>
+    
+  </li>
+  
+</ul>
+
+    
+  </li>
+  
+</ul>
+
+    </aside>
+    
   </div>
 </div>
 </main>
