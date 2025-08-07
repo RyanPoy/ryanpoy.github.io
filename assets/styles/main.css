@@ -470,7 +470,7 @@ aside.toc {
     height: max-content;
     padding-left: 0;
     border-left: 1px solid #aaa;
-    font-size: 12px;
+    font-size: 14px;
 }
 aside.toc ul {
     padding-left: 1rem;
@@ -629,7 +629,9 @@ footer span {
     /* border-bottom: 1px solid #e5e5e5; */
     color: #555;
     display: block;
-    padding: 2rem 15%; /* 15% 是因为 main的整体是70%width */
+    margin: 0 auto;
+    padding: 1.6rem 0;
+    max-width: 84%;
 }
 
 .catalogue-item:hover .catalogue-line,.catalogue-item:focus .catalogue-line {
