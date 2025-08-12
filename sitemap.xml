@@ -2,142 +2,146 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.pengyi.me/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/about/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/lifes/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/lifes/12%E5%B9%B4%EF%BC%8C1780%E5%85%AC%E9%87%8C%EF%BC%8C6%E5%B0%8F%E6%97%B6/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
+    </url>
+    <url>
+         <loc>https://www.pengyi.me/lifes/5-25%20rules/</loc>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/lifes/%E4%B8%A4%E7%A7%8D%E4%B8%BB%E4%B9%89/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/lifes/%E5%85%A5%E8%81%8C%E6%90%9C%E7%8B%90/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/lifes/%E6%9C%80%E6%80%95%E5%A4%B1%E5%8E%BB%E5%A5%BD%E5%A5%87%E5%BF%83/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/lifes/%E8%BF%99%E4%B8%8D%E6%98%AF%E6%8B%BC%E5%91%BD%E7%9A%84%E6%97%B6%E4%BB%A3/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/CSRF/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/Python%20Socket%20Programming/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/QCon%20Beijing%202013/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/Share%20Nothing%20Architecture/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/Switch%20Homebrew%20to%20a%20china%20mirror/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/ab%20testing/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/agile%20practice%20summary/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/fate/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/gevent%20on%20pypy/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/growth%20hacking/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/install%20mysql-v5.7%20on%20centos_v7.9/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/java%20PorterStemmer%20in%20Lucene/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/loaddata%20of%20mysql/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/parse%20html%20with%20python/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/performace%20optimization/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/python%20tricks%20and%20hacks/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/python%20validation/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/some%20common%20metrics%20in%20Data%20Analysis%20and%20Statistics/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/thoughts%20on%20building%20a%20production/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/thoughts%20on%20vertical%20website%20crawler/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/techs/translation%3A%20rethinking%20kanban/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/tutorials/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/tutorials/Fudge%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/tutorials/Hibernate%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/tutorials/Tornado%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
     <url>
          <loc>https://www.pengyi.me/tutorials/Webpy%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/</loc>
-         <lastmod>2025-08-07</lastmod>
+         <lastmod>2025-08-12</lastmod>
     </url>
 </urlset>
